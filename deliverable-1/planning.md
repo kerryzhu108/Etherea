@@ -1,68 +1,46 @@
-# YOUR PRODUCT/TEAM NAME
-> _Note:_ This document is meant to evolve throughout the planning phase of your project.   That is, it makes sense for you commit regularly to this file while working on the project (especially edits/additions/deletions to the _Highlights_ section). Most importantly, it is a reflection of all the planning you work you've done in the first iteration. 
- > **This document will serve as a master plan between your team, your partner and your TA.**
-
+# LivingBasics
 ## Product Details
- 
+
 #### Q1: What are you planning to build?
 
- > Short (1 - 2 min' read)
- * Start with a single sentence, high-level description of the product.
- * Be clear - Describe the problem you are solving in simple terms.
- * Be concrete. For example:
-    * What are you planning to build? Is it a website, mobile app,
-   browser extension, command-line app, etc.?      
-    * When describing the problem/need, give concrete examples of common use cases.
-    * Assume your the reader knows nothing about the problem domain and provide the necessary context. 
- * Focus on *what* your product does, and avoid discussing *how* you're going to implement it.      
-   For example: This is not the time or the place to talk about which programming language and/or framework you are planning to use.
- * **Feel free (and very much encouraged) to include useful diagrams, mock-ups and/or links**.
+We are planning to build a mobile app that encourages Sustainable Development Goals such as preventing pollution and human induced climate change. The app aims to make individuals live more sustainably by setting monthly themes with goals they can check off daily, and a leaderboard for people to share and compete against. The themes can be vegan month to reduce beef consumption, hydro month to reduce water and electricity use, and recycling month to reduce plastic waste. The app itself will contain a checklist of tasks to complete which matches the current theme and a calculator that quantifies their impact. A user would use this app if they want to minimize their carbon footprint, but don’t have the motivation or initiative to make the necessary changes to their life. A user would also use this app if people have the desire to improve their lifestyle, but are ignorant on how to make that happen.
 
 
 #### Q2: Who are your target users?
 
-  > Short (1 - 2 min' read max)
- * Be specific (e.g. a 'a third-year university student studying Computer Science' and not 'a student')
- * **Feel free to use personas. You can create your personas as part of this Markdown file, or add a link to an external site (for example, [Xtensio](https://xtensio.com/user-persona/)).**
+Our target users are youth, aged 15-24, with access to a phone in North America, who are environmentally conscious, competitive, ambitious, want to improve their world, and learn about how to make an impact. We are also targeting those who want to make a positive and healthy change to their lifestyles, but don’t know where to get started, those who want to abide by a fixed regiment/schedule to improve their health, and those who need a slight push or external motivation to do many small things that eventually build up to massive positive contributions to the environment. 
 
 #### Q3: Why would your users choose your product? What are they using today to solve their problem/need?
 
-> Short (1 - 2 min' read max)
- * We want you to "connect the dots" for us - Why does your product (as described in your answer to Q1) fits the needs of your users (as described in your answer to Q2)?
- * Explain the benefits of your product explicitly & clearly. For example:
-    * Save users time (how much?)
-    * Allow users to discover new information (which information? And, why couldn't they discover it before?)
-    * Provide users with more accurate and/or informative data (what kind of data? Why is it useful to them?)
-    * Does this application exist in another form? If so, how does your differ and provide value to the users?
-    * How does this align with your partner's organization's values/mission/mandate?
+While social media platforms have groups that are similar to our idea, there is no app that both gamifies sustainable actions (our leaderboard), and quantifies each user’s impact with a calculator that displays how many animals they are saving / co2 emissions they are reducing. There are existing solutions that quantify a person’s impact but they are on an individual level with no easy way for people to share results and compete. Knowing what you can do is easy, but often people don't follow through. The frequent tasks on the app serve as a reminder, which is what a lot of people need and the leaderboard inspires people to improve their lifestyles and the environment. 
+
+Examples of apps that promote sustainable development include Oroeco, Waterprint, Good Guide, and iRecycle. They all promote the improvement of one’s living and the status of the environment through the tracking of resources used and giving the user’s advice. Our app does that and more by encouraging users through a competitive element. Users have a larger incentive to improve their lifestyles and the more users compete, the better they and the 
 
 #### Q4: How will you build it?
 
-> Short (1-2 min' read max)
- * What is the technology stack? Specify any and all languages, frameworks, libraries, PaaS products or tools. 
- * How will you deploy the application?
- * Describe the architecture - what are the high level components or patterns you will use? Diagrams are useful here. 
- * Will you be using third party applications or APIs? If so, what are they?
- * What is your testing strategy?
+We will be using React Native for the front-end development, Node for the back-end, Github Actions for continuous integration, PostgreSQL for the database, and Heroku for the deployment.
+
+Our testing strategy is to use unit, integration, and UI tests. We plan on using many unit tests because they are fast and have small costs. These tests will ensure individual pieces of code function properly. We also plan on using integration tests to ensure that different parts of the code interact with each other properly. The final tests we plan on making are UI tests. We will try not to use more UI tests than necessary because they are slow to run. We’ll also have manual testing which looks at edge cases and checks off user stories
 
 #### Q5: What are the user stories that make up the MVP?
 
- * At least 5 user stories concerning the main features of the application - note that this can broken down further
- * You must follow proper user story format (as taught in lecture) ```As a <user of the app>, I want to <do something in the app> in order to <accomplish some goal>```
- * User stories must contain acceptance criteria. Examples of user stories with different formats can be found here: https://www.justinmind.com/blog/user-story-examples/. **It is important that you provide a link to an artifact containing your user stories**.
- * If you have a partner, these must be reviewed and accepted by them
+- As a user, I want to be able to sign up/login manually or with my Google account so I can access the site and all of its functionality. To fulfill this user story, we will need to integrate Google API and have a sign up flow and landing page in the front-end. In the back-end, we will need an API for the front-end to pass user data, to store the user information into a database, and have user authentication and email confirmation. 
+
+- As a user, I want to be able to view all my tasks for the day so I can check which ones I will complete and feel that I have accomplished something. To accomplish this, we need to implement a checklist design and pass checked items to the back-end. In the back-end, we need an API for the front-end to pass the user’s checked items and log it into the database for the leaderboard, retrieving daily items, and seeing the monthly theme. 
+
+- As a user, I want to be able to view the leaderboard as well as my position so I can gauge how much of a difference to the world I am making compared to others. In the back-end, we will need an efficient way for users to know their relative position and some function that keeps track of the top scores. In the front-end, we will need a dynamic leaderboard that gets its information from the back-end.
+
+- As a user, I want to be able to view statistics/the impact calculator so I can see the direct impact I am making through quantified data. For example, I want to know the number of animals I saved and the amount of carbon emissions I reduced. In the back-end, we need to compute these statistics based on the user’s history and monthly theme. In the front-end, we need some way to display the user’s statistics. 
+
+- As an admin, I want to be able to create new themes every month and daily tasks and add them to that month’s challenges so users can have more options when selecting what they will do to improve the world. In the back-end, we need to sync the changes the admin makes with the rest of the users. In the front-end, we need an admin panel that the admin can interact with and make the necessary additions and changes to the tasks and monthly themes.
+
+- As a developer, I want to have a well organized repository so I can reduce code duplication and find things quicker. In order to accomplish this, we need to organize the repository folders into appropriate categories. For example, files that deal with the front-end should be separated from files that deal with the back-end. 
+
+- As a developer, I want to set up a server on Heroku and CI/CD so when a team member pushes to the development branch, the backend is automatically updated.
 
 ----
 ## Intellectual Property Confidentiality Agreement 
-> Note this section is **not marked** but must be completed briefly if you have a partner. If you have any questions, please contact David and Adam.
->  
-**By default, you own any work that you do as part of your coursework.** However, some partners may want you to keep the project confidential after the course is complete. As part of your first deliverable, you should discuss and agree upon an option with your partner. Examples include:
-1. You can share the software and the code freely with anyone with or without a license, regardless of domain, for any use.
-2. You can upload the code to GitHub or other similar publicly available domains.
-3. You will only share the code under an open-source license with the partner but agree to not distribute it in any way to any other entity or individual. 
-4. You will share the code under an open-source license and distribute it as you wish but only the partner can access the system deployed during the course.
-
-**Briefly describe which option you have agreed to. Your partner cannot ask you to sign any legally binding agreements or documents pertaining to non-disclosure, confidentiality, IP ownership, etc.**
+Our partner has agreed to give us permission to share the code that we have written to potential employers. Any subsequent additions made to the application after we have finished, however, may not be shared.
 
 ----
 
@@ -70,63 +48,78 @@
 
 #### Q6: What are the roles & responsibilities on the team?
 
-Describe the different roles on the team and the responsibilities associated with each role. 
- * Roles should reflect the structure of your team and be appropriate for your project. Not necessarily one role to one team member.
+##### Kerry
 
-List each team member and:
- * A description of their role(s) and responsibilities including the components they'll work on and non-software related work
- * 3 technical strengths and weaknesses each (e.g. languages, frameworks, libraries, development methodologies, etc.)
+Kerry is responsible for breaking down the tickets, in Trello, into the front-end and back-end tasks, managing progress on the Trello board, setting up front-end repository structure, and work on implementing front-end designs. He has experience in Vue.js for front-end development, working in sprints for breaking down tasks into tickets, and has worked extensively with Cypress for end-to-end testing. He doesn’t have much experience in setting up a database, knowledge of the best software design practices, and setting up a back-end with Express.js. 
+
+##### Valerie
+
+Valerie is responsible for implementing a dynamic leaderboard in the front-end and the database for the checklist in the back-end. She has proficiency with PostgreSQL, database design, and basic experience in front-end website development. She has a lack of experience with back-end development in NodeJS, React Native, and has uncertainty when creating and running tests.
+
+##### Jayden
+
+Jayden is responsible for implementing the back-end for admin controls and anything that anyone needs help with. He has experience working with NodeJS in the back-end and creating and running unit tests in Javascript. He lacks experience in setting up databases, React Native, and implementing anything related to the front-end. 
+
+##### Morgan
+
+Morgan is responsible for setting up the sign in and login in the backend and setting up the server for CI/CD. She has basic experience with building the backend of web applications and connecting it to the front-end/routing an API. She has some knowledge in building CI/CD pipelines in GitHub Actions and deploying to Heroku. She has no experience with front-end development and lacks experience with Javascript and databases.
+
+##### Tanmay
+
+Tanmay is responsible for implementing user tasks in the front-end and working with the logic involved with user authentication. There is experience in working with Python scripts and scrapers and some experience in React. There is a lack of experience with React Native, databases, and connecting the back-end/database to the front-end, apart from A1.
+
+##### Zach
+
+Zach is responsible for various backend related tasks including the implementation of the impact statistics calculator as well as maintaining and organizing the backend repository through routing, testing, and documentation through README files. He has experience developing REST APIs, including how to validate and error check incoming requests, verifying requests using JSON web tokens, and documentation according to OpenAPI specs . Through prior development experience, Zach is also proficient with Javascript and working with Node and Express.js. As for weaknesses, Zach lacks experience with databases, his knowledge being limited to only setting them up and making basic queries.
+
+##### Andy
+
+
 
 #### Q7: What operational events will you have as a team?
 
-Describe meetings (and other events) you are planning to have. 
- * When and where? Recurring or ad hoc? In-person or online?
- * What's the purpose of each meeting?
- * Other events could be coding sessions, code reviews, quick weekly sync meeting online, etc.
- * You must have at least 2 meetings with your project partner (if you have one) before D1 is due. Describe them here:
-   * What did you discuss during the meetings?
-   * What were the outcomes of each meeting?
-   * You must provide meeting minutes.
-   * You must have a regular meeting schedule established by the second meeting.  
-  
+- **Tuesdays 5pm:** Weekly meetings with partner online via google meets. The purpose of these meetings are to update progress and to have questions answered about functionality. Each meeting should take approximately 15-60 minutes, depending on how much we have to report.
+
+- **Tuesdays 4pm:** Weekly group meetings to ensure proper communication and progress updates. Topics include progress on development, any road blocks we may have run into and how to solve them and deciding what needs to be done next and shifting priorities accordingly.
+
+We have had two meetings with our project partner in the last two weeks. In the first meeting, we discussed the basic functionalities and features they wanted in the application. They also showed us their designs and emailed them to us for development. As a result, we were all aware of the functionalities of the app. In the second meeting, we clarified questions regarding the leaderboard and the rights to sharing code. We updated our partner with our progress as well. Each meeting took about 15 to 20 minutes. We expect the meetings to run longer as we continue into development.
+
 #### Q8: What artifacts will you use to self-organize?
 
-List/describe the artifacts you will produce in order to organize your team.       
-
- * Artifacts can be To-Do lists, Task boards, schedule(s), meeting minutes, etc.
- * We want to understand:
-   * How do you keep track of what needs to get done?
-   * **How do you prioritize tasks?**
-   * How do tasks get assigned to team members?
-   * How do you determine the status of work from inception to completion?
+We will use Trello to manage tickets, Google Meet to meet and discuss the details of the project, and Google Calendar to remind everyone of meeting times. Tasks will be prioritized based on how many other tasks depend on it. For example, every aspect of the project relies on the repository, so setting it up is our top priority. From there, the database needs to be set up and the user accounts need to be created. Tasks are assigned based on proficiency with the relevant tools and also how much work they have done. We will determine/track the status of work by using a sprint board. Tickets will be assigned and moved from “TO-DO”, to “In Progress”, “Blocked/ Ready for Testing”, and finally, “Complete.”
 
 #### Q9: What are the rules regarding how your team works?
 
-Describe your team's working culture.
-
 **Communications:**
- * What is the expected frequency? What methods/channels are appropriate? 
- * If you have a partner project, what is your process (in detail) for communicating with your partner?
- 
+
+Group communication is expected to be weekly, at the minimum. We will communicate on Instagram through a group chat. Communication with our partner is also expected to be weekly, more specifically, through the weekly-scheduled online meeting via Google Meet. During these meetings, it is important that we clear up any uncertainties and confusion we have about the project. We will ask questions that block our progression and through our communication with our partner, we will resolve our problems. After these issues are cleared up, our partner will be updated on our progress. Between weeks, people working on related tickets will communicate on their own.
+
 **Meetings:**
- * How are people held accountable for attending meetings, completing action items? Is there a moderator or process?
- 
+
+We will take turns hosting the meetings. Although they will always be on Google Meet, someone new will be the moderator each time to ensure that the workload is fairly divided.
+
 **Conflict Resolution:**
- * List at least three team scenarios/conflicts you discussed in lecture and how you decided you will resolve them. Indecisions? Non-responsive team members? Any other scenarios you can think of?
 
+##### Non-responsive team members
 
+If a team member is non-responsive, they will be contacted to determine the reason for their absence, in case there is a valid explanation. If there is no valid reason, they will be reminded of their importance in the project. Team members rely on their contribution and communication is essential in group work. 
+
+##### Lack of contribution
+
+To minimize confusion about who has to contribute what, there are tickets that define a task, the people doing that task, and the deadline for completion. If the deadlines aren’t met, the person unable to complete the task will be contacted to determine if help is needed. The ticket will be re-evaluated to determine how to finish it, what resources can be used, and a reasonable time frame to get the ticket done. If they are totally unresponsive and make no contributions, the issue will be brought to the attention of the TA and the ticket will be reassigned..
+
+##### Disagreement on implementation
+
+If there is a disagreement on how an aspect of the project should be implemented, the disagreeing parties will discuss the positives and negatives for their implementations and if needed, the disagreement will be brought to the attention of the group to further discuss the issue and come to some resolution. If the issue affects the whole team/app, then the issue will definitely be discussed by the entire team on either the group chats or during the team meetings. If there is still uncertainty, the TA will be consulted for a second opinion as they might add some information that we had not considered previously. 
 
 
 ----
 ## Highlights
 
-Specify 3 - 5 key decisions and/or insights that came up during your meetings
-and/or collaborative process.
+1. We will have no verification system for the leaderboard. We assume all participants play ethically and responsibly. There's no incentive to win except for the satisfaction of knowing that you made significant contributions to the improvement of your own sustainable development. The alternative is to have some sort of verification system like pictures, but the amount of moderation needed can’t scale. While people may cheat, they will still have to login and check the boxes everyday, if it becomes a large issue, moderation will be introduced later.
 
- * Short (5 min' read max)
- * Decisions can be related to the product and/or the team process.
-    * Mention which alternatives you were considering.
-    * Present the arguments for each alternative.
-    * Explain why the option you decided on makes the most sense for your team/product/users.
- * Essentially, we want to understand how (and why) you ended up with your current product and process plan.
- * This section is useful for important information regarding your decision making process that may not necessarily fit in other sections. 
+2. We will use the existing designs as a guide, but they may not be exactly as seen. Alternatively, we could've said it would be exactly as given in the Adobe XD prototype, but we don't know yet if we can guarantee that as it might be slightly different. 
+
+3. We initially believed that each person should be assigned a ticket. They would be responsible for implementing the back-end and front-end for the ticket they were assigned, but that would lead to several merge conflicts and a disorganized repository. We decided that it would be best to break up the tasks by features and user stories, and split that further into front-end and back-end components. There are four people responsible for implementing the back-end of the app and three responsible for implementing the front-end because our partner already has an idea of the frontend design. 
+
+4. We decided to use React Native, Node, PostgreSQL and Heroku. This worked best given our experience and current knowledge. For the front-end implementation of the app, we chose to use React Native over Flutter because everyone has experience in JavaScript and some people have experience programming in React. For the back-end implementation, we chose Node over Python because of its faster performance and we figured that the app would be easier to create if both the front-end and back-end were implemented in the same programming language. We chose to use PostgreSQL for the implementation of the database because some of us learned PostgreSQL in CSC343 and to deploy the app, we chose Heroku because our partners recommended it and most of us used it for A1.
