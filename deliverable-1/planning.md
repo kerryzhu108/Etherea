@@ -74,7 +74,7 @@ Zach is responsible for various backend related tasks including the implementati
 
 ##### Andy
 
-
+Andy is responsible for backend implementations such as the leaderboard system and the impact statistics backend. His strengths include proficiency in PostgreSQL and general database design. In terms of weaknesses, he lacks experience with JavaScript.
 
 #### Q7: What operational events will you have as a team?
 
