@@ -1,0 +1,18 @@
+{
+  "name": "assignment1-backend",
+  "version": "1.0.0",
+  "description": "Node backend for CSC301 assignment 1 calculator application.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node src/index.js"
+  },
+  "author": "Zachary Vincze",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-validator": "^6.12.2",
+    "jest": "^27.2.4"
+  }
+}
