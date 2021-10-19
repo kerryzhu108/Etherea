@@ -1,8 +1,7 @@
 const express = require("express");
 var bodyParser = require('body-parser');
 
-var get_cost = require("./routes/get_items");
-var get_total_cost = require("./routes/get_total_cost");
+var rootRouter = require("./routes/root");
 
 const app = express();
 
@@ -15,7 +14,6 @@ app.use(express.json());
 app.use(bodyParser.json());
 
 // Route endpoints
-app.use("/get_items", get_cost);
-app.use("/get_total_cost", get_total_cost);
+app.use("/", rootRouter);
 
 module.exports = app
