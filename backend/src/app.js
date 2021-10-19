@@ -5,10 +5,6 @@ var rootRouter = require("./routes/root");
 
 const app = express();
 
-function application_start() {
-    console.log(`Server running on port ${port}`);
-}
-
 // Application middleware
 app.use(express.json());
 app.use(bodyParser.json());
