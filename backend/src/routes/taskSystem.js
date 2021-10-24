@@ -281,18 +281,4 @@ router.put('/taskFinished', async(req, res) => {
     }
 })
 
-router.get("/theme_image/:themeid/:imagename", async(req, res) =>{
-    const { themeid, imagename } = req.params
-    console.log(themeid, imagename)
-    try {
-        const info = await pool.query("SELECT * FROM themeimage WHERE themeid = $1 AND imagename =$2", [themeid, imagename]);
-        res.json(info.rows)
-    } catch (error) {
-        return res.status(400).send(error.message);
-    }
-    finally{
-        res.end();
-    }
-})
-
 module.exports = router;
