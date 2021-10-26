@@ -5,16 +5,12 @@ export default class SignUp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstName: '',
-      lastName: '',
       email: '',
       password: '',
-      confirmPassword: ''
     };
   }
 
   onChangeInputHandler = (name, value) => {
-    console.log(name)
     this.setState({
         [name]: value,
     });
@@ -23,18 +19,7 @@ export default class SignUp extends React.Component {
   render() { 
     return (
       <View style={styles.container}>
-        <Text style={{fontSize: 30}}>Sign Up</Text>
-        <TextInput 
-          placeholder="First Name" 
-          style={styles.input} 
-          onChangeText={text => this.onChangeInputHandler('firstName', text)}
-        />
-
-        <TextInput 
-          placeholder="Last Name" 
-          style={styles.input} 
-          onChangeText={text => this.onChangeInputHandler('lastName', text)}
-        />
+        <Text style={{fontSize: 30}}>Login</Text>
 
         <TextInput 
           placeholder="Email" 
@@ -48,15 +33,9 @@ export default class SignUp extends React.Component {
           onChangeText={text => this.onChangeInputHandler('password', text)}
         />
 
-        <TextInput 
-          placeholder="Confirm Password" 
-          style={styles.input}
-          onChangeText={text => this.onChangeInputHandler('confirmPassword', text)}
-        />
+        <Text style={styles.goSignup} onPress={() => this.props.navigation.navigate('SignUp')}>Don't have an account? Click here.</Text>
 
-        <Text style={styles.goLogin} onPress={() => this.props.navigation.navigate('Login')}>Already have an account? Click here.</Text>
-
-        <Button title='Login' onPress={text => {console.log(this.state.firstName)}}/>
+        <Button title='Login' onPress={text => {console.log(this.state.email)}}/>
       </View>
     );
   }
@@ -80,7 +59,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     backgroundColor: '#DCDCDC',
   },
-  goLogin: {
+  goSignup: {
     margin: 20,
     textDecorationLine: 'underline'
   }
