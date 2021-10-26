@@ -2,6 +2,7 @@ const express = require("express");
 var bodyParser = require('body-parser');
 
 var rootRouter = require("./routes/root");
+var taskRouter = require("./routes/taskSystem");
 
 const app = express();
 
@@ -14,5 +15,6 @@ app.use(bodyParser.json());
 
 // Route endpoints
 app.use("/", rootRouter);
+app.use(taskRouter);
 
 module.exports = app
