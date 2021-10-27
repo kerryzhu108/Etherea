@@ -4,6 +4,7 @@ var router = express.Router();
 const { check, validationResult } = require('express-validator');
 const config = require('../config');
 const bcrypt = require('bcrypt');
+const { generateAccessToken, authenticateToken } = require("../token");
 
 const pool = new Pool(config.db);
 
@@ -60,12 +61,17 @@ router.post('/login', [
                 }
 
                 if (isMatch) {
-                    return res.json({ message: "Successfully logged in user." });
+                    // Generate an access token and send back to client
+                    return res.json({ tokens: { access: generateAccessToken(body.email) } });
                 } else {
                     return res.json({ error: { message: "Could not log in user, incorrect credentials." } });
                 }
             });
         });
+});
+
+router.post("/tokentest", authenticateToken, (req, res) => {
+    return res.json(req.user);
 });
 
 module.exports = router;
