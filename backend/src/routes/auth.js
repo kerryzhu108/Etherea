@@ -1,5 +1,4 @@
 const express = require('express');
-const { Pool } = require('pg');
 var router = express.Router();
 const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
@@ -50,11 +49,20 @@ router.post('/register', [
         );
 
         // Attempt to insert the user into the database
-        pool.query("INSERT INTO USERS (email, password, firstname, lastname) values ($1, $2, $3, $4)",
+        pool.query("INSERT INTO Users (email, password, firstname, lastname) values ($1, $2, $3, $4) RETURNING id",
             [body.email, hashed_password, body.first_name, body.last_name], (err, result) => {
                 if (err) {
                     return res.status(400).json({ error: { message: err.toString() } });
                 }
+
+                // On successful registration, add user id to table progressInfo
+                var userId = result.rows[0].id;
+                pool.query("INSERT INTO progressInfo (id) VALUES ($1)", [userId], 
+                    (err, result) => {
+                        if (err) {
+                            return res.status(400).json({ error: { message: err.toString() } });
+                        }
+                    });
 
                 // On successful registration, return successful response
                 return res.json({ message: `Successfully created user` });
