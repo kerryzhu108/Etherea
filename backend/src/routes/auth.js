@@ -17,7 +17,7 @@ router.post('/register', [
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });
+        return res.status(400).json({ errors: errors.array() });
     }
 
     const body = req.body;
@@ -28,7 +28,7 @@ router.post('/register', [
     pool.query("INSERT INTO USERS (email, password, firstname, lastname) values ($1, $2, $3, $4)",
         [body.email, hashed_password, body.first_name, body.last_name], (err, result) => {
             if (err) {
-                return res.json({ error: { message: err.toString() } });
+                return res.status(400).json({ error: { message: err.toString() } });
             }
 
             // On successful registration, return successful response
@@ -42,7 +42,7 @@ router.post('/login', [
 ], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(422).json({ errors: errors.array() });
+        return res.status(400).json({ errors: errors.array() });
     }
 
     const body = req.body;
@@ -50,7 +50,7 @@ router.post('/login', [
     pool.query("SELECT password FROM users WHERE email=$1",
         [body.email], (err, result) => {
             if (err) {
-                return res.json({ error: { message: err.toString() } });
+                return res.status(400).json({ error: { message: err.toString() } });
             }
 
             // On successful registration, return successful response
@@ -64,7 +64,7 @@ router.post('/login', [
                     // Generate an access token and send back to client
                     return res.json({ tokens: { access: generateAccessToken(body.email) } });
                 } else {
-                    return res.json({ error: { message: "Could not log in user, incorrect credentials." } });
+                    return res.status(401).json({ error: { message: "Could not log in user, incorrect credentials." } });
                 }
             });
         });

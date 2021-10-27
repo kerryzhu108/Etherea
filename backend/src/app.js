@@ -5,6 +5,8 @@ var rootRouter = require("./routes/root");
 var taskRouter = require("./routes/taskSystem");
 var authRouter = require("./routes/auth");
 
+require("dotenv").config();
+
 const app = express();
 
 // Application middleware
