@@ -1,14 +1,17 @@
 'use strict'
-const domain = 'https://aqueous-eyrie-35955.herokuapp.com/'
+const domain = 'https://etherea-dev.herokuapp.com/'
 const defaultHeaders = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
 }
 
-export function getItems() {
+export function signUp(firstName, lastName, email, password, confirmPassword) {
   return fetch(domain + 'get_items', {
     method: 'GET',
     headers: defaultHeaders,
+    body: JSON.stringify({
+      fir
+    })
   })   
 }
 

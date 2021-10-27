@@ -9,10 +9,8 @@ export default class Landing extends React.Component {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Etherea</Text>
-
-        <TouchableOpacity style={{marginTop: 80}} onPress={() => this.props.navigation.navigate('SignUp')}>
-          <Text>Sign Up</Text>
-        </TouchableOpacity>
+        <Text style={styles.navigation} onPress={() => this.props.navigation.navigate('SignUp')}>Sign Up</Text>
+        <Text style={styles.navigation} onPress={() => this.props.navigation.navigate('Login')}>Login</Text>
       </View>
     );
   }
@@ -27,5 +25,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     marginTop: 80
+  },
+  navigation: {
+    fontSize: 20,
+    marginTop: 80,
+    textDecorationLine: 'underline'
+
   }
 });

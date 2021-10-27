@@ -3,6 +3,9 @@ var bodyParser = require('body-parser');
 
 var rootRouter = require("./routes/root");
 var taskRouter = require("./routes/taskSystem");
+var authRouter = require("./routes/auth");
+
+require("dotenv").config();
 
 const app = express();
 
@@ -15,6 +18,7 @@ app.use(bodyParser.json());
 
 // Route endpoints
 app.use("/", rootRouter);
-app.use(taskRouter);
+app.use("/", taskRouter);
+app.use("/auth/", authRouter);
 
-module.exports = app
+module.exports = app;

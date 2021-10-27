@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Landing from './views/landing.js'
 import SignUp from './views/signUp.js'
+import Login from './views/login.js'
 
 const Stack = createNativeStackNavigator();
 class App extends Component {
@@ -17,9 +18,10 @@ class App extends Component {
   render() {
     return (
       <NavigationContainer theme={MyTheme}>
-        <Stack.Navigator initialRouteName="Landing" screenOptions={{headerShown: true}}>
+        <Stack.Navigator initialRouteName="Landing" screenOptions={{headerShown: false}} style={styles.container}>
           <Stack.Screen name="Landing" component={Landing}/>
           <Stack.Screen name="SignUp" component={SignUp} />
+          <Stack.Screen name="Login" component={Login} />
         </Stack.Navigator>
       </NavigationContainer>
     )
@@ -28,6 +30,7 @@ class App extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 90,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
