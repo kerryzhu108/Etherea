@@ -140,7 +140,7 @@ router.post("/chooseTasks", async(req, res) =>{
 
             })
         }
-        //res.json(`Success! New tasks have been added to the month ${month}`);
+        res.json("Success! New tasks have been added for this month.");
     } catch (error) {
          return res.status(400).send(error.message);
     }
@@ -173,6 +173,7 @@ router.post("/chooseTasks", async(req, res) =>{
         "datetodo": "2021-10-24T04:00:00.000Z",
         "points": 10
     }
+]
  */
 router.get("/userTask/:userid", async(req, res) =>{
     const { userid } = req.params
@@ -256,7 +257,6 @@ router.put('/taskFinished', async(req, res) => {
                 const txtLv = "UPDATE progressInfo SET level = $1, exp = $2, streak = $3 WHERE id = $4";
                 const updLv = await client.query(txtLv, [newLevel, newPoints, streak, userid]);
                 
-                //console.log(userid + '  '+taskid);
                 await client.query('COMMIT')
             } catch (e) {
                 await client.query('ROLLBACK')
