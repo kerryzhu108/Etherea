@@ -10,7 +10,7 @@ const { pool } = require('../config');
 
 // Registration endpoint
 router.post('/register', [
-    check('email').isEmail(),
+    check("email").isEmail(),
     check("first_name").isString(),
     check("last_name").isString(),
     check("password").isString(),
