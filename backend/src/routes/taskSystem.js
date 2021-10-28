@@ -2,13 +2,7 @@ const express = require("express");
 
 var router = express.Router();
 
-const { Pool } = require('pg');
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
+const { pool } = require('../config');
 
 /* Get user's progress info (level, exp points, streak)
 Returns the following json:

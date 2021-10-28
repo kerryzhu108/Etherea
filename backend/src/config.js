@@ -8,10 +8,10 @@ const connectionString = `postgresql://${process.env.DB_USER}:${process.env.DB_P
 
 const pool = new Pool({
     connectionString: isProduction ? process.env.DATABASE_URL : connectionString,
-    ssl: {
+    ssl: isProduction ? {
         rejectUnauthorized: false
-    }
-  });
+    } : false
+});
 
 // const config = {
 //     db: {
@@ -28,4 +28,39 @@ const pool = new Pool({
 
 // module.exports = config;
 
-module.exports = { pool };
+function createTables() {
+    pool.query(`CREATE TABLE IF NOT EXISTS users (
+                id BIGSERIAL PRIMARY KEY NOT NULL,
+                email VARCHAR(100) NOT NULL,
+                password VARCHAR(100) NOT NULL,
+                firstname VARCHAR(50) NOT NULL,
+                lastname VARCHAR(50) NOT NULL,
+                UNIQUE(email)
+                )`,
+        (err, result) => {
+            if (err) {
+                console.log("Error creating table users.")
+                console.log(err);
+            } else {
+                console.log("Table users created.")
+            }
+        });
+
+    pool.query(`CREATE TABLE IF NOT EXISTS progressInfo (
+                id BIGSERIAL PRIMARY KEY NOT NULL,
+                exp INTEGER DEFAULT 0 NOT NULL,
+                streak INTEGER DEFAULT 0 NOT NULL
+                )
+                `,
+        (err, result) => {
+            if (err) {
+                console.log("Error creating table progressInfo.")
+                console.log(err);
+            } else {
+                console.log("Table progressInfo created.")
+            }
+        });
+}
+
+
+module.exports = { pool, createTables };
