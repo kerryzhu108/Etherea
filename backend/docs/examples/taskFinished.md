@@ -3,7 +3,7 @@ User has finished one task.
 
 **URL** : `/taskFinished`
 
-**Method** : `POST`
+**Method** : `PUT`
 
 **Auth** : `NO`
 
