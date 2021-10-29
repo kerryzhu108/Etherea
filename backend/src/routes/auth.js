@@ -72,7 +72,7 @@ router.post('/login', [
 
     const body = req.body;
 
-    pool.query("SELECT password FROM users WHERE email=$1",
+    pool.query("SELECT password, id FROM users WHERE email=$1",
         [body.email], (err, result) => {
             if (err) {
                 return res.status(400).json({ error: { message: err.toString() } });
@@ -91,7 +91,7 @@ router.post('/login', [
 
                 if (isMatch) {
                     // Generate an access token and send back to client
-                    return res.json({ tokens: { access: generateAccessToken(body.email) } });
+                    return res.json({ userid: result.rows[0].id, tokens: { access: generateAccessToken(body.email) } });
                 } else {
                     return res.status(401).json({ error: { message: "Invalid password" } });
                 }
