@@ -1,7 +1,7 @@
 # Get Impact Statistics
 Return a specific user's emissions reduced and animals saved count.
 
-**URL** : `/leaderboard/`
+**URL** : `/impactStats/:userid`
 
 **Method** : `GET`
 

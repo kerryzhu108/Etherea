@@ -4,7 +4,7 @@ var router = express.Router();
 
 const { pool } = require('../config');
 
-router.get("/userTask/:userid", async(req, res) =>{
+router.get("/impactStats/:userid", async(req, res) =>{
     const { userid } = req.params
     try {
         //NOTE: currently table does not exist on db
