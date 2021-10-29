@@ -9,7 +9,7 @@ router.get('/leaderboard', async (req, res) => {
       const client = await pool.connect();
       //naive approach: send entire leaderboard worth of data, may need to change to paginate
       const result = await client.query(
-          "SELECT u.id, u.firstname, u.lastname, p.exp FROM users u JOIN progressInfo p WHERE u.id = p.id ORDER BY p.exp DESC");
+          "SELECT u.id, CONCAT(u.firstname, ' ', u.lastname) AS name, p.exp FROM users u JOIN progressInfo p WHERE u.id = p.id ORDER BY p.exp DESC");
       const results = { 'results': (result) ? result.rows : null};
       
       res.json(results);
