@@ -100,7 +100,6 @@ export default class Leaderboard extends React.Component {
         <ImageBackground source={require('../assets/leaderboardBackground.png')} resizeMode="cover" style={styles.imageScreenBackground}>
             <Text style={styles.title}>LEADERBOARD</Text>
             <View style={styles.topThreeView}>
-
             </View>
             <FlatList    
               style={styles.list}
