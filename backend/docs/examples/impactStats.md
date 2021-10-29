@@ -1,5 +1,5 @@
-# Get Leaderboard data
-Return a list of all player ids, firstnames, lastnames, and experience points
+# Get Impact Statistics
+Return a specific user's emissions reduced and animals saved count.
 
 **URL** : `/leaderboard/`
 
