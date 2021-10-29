@@ -4,6 +4,10 @@ function generateAccessToken(email) {
     return jwt.sign({ email: email }, process.env.TOKEN_SECRET, { expiresIn: 1800 });
 }
 
+function generateRefreshToken(email) {
+    return jwt.sign({ email: email }, process.env.TOKEN_SECRET, { expiresIn: '30d' });
+}
+
 function authenticateToken(req, res, next) {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(' ')[1];
@@ -17,4 +21,4 @@ function authenticateToken(req, res, next) {
     });
 }
 
-module.exports = { generateAccessToken, authenticateToken };
+module.exports = { generateAccessToken, authenticateToken, generateRefreshToken };

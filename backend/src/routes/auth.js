@@ -2,7 +2,8 @@ const express = require('express');
 var router = express.Router();
 const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
-const { generateAccessToken, authenticateToken } = require("../token");
+const jwt = require('jsonwebtoken');
+const { generateAccessToken, authenticateToken, generateRefreshToken } = require("../token");
 
 const { pool } = require('../config');
 //const config = require('../config');
@@ -91,7 +92,18 @@ router.post('/login', [
 
                 if (isMatch) {
                     // Generate an access token and send back to client
-                    return res.json({ userid: result.rows[0].id, tokens: { access: generateAccessToken(body.email) } });
+                    var access_token = generateAccessToken(body.email);
+                    var refresh_token = generateRefreshToken(body.email);
+                    const userid = result.rows[0].id;
+
+                    // Store refresh token in database
+                    pool.query("UPDATE users SET refresh=$1 WHERE email=$2", [refresh_token, body.email], (err, result) => {
+                        if (err) {
+                            return res.status(400).json({ error: { message: err.toString() } });
+                        }
+
+                        return res.json({ userid: userid, tokens: { access: access_token, refresh: refresh_token } });
+                    });
                 } else {
                     return res.status(401).json({ error: { message: "Invalid password" } });
                 }
@@ -99,8 +111,32 @@ router.post('/login', [
         });
 });
 
-router.post("/tokentest", authenticateToken, (req, res) => {
-    return res.json(req.user);
+router.post("/refresh", [
+    check("refresh").isString()
+], async (req, res) => {
+    const body = req.body;
+    jwt.verify(body.refresh, process.env.TOKEN_SECRET, (err, user) => {
+        if (err) return res.status(401).json({ error: { message: "Invalid refresh token" } });
+        req.user = user;
+
+        pool.query("SELECT refresh, id FROM users WHERE email=$1", [req.user.email], (err, result) => {
+            if (err) return res.status(400).json({ error: { message: err.toString() } });
+            if (result.rows.length <= 0) return res.status(400).json({ error: { message: "Email does not exist" } });
+            if (result.rows[0].refresh !== body.refresh) return res.status(401).json({ error: { message: "Invalid refresh token" } });
+
+            const userid = result.rows[0].userid;
+            const access_token = generateAccessToken(req.user.email);
+            const refresh_token = generateRefreshToken(req.user.email);
+
+            pool.query("UPDATE users SET refresh=$1 WHERE email=$2", [refresh_token, req.user.email], (err, result) => {
+                if (err) return res.status(400).json({ error: { message: err.toString() } });
+
+                return res.json({ userid: userid, tokens: { access: access_token, refresh: refresh_token } });
+            });
+        });
+    });
+
+    // Generate a new access and refresh token pair
 });
 
 module.exports = router;
