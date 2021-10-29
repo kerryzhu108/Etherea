@@ -19,8 +19,6 @@ router.post('/register', [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        // rerender the sign up page showing the error messages?
-        // res.render("signUp.js", { errors });
         return res.status(400).json({ errors: errors.array() });
     } else {
 
@@ -33,20 +31,18 @@ router.post('/register', [
                     return res.status(400).json({ error: { message: err.toString() } });
                 }
                 if (results.rows.length > 0) {
-                    //errors.push({ message: "Email already registered" })
-                    //return res.render("signUp.js", { message: "Email already registered" });
                     return res.status(400).json({ error: { message: "Email already registered" } });
                 }
 
                 // Attempt to insert the user into the database
-                pool.query("INSERT INTO Users (email, password, firstname, lastname) values ($1, $2, $3, $4) RETURNING id",
+                pool.query("INSERT INTO Users (email, password, firstname, lastname) values ($1, $2, $3, $4) RETURNING uid",
                     [body.email, hashed_password, body.first_name, body.last_name], (err, result) => {
                         if (err) {
                             return res.status(400).json({ error: { message: err.toString() } });
                         }
 
                         // On successful registration, add user id to table progressInfo
-                        var userId = result.rows[0].id;
+                        var userId = result.rows[0].uid;
                         pool.query("INSERT INTO progressInfo (id) VALUES ($1)", [userId],
                             (err, result) => {
                                 if (err) {
