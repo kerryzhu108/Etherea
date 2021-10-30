@@ -1,6 +1,6 @@
 const express = require('express');
 var router = express.Router();
-const { check, validationResult, body } = require('express-validator');
+const { check, validationResult } = require('express-validator/check');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { generateAccessToken, authenticateToken, generateRefreshToken } = require("../token");
@@ -41,9 +41,9 @@ const formatValidationResult = validationResult.withDefaults({
             }
             return { message: "Password contains invalid characters. " };
         } else {
-            return;
+            return null;
         }
-    },
+    }
   });
 
 // Registration endpoint
