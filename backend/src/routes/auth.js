@@ -35,10 +35,13 @@ const formatValidationResult = validationResult.withDefaults({
         if ( error.param === "confirmPassword" && error.value === "" ) {
             return { message: "The Confirm Password field is required. " };
         }
-        if ( (error.param === "password" || error.param === "confirmPassword") && error.value.length < 8 ) {
-            return { message: "Password must be a least 8 characters long. " };
-        } else {
+        if ( (error.param === "password" || error.param === "confirmPassword") ) {
+            if ( error.value.length < 8 ) {
+                return { message: "Password must be a least 8 characters long. " };
+            }
             return { message: "Password contains invalid characters. " };
+        } else {
+            return;
         }
     },
   });
