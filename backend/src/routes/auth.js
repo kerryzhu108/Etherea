@@ -20,7 +20,8 @@ router.post('/register', [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return console.log(req.body);
+        //return res.status(400).json({ errors: errors.array() });
     } else {
 
         const body = req.body;
