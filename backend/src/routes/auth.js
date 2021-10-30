@@ -37,13 +37,11 @@ router.post('/register', [
                 }
 
                 // Attempt to insert the user into the database
-                client = await pool.connect();
-                await client.query("INSERT INTO Users (email, password, firstname, lastname) values ($1, $2, $3, $4) RETURNING uid",
+                pool.query("INSERT INTO Users (email, password, firstname, lastname) values ($1, $2, $3, $4) RETURNING uid",
                     [body.email, hashed_password, body.first_name, body.last_name], (err, result) => {
                         if (err) {
                             return res.status(400).json({ error: { message: err.toString() } });
                         }
-                client.release();
 
                         // On successful registration, add user id to table progressInfo and table impactStats;
                         var userId = result.rows[0].uid;
