@@ -26,7 +26,7 @@ router.post('/register', [
         if ( body.password !== body.confirmPassword ) {
             return res.status(400).json({ error: { message: "Passwords do not match" } });
         }
-        
+
         const hashed_password = await bcrypt.hash(body.password, 10);
 
         pool.query("SELECT * FROM USERS WHERE email = $1", [body.email], 
@@ -63,9 +63,7 @@ router.post('/register', [
 
         // On successful registration, return successful response
         return res.json({ message: `Successfully created user` });
-
     }
-
 });
 
 router.post('/login', [
@@ -79,7 +77,7 @@ router.post('/login', [
 
     const body = req.body;
 
-    pool.query("SELECT password, id FROM users WHERE email=$1",
+    pool.query("SELECT password, uid FROM users WHERE email=$1",
         [body.email], (err, result) => {
             if (err) {
                 return res.status(400).json({ error: { message: err.toString() } });
@@ -100,7 +98,7 @@ router.post('/login', [
                     // Generate an access token and send back to client
                     var access_token = generateAccessToken(body.email);
                     var refresh_token = generateRefreshToken(body.email);
-                    const userid = result.rows[0].id;
+                    const userid = result.rows[0].uid;
 
                     // Store refresh token in database
                     pool.query("UPDATE users SET refresh=$1 WHERE email=$2", [refresh_token, body.email], (err, result) => {
