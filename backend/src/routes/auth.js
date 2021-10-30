@@ -46,8 +46,8 @@ const formatValidationResult = validationResult.withDefaults({
 // Registration endpoint
 router.post('/register', [
     check("email").normalizeEmail().isEmail(),
-    check("first_name").isString(),
-    check("last_name").isString(),
+    check("first_name").isString().isLength({ min: 1 }),
+    check("last_name").isString().isLength({ min: 1 }),
     check("password").isString().isLength({ min: 8 }),
     check("confirmPassword").isString().isLength({ min: 8 })
 ], async (req, res) => {
@@ -66,6 +66,7 @@ router.post('/register', [
         pool.query("SELECT * FROM USERS WHERE email = $1", [body.email.normalizeEmail()], 
             (err, results) => {
                 if (err) {
+                    // Internal server error
                     return res.status(500).json({ error: { message: err.toString() } });
                 }
                 if (results.rows.length > 0) {
@@ -91,6 +92,7 @@ router.post('/register', [
             })()
             .catch(
                 err => { 
+                    // Internal server error
                     return res.status(500).json( { error: { message: err.toString() } } ) 
                 }
             )
