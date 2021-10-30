@@ -1,5 +1,6 @@
 const express = require("express");
 var bodyParser = require('body-parser');
+const expressValidator = require('express-validator');
 
 var rootRouter = require("./routes/root");
 var taskRouter = require("./routes/taskSystem");
@@ -20,6 +21,7 @@ app.use(express.urlencoded({
     extended: true
   }));
 app.use(bodyParser.json());
+app.use(expressValidator(middlewareOptions));
 
 // Route endpoints
 app.use("/", rootRouter);
