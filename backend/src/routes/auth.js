@@ -9,33 +9,67 @@ const { pool } = require('../config');
 //const config = require('../config');
 //const pool = new Pool(config.db);
 
+const formatValidationResult = validationResult.withDefaults({
+    formatter: error => {
+        if ( error.param === "email" ) {
+            if ( error.value === "" ) {
+                return { message: "The Email field is required. " };
+            }
+            return { message: "Please enter a valid email. " };
+        }
+        if ( error.param === "first_name" ) {
+            if ( error.value === "" ) {
+                return { message: "The First Name field is required. " };
+            }
+            return { message: "First Name contains invalid characters. " };
+        }
+        if ( error.param === "last_name" ) {
+            if ( error.value === "" ) {
+                return { message: "The Last Name field is required. " };
+            }
+            return { message: "Last Name contains invalid characters. " };
+        }
+        if ( error.param === "password" && error.value === "" ) {
+            return { message: "The Password field is required. " };
+        }
+        if ( error.param === "confirmPassword" && error.value === "" ) {
+            return { message: "The Confirm Password field is required. " };
+        }
+        if ( error.param === "password" && error.value.length < 8 ) {
+            return { message: "Password must be a least 8 characters long. " };
+        } else {
+            return { message: "Password contains invalid characters. " };
+        }
+    },
+  });
+
 // Registration endpoint
 router.post('/register', [
-    check("email").isEmail(),
+    check("email").normalizeEmail().isEmail(),
     check("first_name").isString(),
     check("last_name").isString(),
     check("password").isString().isLength({ min: 8 }),
     check("confirmPassword").isString().isLength({ min: 8 })
 ], async (req, res) => {
-    const errors = validationResult(req);
+    const errors = formatValidationResult(req);
 
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ error: errors.array() });
     } else {
         const body = req.body;
         if ( body.password !== body.confirmPassword ) {
-            return res.status(400).json({ error: { message: "Passwords do not match" } });
+            return res.status(400).json({ error: { message: "Passwords do not match. " } });
         }
 
         const hashed_password = await bcrypt.hash(body.password, 10);
 
-        pool.query("SELECT * FROM USERS WHERE email = $1", [body.email], 
+        pool.query("SELECT * FROM USERS WHERE email = $1", [body.email.normalizeEmail()], 
             (err, results) => {
                 if (err) {
-                    return res.status(400).json({ error: { message: err.toString() } });
+                    return res.status(500).json({ error: { message: err.toString() } });
                 }
                 if (results.rows.length > 0) {
-                    return res.status(400).json({ error: { message: "Email already registered" } });
+                    return res.status(400).json({ error: { message: "Email already registered. " } });
                 }
             }
         );
@@ -47,7 +81,7 @@ router.post('/register', [
             try {
                 const res = await client.query(`INSERT INTO Users (email, password, firstname, lastname) 
                                                 values ($1, $2, $3, $4) RETURNING uid`,
-                            [body.email, hashed_password, body.first_name, body.last_name])
+                            [body.email.normalizeEmail(), hashed_password, body.first_name, body.last_name])
                 var userId = res.rows[0].uid;
                 client.query("INSERT INTO progressInfo (id) VALUES ($1)", [userId])
                 client.query("INSERT INTO impactStats (uid) VALUES ($1)", [userId])
@@ -57,12 +91,12 @@ router.post('/register', [
             })()
             .catch(
                 err => { 
-                    return res.status(400).json( { error: { message: err.toString() } } ) 
+                    return res.status(500).json( { error: { message: err.toString() } } ) 
                 }
             )
 
         // On successful registration, return successful response
-        return res.json({ message: `Successfully created user` });
+        return res.status(200).json({ message: `Successfully created user` });
     }
 });
 
