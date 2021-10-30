@@ -1,6 +1,6 @@
 const express = require('express');
 var router = express.Router();
-const { check, validationResult } = require('express-validator/check');
+const { check, validationResult, body } = require('express-validator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { generateAccessToken, authenticateToken, generateRefreshToken } = require("../token");
@@ -55,7 +55,7 @@ router.post('/register', [
     check("confirmPassword").isString().isLength({ min: 8 })
 ], async (req, res) => {
     const body = req.body;
-    const errors = formatValidationResult(req);
+    const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
         return res.status(400).json({ error: errors.array() });
