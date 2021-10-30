@@ -8,8 +8,9 @@ var impactStatsRouter = require("./routes/impactStats");
 var authRouter = require("./routes/auth");
 
 require("dotenv").config();
-const createTables = require("./config.js").createTables;
+const { createTables, dropTables } = require("./config.js");
 
+dropTables(); // comment out this line if do not want to reset table content in development mode
 createTables();
 
 const app = express();

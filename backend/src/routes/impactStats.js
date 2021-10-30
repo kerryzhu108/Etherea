@@ -17,3 +17,5 @@ router.get("/impactStats/:userid", async(req, res) =>{
         res.end();
     }
 })
+
+module.exports = router;

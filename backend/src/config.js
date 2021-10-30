@@ -28,9 +28,51 @@ const pool = new Pool({
 
 // module.exports = config;
 
-function createTables() {
-    pool.query(`CREATE TABLE IF NOT EXISTS users (
-                id BIGSERIAL PRIMARY KEY NOT NULL,
+
+
+async function dropTables() {
+    if (isProduction) {
+        return;
+    }
+    client = await pool.connect();
+    await client.query(`DROP TABLE IF EXISTS users CASCADE`, 
+        (err, result) => {
+            if (err) {
+                console.log("Error dropping table users.")
+                console.log(err);
+            } else {
+                console.log("Table users dropped.")
+            }
+        });
+
+    await client.query(`DROP TABLE IF EXISTS progressInfo CASCADE`, 
+        (err, result) => {
+            if (err) {
+                console.log("Error dropping table progressInfo.")
+                console.log(err);
+            } else {
+                console.log("Table progressInfo dropped.")
+            }
+        });
+    
+    await client.query(`DROP TABLE IF EXISTS impactStats CASCADE`, 
+        (err, result) => {
+            if (err) {
+                console.log("Error dropping table impactStats.")
+                console.log(err);
+            } else {
+                console.log("Table impactStats dropped.")
+            }
+        });    
+    client.release();
+    return;
+}
+
+
+async function createTables() {
+    client = await pool.connect();
+    await client.query(`CREATE TABLE IF NOT EXISTS users (
+                uid BIGSERIAL PRIMARY KEY NOT NULL,
                 email VARCHAR(100) NOT NULL,
                 password VARCHAR(100) NOT NULL,
                 firstname VARCHAR(50) NOT NULL,
@@ -47,7 +89,7 @@ function createTables() {
             }
         });
 
-    pool.query(`CREATE TABLE IF NOT EXISTS progressInfo (
+    await client.query(`CREATE TABLE IF NOT EXISTS progressInfo (
                 id BIGSERIAL PRIMARY KEY NOT NULL,
                 exp INTEGER DEFAULT 0 NOT NULL,
                 streak INTEGER DEFAULT 0 NOT NULL
@@ -61,7 +103,25 @@ function createTables() {
                 console.log("Table progressInfo created.")
             }
         });
+
+    await client.query(`CREATE TABLE IF NOT EXISTS impactStats (
+                uid BIGSERIAL PRIMARY KEY NOT NULL,
+                emissionsReduced REAL DEFAULT 0 NOT NULL,
+                animalsSaved REAL DEFAULT 0 NOT NULL,
+                CONSTRAINT foreignKey_uid
+                    FOREIGN KEY(uid) 
+                    REFERENCES users(uid)
+                    ON DELETE CASCADE)`,
+        (err, result) => {
+            if (err) {
+                console.log("Error creating table impactStats.")
+                console.log(err);
+            } else {
+                console.log("Table impactStats created.")
+            }
+        });
+    client.release();
+    return;
 }
 
-
-module.exports = { pool, createTables };
+module.exports = { pool, createTables, dropTables };
