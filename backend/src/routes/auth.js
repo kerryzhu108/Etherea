@@ -35,7 +35,7 @@ const formatValidationResult = validationResult.withDefaults({
         if ( error.param === "confirmPassword" && error.value === "" ) {
             return { message: "The Confirm Password field is required. " };
         }
-        if ( error.param === "password" && error.value.length < 8 ) {
+        if ( (error.param === "password" || error.param === "confirmPassword") && error.value.length < 8 ) {
             return { message: "Password must be a least 8 characters long. " };
         } else {
             return { message: "Password contains invalid characters. " };
@@ -51,12 +51,12 @@ router.post('/register', [
     check("password").isString().isLength({ min: 8 }),
     check("confirmPassword").isString().isLength({ min: 8 })
 ], async (req, res) => {
+    const body = req.body;
     const errors = formatValidationResult(req);
 
     if (!errors.isEmpty()) {
         return res.status(400).json({ error: errors.array() });
     } else {
-        const body = req.body;
         if ( body.password !== body.confirmPassword ) {
             return res.status(400).json({ error: { message: "Passwords do not match. " } });
         }
