@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, Button, StyleSheet, TextInput } from "react-native";
+import { signUp } from "../api";
 
 export default class SignUp extends React.Component { 
   constructor(props) {
@@ -56,7 +57,7 @@ export default class SignUp extends React.Component {
 
         <Text style={styles.goLogin} onPress={() => this.props.navigation.navigate('Login')}>Already have an account? Click here.</Text>
 
-        <Button title='Login' onPress={text => {console.log(this.state.firstName)}}/>
+        <Button title='Sign Up' onPress={text => {console.log(signUp(this.state.firstName, this.state.lastName, this.state.email, this.state.password, this.state.confirmPassword))}}/>
       </View>
     );
   }
