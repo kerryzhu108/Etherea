@@ -59,7 +59,7 @@ router.post('/register', [
     const body = req.body;
 
     if (!errors.isEmpty()) {
-        return res.status(400).json({ error: errors.array() });
+        return res.status(400).json({ errors: errors.array() });
     } else {
         if ( body.password !== body.confirmPassword ) {
             return res.status(400).json({ error: { message: "Passwords do not match. " } });
@@ -102,7 +102,7 @@ router.post('/register', [
             )
 
         // On successful registration, return successful response
-        return res.status(200).json({ message: `Successfully created user` });
+        return res.json({ message: `Successfully created user` });
     }
 });
 
