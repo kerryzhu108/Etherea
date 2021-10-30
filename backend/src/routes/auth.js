@@ -50,12 +50,13 @@ const { pool } = require('../config');
 router.post('/register', [
     check("first_name").isString().isLength({ min: 1 }),
     check("last_name").isString().isLength({ min: 1 }),
-    check("email").normalizeEmail().isEmail(),
+    check("email").isEmail(),
     check("password").isString().isLength({ min: 8 }),
     check("confirmPassword").isString().isLength({ min: 8 })
 ], async (req, res) => {
-    const body = req.body;
     const errors = validationResult(req);
+
+    const body = req.body;
 
     if (!errors.isEmpty()) {
         return res.status(400).json({ error: errors.array() });
@@ -66,7 +67,7 @@ router.post('/register', [
 
         const hashed_password = await bcrypt.hash(body.password, 10);
 
-        pool.query("SELECT * FROM USERS WHERE email = $1", [body.email.normalizeEmail()], 
+        pool.query("SELECT * FROM USERS WHERE email = $1", [body.email], 
             (err, results) => {
                 if (err) {
                     // Internal server error
