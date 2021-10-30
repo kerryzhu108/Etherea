@@ -6,7 +6,7 @@ const defaultHeaders = {
 }
 
 export function signUp(firstName, lastName, email, password, confirmPassword) {
-   fetch(domain + 'auth/register', {
+   return fetch(domain + 'auth/register', {
     method: 'POST',
     headers: defaultHeaders,
     mode: 'cors',
@@ -18,11 +18,12 @@ export function signUp(firstName, lastName, email, password, confirmPassword) {
       "password": password,
       "confirmPassword" : confirmPassword
     })
-  }).then((response) => response.json())
-  .then((responseData) => {
-    console.log(responseData);
-    return responseData;
-  })
+  }).then((response) => { return response; })
+  // response.json())
+  // .then((responseData) => {
+  //   //console.log(responseData);
+  //   return responseData;
+  // })
 }
 
 export function login(email, password) {
