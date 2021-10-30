@@ -14,16 +14,19 @@ router.post('/register', [
     check("email").isEmail(),
     check("first_name").isString(),
     check("last_name").isString(),
-    check("password").isString().isLength({ min: 8 })
+    check("password").isString().isLength({ min: 8 }),
+    check("confirmPassword").isString().isLength({ min: 8 })
 ], async (req, res) => {
-    console.log(req.body);
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     } else {
-
         const body = req.body;
+        if ( body.password !== body.confirmPassword ) {
+            return res.status(400).json({ error: { message: "Passwords do not match" } });
+        }
+        
         const hashed_password = await bcrypt.hash(body.password, 10);
 
         pool.query("SELECT * FROM USERS WHERE email = $1", [body.email], 
