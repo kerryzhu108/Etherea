@@ -45,9 +45,9 @@ const formatValidationResult = validationResult.withDefaults({
 
 // Registration endpoint
 router.post('/register', [
-    check("email").normalizeEmail().isEmail(),
     check("first_name").isString().isLength({ min: 1 }),
     check("last_name").isString().isLength({ min: 1 }),
+    check("email").normalizeEmail().isEmail(),
     check("password").isString().isLength({ min: 8 }),
     check("confirmPassword").isString().isLength({ min: 8 })
 ], async (req, res) => {
