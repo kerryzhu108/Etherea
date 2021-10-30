@@ -32,8 +32,8 @@ router.post('/register', [
         ;(async () => {
             const client = await pool.connect()
             try {
-                const res = await client.query("SELECT * FROM users WHERE email=$1", [body.email])
-                if (res.rows.length > 0) {
+                const result = await client.query("SELECT * FROM users WHERE email=$1", [body.email])
+                if (result.rows.length > 0) {
                     return res.status(400).json({ error: { message: "Email already registered. " } });
                 }
             } finally {
