@@ -9,43 +9,6 @@ const { pool } = require('../config');
 //const config = require('../config');
 //const pool = new Pool(config.db);
 
-// const formatValidationResult = validationResult.withDefaults({
-//     formatter: error => {
-//         if ( error.param === "email" ) {
-//             if ( error.value === "" ) {
-//                 return { message: "The Email field is required. " };
-//             }
-//             return { message: "Please enter a valid email. " };
-//         }
-//         if ( error.param === "first_name" ) {
-//             if ( error.value === "" ) {
-//                 return { message: "The First Name field is required. " };
-//             }
-//             return { message: "First Name contains invalid characters. " };
-//         }
-//         if ( error.param === "last_name" ) {
-//             if ( error.value === "" ) {
-//                 return { message: "The Last Name field is required. " };
-//             }
-//             return { message: "Last Name contains invalid characters. " };
-//         }
-//         if ( error.param === "password" && error.value === "" ) {
-//             return { message: "The Password field is required. " };
-//         }
-//         if ( error.param === "confirmPassword" && error.value === "" ) {
-//             return { message: "The Confirm Password field is required. " };
-//         }
-//         if ( (error.param === "password" || error.param === "confirmPassword") ) {
-//             if ( error.value.length < 8 ) {
-//                 return { message: "Password must be a least 8 characters long. " };
-//             }
-//             return { message: "Password contains invalid characters. " };
-//         } else {
-//             return null;
-//         }
-//     }
-//   });
-
 // Registration endpoint
 router.post('/register', [
     check("first_name").isString().isLength({ min: 1 }),
@@ -59,7 +22,7 @@ router.post('/register', [
     const body = req.body;
 
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ error: errors.array() });
     } else {
         if ( body.password !== body.confirmPassword ) {
             return res.status(400).json({ error: { message: "Passwords do not match. " } });
@@ -83,7 +46,7 @@ router.post('/register', [
                     return res.status(500).json( { error: { message: err.toString() } } ) 
                 }
             )
-            
+
         // pool.query("SELECT * FROM users WHERE email=$1", [body.email], 
         //     (err, results) => {
         //         if (err) {
