@@ -9,42 +9,42 @@ const { pool } = require('../config');
 //const config = require('../config');
 //const pool = new Pool(config.db);
 
-const formatValidationResult = validationResult.withDefaults({
-    formatter: error => {
-        if ( error.param === "email" ) {
-            if ( error.value === "" ) {
-                return { message: "The Email field is required. " };
-            }
-            return { message: "Please enter a valid email. " };
-        }
-        if ( error.param === "first_name" ) {
-            if ( error.value === "" ) {
-                return { message: "The First Name field is required. " };
-            }
-            return { message: "First Name contains invalid characters. " };
-        }
-        if ( error.param === "last_name" ) {
-            if ( error.value === "" ) {
-                return { message: "The Last Name field is required. " };
-            }
-            return { message: "Last Name contains invalid characters. " };
-        }
-        if ( error.param === "password" && error.value === "" ) {
-            return { message: "The Password field is required. " };
-        }
-        if ( error.param === "confirmPassword" && error.value === "" ) {
-            return { message: "The Confirm Password field is required. " };
-        }
-        if ( (error.param === "password" || error.param === "confirmPassword") ) {
-            if ( error.value.length < 8 ) {
-                return { message: "Password must be a least 8 characters long. " };
-            }
-            return { message: "Password contains invalid characters. " };
-        } else {
-            return null;
-        }
-    }
-  });
+// const formatValidationResult = validationResult.withDefaults({
+//     formatter: error => {
+//         if ( error.param === "email" ) {
+//             if ( error.value === "" ) {
+//                 return { message: "The Email field is required. " };
+//             }
+//             return { message: "Please enter a valid email. " };
+//         }
+//         if ( error.param === "first_name" ) {
+//             if ( error.value === "" ) {
+//                 return { message: "The First Name field is required. " };
+//             }
+//             return { message: "First Name contains invalid characters. " };
+//         }
+//         if ( error.param === "last_name" ) {
+//             if ( error.value === "" ) {
+//                 return { message: "The Last Name field is required. " };
+//             }
+//             return { message: "Last Name contains invalid characters. " };
+//         }
+//         if ( error.param === "password" && error.value === "" ) {
+//             return { message: "The Password field is required. " };
+//         }
+//         if ( error.param === "confirmPassword" && error.value === "" ) {
+//             return { message: "The Confirm Password field is required. " };
+//         }
+//         if ( (error.param === "password" || error.param === "confirmPassword") ) {
+//             if ( error.value.length < 8 ) {
+//                 return { message: "Password must be a least 8 characters long. " };
+//             }
+//             return { message: "Password contains invalid characters. " };
+//         } else {
+//             return null;
+//         }
+//     }
+//   });
 
 // Registration endpoint
 router.post('/register', [
