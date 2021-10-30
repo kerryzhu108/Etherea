@@ -67,7 +67,7 @@ router.post('/register', [
 
         const hashed_password = await bcrypt.hash(body.password, 10);
         
-        pool.query("SELECT * FROM USERS WHERE email = $1", [body.email], 
+        pool.query("SELECT * FROM users WHERE email=$1", [body.email], 
             (err, results) => {
                 if (err) {
                     // Internal server error
