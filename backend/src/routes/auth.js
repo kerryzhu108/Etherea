@@ -66,7 +66,7 @@ router.post('/register', [
         }
 
         const hashed_password = await bcrypt.hash(body.password, 10);
-
+        
         pool.query("SELECT * FROM USERS WHERE email = $1", [body.email], 
             (err, results) => {
                 if (err) {
@@ -86,7 +86,7 @@ router.post('/register', [
             try {
                 const res = await client.query(`INSERT INTO Users (email, password, firstname, lastname) 
                                                 values ($1, $2, $3, $4) RETURNING uid`,
-                            [body.email.normalizeEmail(), hashed_password, body.first_name, body.last_name])
+                            [body.email, hashed_password, body.first_name, body.last_name])
                 var userId = res.rows[0].uid;
                 client.query("INSERT INTO progressInfo (id) VALUES ($1)", [userId])
                 client.query("INSERT INTO impactStats (uid) VALUES ($1)", [userId])
