@@ -66,18 +66,35 @@ router.post('/register', [
         }
 
         const hashed_password = await bcrypt.hash(body.password, 10);
-        
-        pool.query("SELECT * FROM users WHERE email=$1", [body.email], 
-            (err, results) => {
-                if (err) {
-                    // Internal server error
-                    return res.status(500).json({ error: { message: err.toString() } });
-                }
-                if (results.rows.length > 0) {
+        ;(async () => {
+            const client = await pool.connect()
+            try {
+                const res = await client.query("SELECT * FROM users WHERE email=$1", [body.email])
+                if (res.rows.length > 0) {
                     return res.status(400).json({ error: { message: "Email already registered. " } });
                 }
+            } finally {
+                client.release()
             }
-        );
+            })()
+            .catch(
+                err => { 
+                    // Internal server error
+                    return res.status(500).json( { error: { message: err.toString() } } ) 
+                }
+            )
+            
+        // pool.query("SELECT * FROM users WHERE email=$1", [body.email], 
+        //     (err, results) => {
+        //         if (err) {
+        //             // Internal server error
+        //             return res.status(500).json({ error: { message: err.toString() } });
+        //         }
+        //         if (results.rows.length > 0) {
+        //             return res.status(400).json({ error: { message: "Email already registered. " } });
+        //         }
+        //     }
+        // );
 
         // Attempt to insert the user into the database
         // On successful registration, add user id to table progressInfo and table impactStats
@@ -102,7 +119,7 @@ router.post('/register', [
             )
 
         // On successful registration, return successful response
-        return res.json({ message: `Successfully created user` });
+        return res.status(200).json({ message: `Successfully created user` });
     }
 });
 
