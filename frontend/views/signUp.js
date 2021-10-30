@@ -69,7 +69,7 @@ export default class SignUp extends React.Component {
             if ( error.param === "confirmPassword" && error.value === "" ) {
               messageString += "The Confirm Password field is required. ";
             }
-            if ( (error.param === "password" || error.param === "confirmPassword") ) {
+            if ( (error.param === "password" || error.param === "confirmPassword") && error.value !== "") {
                 if ( error.value.length < 8 ) {
                   messageString += "Password must be a least 8 characters long. ";
                 } else {

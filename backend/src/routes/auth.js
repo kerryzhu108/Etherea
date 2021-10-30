@@ -29,60 +29,39 @@ router.post('/register', [
         }
 
         const hashed_password = await bcrypt.hash(body.password, 10);
-        ;(async () => {
-            const client = await pool.connect()
-            try {
-                const result = await client.query("SELECT * FROM users WHERE email=$1", [body.email])
-                if (result.rows.length > 0) {
-                    return res.status(400).json({ error: { message: "Email already registered. " } });
+        pool.query("SELECT * FROM users WHERE email=$1", [body.email],
+            (err, results) => {
+              if (err) {
+                return res.status(500).json({ error: { message: err.toString() } });
+              }
+              else if (results.rows.length > 0) {
+                return res.status(400).json({ error: { message: "Email already registered. " } });
+              } else {
+                pool.query(`INSERT INTO Users (email, password, firstname, lastname) 
+                            values ($1, $2, $3, $4) RETURNING uid`,
+                            [body.email, hashed_password, body.first_name, body.last_name],
+                    (err, results) => {
+                        if (err) { 
+                            return res.status(500).json({ error: { message: err.toString() } });
+                        }
+                        var userId = results.rows[0].uid;
+                        pool.query("INSERT INTO progressInfo (id) VALUES ($1)", [userId], 
+                            (err, results) => {
+                                if (err) { 
+                                    return res.status(500).json({ error: { message: err.toString() } });
+                                }
+                            });
+                        pool.query("INSERT INTO impactStats (uid) VALUES ($1)", [userId], 
+                            (err, results) => {
+                                if (err) { 
+                                    return res.status(500).json({ error: { message: err.toString() } });
+                                }
+                            });
+                        // On successful registration, return successful response
+                        return res.status(200).json({ message: `Successfully created user` });
+                    });
                 }
-            } finally {
-                client.release()
-            }
-            })()
-            .catch(
-                err => { 
-                    // Internal server error
-                    return res.status(500).json( { error: { message: err.toString() } } ) 
-                }
-            )
-
-        // pool.query("SELECT * FROM users WHERE email=$1", [body.email], 
-        //     (err, results) => {
-        //         if (err) {
-        //             // Internal server error
-        //             return res.status(500).json({ error: { message: err.toString() } });
-        //         }
-        //         if (results.rows.length > 0) {
-        //             return res.status(400).json({ error: { message: "Email already registered. " } });
-        //         }
-        //     }
-        // );
-
-        // Attempt to insert the user into the database
-        // On successful registration, add user id to table progressInfo and table impactStats
-        ;(async () => {
-            const client = await pool.connect()
-            try {
-                const res = await client.query(`INSERT INTO Users (email, password, firstname, lastname) 
-                                                values ($1, $2, $3, $4) RETURNING uid`,
-                            [body.email, hashed_password, body.first_name, body.last_name])
-                var userId = res.rows[0].uid;
-                client.query("INSERT INTO progressInfo (id) VALUES ($1)", [userId])
-                client.query("INSERT INTO impactStats (uid) VALUES ($1)", [userId])
-            } finally {
-                client.release()
-            }
-            })()
-            .catch(
-                err => { 
-                    // Internal server error
-                    return res.status(500).json( { error: { message: err.toString() } } ) 
-                }
-            )
-
-        // On successful registration, return successful response
-        return res.status(200).json({ message: `Successfully created user` });
+            });
     }
 });
 
