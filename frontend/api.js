@@ -6,13 +6,20 @@ const defaultHeaders = {
 }
 
 export function signUp(firstName, lastName, email, password, confirmPassword) {
-  return fetch(domain + 'get_items', {
-    method: 'GET',
+   fetch(domain + 'auth/register', {
+    method: 'POST',
     headers: defaultHeaders,
     body: JSON.stringify({
-      fir
+      "first_name": firstName,
+      "last_name": lastName,
+      "email": email,
+      "password": password
     })
-  })   
+  }).then((response) => response.json())
+  .then((responseData) => {
+    console.log(responseData);
+    return responseData;
+  })
 }
 
 export function getTotalCost(checkoutItems, discountCode) {

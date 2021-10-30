@@ -28,8 +28,6 @@ const pool = new Pool({
 
 // module.exports = config;
 
-
-
 async function dropTables() {
     if (isProduction) {
         return;

@@ -1,6 +1,6 @@
 const express = require('express');
 var router = express.Router();
-const { check, validationResult } = require('express-validator');
+const { check, validationResult, body } = require('express-validator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { generateAccessToken, authenticateToken, generateRefreshToken } = require("../token");
@@ -16,6 +16,7 @@ router.post('/register', [
     check("last_name").isString(),
     check("password").isString().isLength({ min: 8 })
 ], async (req, res) => {
+    console.log(req.body);
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -41,11 +42,19 @@ router.post('/register', [
                             return res.status(400).json({ error: { message: err.toString() } });
                         }
 
-                        // On successful registration, add user id to table progressInfo
+                        // On successful registration, add user id to table progressInfo and table impactStats;
                         var userId = result.rows[0].uid;
                         pool.query("INSERT INTO progressInfo (id) VALUES ($1)", [userId],
                             (err, result) => {
                                 if (err) {
+                                    console.log("error inserting into progressInfo");
+                                    return res.status(400).json({ error: { message: err.toString() } });
+                                }
+                            });
+                        pool.query("INSERT INTO impactStats (uid) VALUES ($1)", [userId],
+                            (err, result) => {
+                                if (err) {
+                                    console.log("error inserting into impactStats");
                                     return res.status(400).json({ error: { message: err.toString() } });
                                 }
                             });
