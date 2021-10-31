@@ -11,59 +11,57 @@ const { pool } = require('../config');
 
 // Registration endpoint
 router.post('/register', [
+    check("first_name").isString().isLength({ min: 1 }),
+    check("last_name").isString().isLength({ min: 1 }),
     check("email").isEmail(),
-    check("first_name").isString(),
-    check("last_name").isString(),
-    check("password").isString().isLength({ min: 8 })
+    check("password").isString().isLength({ min: 8 }),
+    check("confirmPassword").isString().isLength({ min: 8 })
 ], async (req, res) => {
-    console.log(req.body);
     const errors = validationResult(req);
 
+    const body = req.body;
+
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ error: errors.array() });
     } else {
+        if ( body.password !== body.confirmPassword ) {
+            return res.status(400).json({ error: { message: "Passwords do not match. " } });
+        }
 
-        const body = req.body;
         const hashed_password = await bcrypt.hash(body.password, 10);
-
-        pool.query("SELECT * FROM USERS WHERE email = $1",
-            [body.email], (err, results) => {
-                if (err) {
-                    return res.status(400).json({ error: { message: err.toString() } });
-                }
-                if (results.rows.length > 0) {
-                    return res.status(400).json({ error: { message: "Email already registered" } });
-                }
-
-                // Attempt to insert the user into the database
-                pool.query("INSERT INTO Users (email, password, firstname, lastname) values ($1, $2, $3, $4) RETURNING uid",
-                    [body.email, hashed_password, body.first_name, body.last_name], (err, result) => {
-                        if (err) {
-                            return res.status(400).json({ error: { message: err.toString() } });
+        pool.query("SELECT * FROM users WHERE email=$1", [body.email],
+            (err, results) => {
+              if (err) {
+                return res.status(500).json({ error: { message: err.toString() } });
+              }
+              else if (results.rows.length > 0) {
+                return res.status(400).json({ error: { message: "Email already registered. " } });
+              } else {
+                pool.query(`INSERT INTO Users (email, password, firstname, lastname) 
+                            values ($1, $2, $3, $4) RETURNING uid`,
+                            [body.email, hashed_password, body.first_name, body.last_name],
+                    (err, results) => {
+                        if (err) { 
+                            return res.status(500).json({ error: { message: err.toString() } });
                         }
-
-                        // On successful registration, add user id to table progressInfo and table impactStats;
-                        var userId = result.rows[0].uid;
-                        pool.query("INSERT INTO progressInfo (id) VALUES ($1)", [userId],
-                            (err, result) => {
-                                if (err) {
-                                    console.log("error inserting into progressInfo");
-                                    return res.status(400).json({ error: { message: err.toString() } });
+                        var userId = results.rows[0].uid;
+                        pool.query("INSERT INTO progressInfo (id) VALUES ($1)", [userId], 
+                            (err, results) => {
+                                if (err) { 
+                                    return res.status(500).json({ error: { message: err.toString() } });
                                 }
                             });
-                        pool.query("INSERT INTO impactStats (uid) VALUES ($1)", [userId],
-                            (err, result) => {
-                                if (err) {
-                                    console.log("error inserting into impactStats");
-                                    return res.status(400).json({ error: { message: err.toString() } });
+                        pool.query("INSERT INTO impactStats (uid) VALUES ($1)", [userId], 
+                            (err, results) => {
+                                if (err) { 
+                                    return res.status(500).json({ error: { message: err.toString() } });
                                 }
                             });
-
                         // On successful registration, return successful response
-                        return res.json({ message: `Successfully created user` });
+                        return res.status(200).json({ message: `Successfully created user` });
                     });
-            }
-        );
+                }
+            });
     }
 });
 
@@ -78,7 +76,7 @@ router.post('/login', [
 
     const body = req.body;
 
-    pool.query("SELECT password, id FROM users WHERE email=$1",
+    pool.query("SELECT password, uid FROM users WHERE email=$1",
         [body.email], (err, result) => {
             if (err) {
                 return res.status(400).json({ error: { message: err.toString() } });
@@ -99,7 +97,7 @@ router.post('/login', [
                     // Generate an access token and send back to client
                     var access_token = generateAccessToken(body.email);
                     var refresh_token = generateRefreshToken(body.email);
-                    const userid = result.rows[0].id;
+                    const userid = result.rows[0].uid;
 
                     // Store refresh token in database
                     pool.query("UPDATE users SET refresh=$1 WHERE email=$2", [refresh_token, body.email], (err, result) => {

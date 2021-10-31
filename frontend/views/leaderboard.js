@@ -1,6 +1,6 @@
 'use strict'
 import React from "react";
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ImageBackground} from "react-native";
+import { View, Text, StyleSheet, FlatList, ImageBackground} from "react-native";
 
 
 const domain = 'https://etherea-dev.herokuapp.com/'
@@ -9,103 +9,68 @@ const defaultHeaders = {
   'Content-Type': 'application/json',
 }
 
-
-
-const DATA = [
-  {
-    pos: 4,
-    name: 'Andy',
-    level: 2,
-    points: 120
-  },
-  {
-    pos: 5,
-    name: 'Morgan',
-    level:2,
-    points: 117
-  },
-  {
-    pos: 6,
-    name: 'Kerry',
-    level: 1,
-    points: 112
-  },
-  {
-    pos: 7,
-    name: 'Tanmay',
-    level: 1,
-    points: 110
-  },
-  {
-    pos: 4,
-    name: 'Andy',
-    level: 2,
-    points: 120
-  },
-  {
-    pos: 5,
-    name: 'Morgan',
-    level:2,
-    points: 117
-  },
-  {
-    pos: 6,
-    name: 'Kerry',
-    level: 1,
-    points: 112
-  },
-  {
-    pos: 7,
-    name: 'Tanmay',
-    level: 1,
-    points: 110
-  }
-];
-
-const Item = ({ pos, name, level, points }) => (
+const Item = ({ pos, name, level, exp }) => (
   <View style={styles.item}>
     <Text style={styles.itemTextRank}>{pos}</Text>
     <Text style={styles.itemTextName}>{name}</Text>
     <ImageBackground source={require('../assets/leaderboardLevelBanner.png')} style={styles.imageLevelBackground}>
       <Text style={styles.itemTextLevel}>{level}</Text>
     </ImageBackground>
-    <Text style={styles.itemTextPoints}>{points}</Text>
+    <Text style={styles.itemTextPoints}>{exp}</Text>
     <Text style={styles.itemTextPointsLetter}>pts</Text>
-
   </View>
 );
 
 export default class Leaderboard extends React.Component {
 
-  /*state = {data: []}
-  componentWillMount() {
-    //return 
-    console.log("Here")
-    const inputObject = (fetch(domain + 'leaderboard', {
-      method: 'GET',
-      headers: defaultHeaders
-    }))   
-    this.setState({data: inputObject })
-  } */
+  state = {data: []}
+
   constructor(props) {
     super(props);
+    fetch(domain + 'leaderboard', {
+      method: 'GET',
+      headers: defaultHeaders
+    })
+    .then((response) => response.json())
+    .then((json) => {
+      let data_unrank = json.results
+      let i = 1
+      const data_rank = data_unrank.map((user) =>{
+        user.rank = i
+        i = i + 1
+        return user
+      })
+      this.setState({data: data_rank})
+      console.log(this.state.data)
+    })
+    .catch((error) => {
+      console.error(error); 
+    });
   }
   
   render() { 
     const renderItem = ({ item }) => (
-      <Item pos={item.pos} name={item.name} level={item.level} points={item.points}/>
+      <Item 
+        pos={item.rank} 
+        name={item.name} 
+        level={item.level} 
+        exp={item.exp}/>
     );
+
     return (
       <View style={styles.container}>
-        <ImageBackground source={require('../assets/leaderboardBackground.png')} resizeMode="cover" style={styles.imageScreenBackground}>
+        <ImageBackground source={require('../assets/leaderboardBackground.png')} 
+                         resizeMode="cover" 
+                         style={styles.imageScreenBackground}>
             <Text style={styles.title}>LEADERBOARD</Text>
-            <View style={styles.topThreeView}>
+            <View style={styles.topThreeView}> 
             </View>
-            <FlatList    
-              style={styles.list}
-              data={DATA}
-              renderItem={renderItem}
-              initialNumToRender={5}   
+              <FlatList    
+                style={styles.list}
+                data={this.state.data}
+                renderItem={renderItem}
+                initialNumToRender={5} 
+                keyExtractor={(item, index) => index.toString()}
             />
         </ImageBackground>
       </View>
@@ -123,10 +88,8 @@ const styles = StyleSheet.create({
   },
   imageLevelBackground: {
     flex: 1,
-    justifySelf: "center",
     resizeMode: "cover",
-    flex: 1,
-    alignSelf: "center",
+    flex: 1
   },
   item:{
     width: '90%',
@@ -146,35 +109,36 @@ const styles = StyleSheet.create({
   itemTextRank:{
     fontSize: 20,
     color: "white",
-    fontFamily:"Poppins",
+    //fontFamily:"Poppins",
     flex: 1,
     alignSelf: "center",
+    marginLeft: '5%'
   },
   itemTextName:{
     fontSize: 14,
     color: "white",
-    fontFamily:"Poppins",
+    //fontFamily:"Poppins",
     alignSelf: "center",
     flex: 3
   },
   itemTextLevel:{
     fontSize: 20,
     color: "#F296B8",
-    fontFamily:"Poppins",
+   // fontFamily:"Poppins",
     alignSelf: "center"
   },
   itemTextPoints:{
     fontSize: 20,
     color: "white",
-    fontFamily:"Poppins",
-    flex: 0.5,
+    //fontFamily:"Poppins",
+    flex: 0.75,
     fontWeight: 'bold',
     alignSelf: "center",
   },
   itemTextPointsLetter:{
     fontSize: 20,
     color: "white",
-    fontFamily:"Poppins",
+    //fontFamily:"Poppins",
     flex: 1,
     alignSelf: "center",
   },
@@ -182,7 +146,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 10,
     alignSelf: 'center',
-    fontFamily:"Poppins",
+   // fontFamily:"Poppins",
     fontWeight: 'bold',
     color:"#747070"
   },

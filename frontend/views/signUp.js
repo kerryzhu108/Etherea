@@ -1,5 +1,8 @@
 import React from "react";
 import { View, Text, Button, StyleSheet, TextInput } from "react-native";
+import FlashMessage from "react-native-flash-message";
+import { showMessage, hideMessage } from "react-native-flash-message";
+import { signUp } from "../api";
 
 export default class SignUp extends React.Component { 
   constructor(props) {
@@ -9,7 +12,8 @@ export default class SignUp extends React.Component {
       lastName: '',
       email: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      errorMessage: ''
     };
   }
 
@@ -19,6 +23,79 @@ export default class SignUp extends React.Component {
         [name]: value,
     });
   }
+  
+  signUpButtonHandler = (response) => {
+    const status = response.status;
+    var messageString = "";
+    response.json().then((responseData) => {
+      console.log(responseData);
+      if (status === 200) {
+        console.log("successful");
+        showMessage({
+          message: "Congratulations!",
+          description: "You have successfully registered",
+          type: "success",
+          duration: 6000,
+        });
+        return;
+      }
+      if (status === 400) {
+        if (Array.isArray(responseData.error)) {
+          responseData.error.forEach(function(error) {
+            if ( error.param === "email" ) {
+                if ( error.value === "" ) {
+                  messageString += "The Email field is required. ";
+                } else { 
+                  messageString += "Please enter a valid email. ";
+                }
+            }
+            if ( error.param === "first_name" ) {
+                if ( error.value === "" ) {
+                  messageString += "The First Name field is required. "; 
+                } else {
+                  messageString += "First Name contains invalid characters. ";
+                }
+            }
+            if ( error.param === "last_name" ) {
+                if ( error.value === "" ) {
+                  messageString += "The Last Name field is required. ";
+                } else {
+                  messageString += "Last Name contains invalid characters. ";
+                }
+            }
+            if ( error.param === "password" && error.value === "" ) {
+              messageString += "The Password field is required. ";
+            }
+            if ( error.param === "confirmPassword" && error.value === "" ) {
+              messageString += "The Confirm Password field is required. ";
+            }
+            if ( (error.param === "password" || error.param === "confirmPassword") && error.value !== "") {
+                if ( error.value.length < 8 ) {
+                  messageString += "Password must be a least 8 characters long. ";
+                } else {
+                  messageString += "Password contains invalid characters. ";
+                }
+            } 
+          })
+        } else {
+          messageString = responseData.error.message;
+        }
+        showMessage({
+          message: "There was a problem with your request.\nPlease try again.",
+          description: messageString,
+          type: "danger",
+          duration: 6000,
+        });
+      } else {
+        showMessage({
+          message: "Internal Server Error. Please try again later.",
+          description: "The server encountered an internal error or misconfiguration and was unable to complete your request.",
+          type: "danger",
+          duration: 6000,
+        });
+    }
+  })
+}
 
   render() { 
     return (
@@ -56,7 +133,13 @@ export default class SignUp extends React.Component {
 
         <Text style={styles.goLogin} onPress={() => this.props.navigation.navigate('Login')}>Already have an account? Click here.</Text>
 
-        <Button title='Login' onPress={text => {console.log(this.state.firstName)}}/>
+        <Button title='Sign Up' onPress={() => { 
+          console.log(this.state.firstName, this.state.lastName, this.state.email, this.state.password, this.state.confirmPassword);
+          signUp(this.state.firstName, this.state.lastName, this.state.email, this.state.password, this.state.confirmPassword)
+          .then(response => this.signUpButtonHandler(response));
+        }}/>
+
+        <FlashMessage position="top" />
       </View>
     );
   }
