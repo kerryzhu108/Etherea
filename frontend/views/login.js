@@ -1,5 +1,9 @@
 import React from "react";
 import { View, Text, Button, StyleSheet, TextInput } from "react-native";
+import { login } from "../apis/login.js";
+import { showMessage } from "react-native-flash-message";
+import FlashMessage from "react-native-flash-message";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class SignUp extends React.Component { 
   constructor(props) {
@@ -16,9 +20,26 @@ export default class SignUp extends React.Component {
     });
   }
 
+  loginHandler = (response) => {
+    response.json().then((responseData) => {
+      if (!responseData.tokens) {
+        showMessage({
+          message: "Oops",
+          description: responseData?.error?.message ? responseData.error.message : 'invalid credentials',
+          type: "danger",
+          duration: 4000,
+        });
+        return;
+      }
+      AsyncStorage.setItem('userid', responseData.userid)
+      this.props.navigation.navigate('Home')
+    })
+  }
+
   render() { 
     return (
       <View style={styles.container}>
+        <FlashMessage position="top" />
         <Text style={{fontSize: 30}}>Login</Text>
 
         <TextInput 
@@ -35,7 +56,9 @@ export default class SignUp extends React.Component {
 
         <Text style={styles.goSignup} onPress={() => this.props.navigation.navigate('SignUp')}>Don't have an account? Click here.</Text>
 
-        <Button title='Login' onPress={text => {console.log(this.state.email)}}/>
+        <Button title='Login' onPress={() => {
+            login(this.state.email, this.state.password).then(response => this.loginHandler.bind(this)(response))
+          }}/>
       </View>
     );
   }

@@ -6,6 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Landing from './views/landing.js'
 import SignUp from './views/signUp.js'
 import Login from './views/login.js'
+import Home from './views/home.js'
 
 const Stack = createNativeStackNavigator();
 class App extends Component {
@@ -22,6 +23,7 @@ class App extends Component {
           <Stack.Screen name="Landing" component={Landing}/>
           <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Home" component={Home} />
         </Stack.Navigator>
       </NavigationContainer>
     )
