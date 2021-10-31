@@ -1,11 +1,8 @@
-# YOUR PRODUCT/TEAM NAME
-
-> _Note:_ This document is intended to be relatively short. Be concise and precise. Assume the reader has no prior knowledge of your application and is non-technical. 
+# Etherea
 
 ## Description 
- * Provide a high-level description of your application and it's value from an end-user's perspective
- * What is the problem you're trying to solve?
- * Is there any context required to understand **why** the application solves this problem?
+
+Our app encourages Sustainable Development Goals such as preventing pollution and human-induced climate change. The app aims to make individuals live more sustainably by setting monthly themes with goals they can check off daily and a leaderboard for people to share and compete against and a calculator that quantifies their impact. Users who wants to minimize their carbon footprint, but don't have the motivation to or users who want to improve their lifestyles, but are ignorant on how to make that happen would find value in this app. The application solves this problem because it encourages users meet Sustainable Development Goals by informing users about the impact they are making and allowing them to compete through a leaderboard.
 
 ## Key Features
  * Described the key features in the application that the user can access
