@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, Button, StyleSheet, TextInput } from "react-native";
 import FlashMessage from "react-native-flash-message";
 import { showMessage, hideMessage } from "react-native-flash-message";
-import { signUp } from "../api";
+import { signUp } from "../apis/login.js";
 
 export default class SignUp extends React.Component { 
   constructor(props) {
@@ -17,7 +17,6 @@ export default class SignUp extends React.Component {
   }
 
   onChangeInputHandler = (name, value) => {
-    console.log(name)
     this.setState({
         [name]: value,
     });
@@ -34,8 +33,9 @@ export default class SignUp extends React.Component {
           message: "Congratulations!",
           description: "You have successfully registered",
           type: "success",
-          duration: 6000,
+          duration: 4000,
         });
+        setTimeout(() => { this.props.navigation.navigate('Home') }, 3000);
         return;
       }
       if (status === 400) {

@@ -15,8 +15,7 @@ router.get('/leaderboard', async (req, res) => {
       res.json(results);
       client.release();
     } catch (err) {
-      console.error(err);
-      res.send("Error " + err);
+      res.status(500).json({error: {message: err.toString()}});
     }
   })
 

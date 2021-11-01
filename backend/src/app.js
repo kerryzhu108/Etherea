@@ -5,6 +5,7 @@ var rootRouter = require("./routes/root");
 var taskRouter = require("./routes/taskSystem");
 var leaderboardRouter = require("./routes/leaderboard");
 var impactStatsRouter = require("./routes/impactStats");
+var profileRouter = require("./routes/profile");
 var authRouter = require("./routes/auth");
 
 require("dotenv").config();
@@ -17,8 +18,8 @@ const app = express();
 // Application middleware
 app.use(express.json());
 app.use(express.urlencoded({
-    extended: true
-  }));
+  extended: true
+}));
 app.use(bodyParser.json());
 
 // Route endpoints
@@ -27,5 +28,6 @@ app.use("/", taskRouter);
 app.use("/", leaderboardRouter);
 app.use("/", impactStatsRouter);
 app.use("/auth/", authRouter);
+app.use("/profile/", profileRouter);
 
 module.exports = app;

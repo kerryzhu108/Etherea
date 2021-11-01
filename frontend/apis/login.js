@@ -1,9 +1,5 @@
 'use strict'
-const domain = 'https://etherea-dev.herokuapp.com/'
-const defaultHeaders = {
-  'Accept': 'application/json',
-  'Content-Type': 'application/json'
-}
+import {domain, defaultHeaders} from './headers.js'
 
 export function signUp(firstName, lastName, email, password, confirmPassword) {
    return fetch(domain + 'auth/register', {
@@ -27,7 +23,7 @@ export function signUp(firstName, lastName, email, password, confirmPassword) {
 }
 
 export function login(email, password) {
-  fetch(domain + 'auth/login', {
+  return fetch(domain + 'auth/login', {
    method: 'POST',
    headers: defaultHeaders,
    mode: 'cors',
@@ -36,20 +32,5 @@ export function login(email, password) {
      "email": email,
      "password": password
    })
- }).then((response) => response.json())
- .then((responseData) => {
-   console.log(responseData);
-   return responseData;
  })
-}
-
-export function getTotalCost(checkoutItems, discountCode) {
-  return fetch(domain + 'get_total_cost', {
-    method: 'POST',
-    headers: defaultHeaders,
-    body: JSON.stringify({
-      items: checkoutItems,
-      discount: discountCode
-    })
-  })   
 }
