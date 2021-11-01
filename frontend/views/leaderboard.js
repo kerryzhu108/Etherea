@@ -1,6 +1,7 @@
 'use strict'
 import React from "react";
 import { View, Text, StyleSheet, FlatList, ImageBackground } from "react-native";
+import NavigationPanel from '../components/navigationPanel.js';
 
 
 import { domain, defaultHeaders } from "../apis/headers";
@@ -68,6 +69,7 @@ export default class Leaderboard extends React.Component {
             initialNumToRender={5}
             keyExtractor={(item, index) => index.toString()}
           />
+        <NavigationPanel navigation={this.props.navigation}/>
         </ImageBackground>
       </View>
     );
