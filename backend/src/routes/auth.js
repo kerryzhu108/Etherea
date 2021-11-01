@@ -76,42 +76,28 @@ router.post('/login', [
 
     const body = req.body;
 
-    pool.query("SELECT password, uid FROM users WHERE email=$1",
-        [body.email], (err, result) => {
-            if (err) {
-                return res.status(400).json({ error: { message: err.toString() } });
-            }
+    try {
+        const client = await pool.connect();
+        var result = await client.query("SELECT password, uid FROM users WHERE email=$1", [body.email]);
+        if (result.rows.length <= 0) {
+            return res.status(401).json({error: {message: "Email does not exist"}})
+        }
 
-            if (result.rows.length <= 0) {
-                return res.status(401).json({ error: { message: "Email does not exist" } });
-            }
+        const password = result.rows[0].password;
+        const isMatch = await bcrypt.compare(body.password, password);
+        if (!isMatch) return res.status(401).json({error: {message: "Invalid password"}});
 
-            // On successful registration, return successful response
-            const password = result.rows[0].password;
-            bcrypt.compare(body.password, password, (err, isMatch) => {
-                if (err) {
-                    return res.json({ error: { message: err.toString() } });
-                }
+        const access_token = generateAccessToken(body.email);
+        const refresh_token = generateRefreshToken(body.email);
+        const uid = result.rows[0].uid;
 
-                if (isMatch) {
-                    // Generate an access token and send back to client
-                    var access_token = generateAccessToken(body.email);
-                    var refresh_token = generateRefreshToken(body.email);
-                    const userid = result.rows[0].uid;
+        result = await client.query("UPDATE users SET refresh=$1 WHERE email=$2", [refresh_token, body.email]);
+        return res.json({userid: uid, tokens: {access: access_token, refresh: refresh_token}});
 
-                    // Store refresh token in database
-                    pool.query("UPDATE users SET refresh=$1 WHERE email=$2", [refresh_token, body.email], (err, result) => {
-                        if (err) {
-                            return res.status(400).json({ error: { message: err.toString() } });
-                        }
-
-                        return res.json({ userid: userid, tokens: { access: access_token, refresh: refresh_token } });
-                    });
-                } else {
-                    return res.status(401).json({ error: { message: "Invalid password" } });
-                }
-            });
-        });
+        
+    } catch(err) {
+        return res.status(500).json({error: {message: err.toString()}});
+    }
 });
 
 router.post("/refresh", [
