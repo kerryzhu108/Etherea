@@ -7,9 +7,6 @@ Return a list of all player ids, firstnames, lastnames, and experience points
 
 **Auth** : `NO`
 
-## Success Response
-**Code** : `200 OK`
-
 **Data Example**
 
 ```json
@@ -20,3 +17,8 @@ Return a list of all player ids, firstnames, lastnames, and experience points
     "exp_points": [10, 5]
 }
 ```
+
+## Success Response
+**Code** : `200 OK`
+
+
