@@ -13,7 +13,6 @@ export default class SignUp extends React.Component {
       email: '',
       password: '',
       confirmPassword: '',
-      errorMessage: ''
     };
   }
 
