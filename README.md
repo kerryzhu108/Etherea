@@ -11,8 +11,8 @@ Our app encourages Sustainable Development Goals such as preventing pollution an
 
 ## Instructions
 ### Accessing the Application
-1. Install the Expo Go app on an Android device. The application can be accessed from the following website: <TODO: Add deployment website here>
-- Note: The backend API is deployed to [https://etherea-dev.herokuapp.com/]() and calls can be made to the REST API there.
+1. Install the Expo Go app on an Android device. The application can be accessed from the following Expo project page: [https://expo.dev/@zacharyvincze/eth](https://expo.dev/@zacharyvincze/eth)
+- Note: The backend API is deployed to [https://etherea-dev.herokuapp.com/](https://etherea-dev.herokuapp.com/) and calls can be made to the REST API there.
 
 ### Using the application
 1. Initially, no users are created. You will be prompted with a login and sign up button to create your profile.
