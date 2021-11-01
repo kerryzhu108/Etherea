@@ -10,12 +10,13 @@ Return a list of all player ids, firstnames, lastnames, and experience points
 ## Success Response
 **Code** : `200 OK`
 
-**Content Example**
-
-TODO: verify the structure of the content
+**Data Example**
 
 ```json
 {
-    
+    "playerIDs": [1, 2],
+    "first_names": [Joe, Jill],
+    "last_names": [Jackson, Jackie],
+    "exp_points": [10, 5]
 }
 ```
