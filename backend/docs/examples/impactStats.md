@@ -7,15 +7,17 @@ Return a specific user's emissions reduced and animals saved count.
 
 **Auth** : `NO`
 
-## Success Response
-**Code** : `200 OK`
-
-**Content Example**
-
-TODO: verify the structure of the content
+**Data Example**
 
 ```json
 {
-    
+    "userid": 1,
+    "emissionsReduced": 100,
+    "animalsSaved":5
 }
 ```
+
+## Success Response
+**Code** : `200 OK`
+
+

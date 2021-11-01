@@ -1,13 +1,10 @@
 'use strict'
 import React from "react";
-import { View, Text, StyleSheet, FlatList, ImageBackground} from "react-native";
+import { View, Text, StyleSheet, FlatList, ImageBackground } from "react-native";
+import NavigationPanel from '../components/navigationPanel.js';
 
 
-const domain = 'https://etherea-dev.herokuapp.com/'
-const defaultHeaders = {
-  Accept: 'application/json',
-  'Content-Type': 'application/json',
-}
+import { domain, defaultHeaders } from "../apis/headers";
 
 const Item = ({ pos, name, level, exp }) => (
   <View style={styles.item}>
@@ -23,7 +20,7 @@ const Item = ({ pos, name, level, exp }) => (
 
 export default class Leaderboard extends React.Component {
 
-  state = {data: []}
+  state = { data: [] }
 
   constructor(props) {
     super(props);
@@ -31,52 +28,53 @@ export default class Leaderboard extends React.Component {
       method: 'GET',
       headers: defaultHeaders
     })
-    .then((response) => response.json())
-    .then((json) => {
-      let data_unrank = json.results
-      let i = 1
-      const data_rank = data_unrank.map((user) =>{
-        user.rank = i
-        i = i + 1
-        return user
+      .then((response) => response.json())
+      .then((json) => {
+        let data_unrank = json.results
+        let i = 1
+        const data_rank = data_unrank.map((user) => {
+          user.rank = i
+          i = i + 1
+          return user
+        })
+        this.setState({ data: data_rank })
+        console.log(this.state.data)
       })
-      this.setState({data: data_rank})
-      console.log(this.state.data)
-    })
-    .catch((error) => {
-      console.error(error); 
-    });
+      .catch((error) => {
+        console.error(error);
+      });
   }
-  
-  render() { 
+
+  render() {
     const renderItem = ({ item }) => (
-      <Item 
-        pos={item.rank} 
-        name={item.name} 
-        level={item.level} 
-        exp={item.exp}/>
+      <Item
+        pos={item.rank}
+        name={item.name}
+        level={item.level}
+        exp={item.exp} />
     );
 
     return (
       <View style={styles.container}>
-        <ImageBackground source={require('../assets/leaderboardBackground.png')} 
-                         resizeMode="cover" 
-                         style={styles.imageScreenBackground}>
-            <Text style={styles.title}>LEADERBOARD</Text>
-            <View style={styles.topThreeView}> 
-            </View>
-              <FlatList    
-                style={styles.list}
-                data={this.state.data}
-                renderItem={renderItem}
-                initialNumToRender={5} 
-                keyExtractor={(item, index) => index.toString()}
-            />
+        <ImageBackground source={require('../assets/leaderboardBackground.png')}
+          resizeMode="cover"
+          style={styles.imageScreenBackground}>
+          <Text style={styles.title}>LEADERBOARD</Text>
+          <View style={styles.topThreeView}>
+          </View>
+          <FlatList
+            style={styles.list}
+            data={this.state.data}
+            renderItem={renderItem}
+            initialNumToRender={5}
+            keyExtractor={(item, index) => index.toString()}
+          />
+        <NavigationPanel navigation={this.props.navigation}/>
         </ImageBackground>
       </View>
     );
   }
- 
+
 }
 
 const styles = StyleSheet.create({
@@ -91,12 +89,12 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     flex: 1
   },
-  item:{
+  item: {
     width: '90%',
     shadowColor: "#000",
     shadowOffset: {
-	    width: 0,
-	    height: 2.75,
+      width: 0,
+      height: 2.75,
     },
     shadowOpacity: 0.2,
     shadowRadius: 4,
@@ -106,7 +104,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "#F296B8"
   },
-  itemTextRank:{
+  itemTextRank: {
     fontSize: 20,
     color: "white",
     //fontFamily:"Poppins",
@@ -114,20 +112,20 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginLeft: '5%'
   },
-  itemTextName:{
+  itemTextName: {
     fontSize: 14,
     color: "white",
     //fontFamily:"Poppins",
     alignSelf: "center",
     flex: 3
   },
-  itemTextLevel:{
+  itemTextLevel: {
     fontSize: 20,
     color: "#F296B8",
-   // fontFamily:"Poppins",
+    // fontFamily:"Poppins",
     alignSelf: "center"
   },
-  itemTextPoints:{
+  itemTextPoints: {
     fontSize: 20,
     color: "white",
     //fontFamily:"Poppins",
@@ -135,7 +133,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     alignSelf: "center",
   },
-  itemTextPointsLetter:{
+  itemTextPointsLetter: {
     fontSize: 20,
     color: "white",
     //fontFamily:"Poppins",
@@ -146,16 +144,16 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 10,
     alignSelf: 'center',
-   // fontFamily:"Poppins",
+    // fontFamily:"Poppins",
     fontWeight: 'bold',
-    color:"#747070"
+    color: "#747070"
   },
   list: {
-    height:170,
+    height: 170,
     flexGrow: 0,
     marginLeft: "5%"
   },
-  topThreeView:{
+  topThreeView: {
     height: "30%"
   }
 

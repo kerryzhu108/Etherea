@@ -7,15 +7,15 @@ Return a list of all player ids, firstnames, lastnames, and experience points
 
 **Auth** : `NO`
 
-## Success Response
-**Code** : `200 OK`
-
-**Content Example**
-
-TODO: verify the structure of the content
+**Data Example**
 
 ```json
 {
-    
+    "leaderboard": [{"uid":11, "name":"Zachary Vincze", "exp":0}, {"uid":13, "name":"Jack Jackson", "exp":15}]
 }
 ```
+
+## Success Response
+**Code** : `200 OK`
+
+

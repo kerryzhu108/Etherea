@@ -1,3 +1,4 @@
+'use strict'
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
@@ -8,9 +9,7 @@ export default class Landing extends React.Component {
   render() { 
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Etherea</Text>
-        <Text style={styles.navigation} onPress={() => this.props.navigation.navigate('SignUp')}>Sign Up</Text>
-        <Text style={styles.navigation} onPress={() => this.props.navigation.navigate('Login')}>Login</Text>
+        <Text style={styles.title}>Impact stats</Text>
       </View>
     );
   }
