@@ -7,9 +7,6 @@ Return a specific user's emissions reduced and animals saved count.
 
 **Auth** : `NO`
 
-## Success Response
-**Code** : `200 OK`
-
 **Data Example**
 
 ```json
@@ -19,3 +16,8 @@ Return a specific user's emissions reduced and animals saved count.
     "animalsSaved":5
 }
 ```
+
+## Success Response
+**Code** : `200 OK`
+
+
