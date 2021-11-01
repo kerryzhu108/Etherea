@@ -14,8 +14,8 @@ Return a specific user's emissions reduced and animals saved count.
 
 ```json
 {
-    "userid":1,
-    "emissionsReduced":100
+    "userid": 1,
+    "emissionsReduced": 100,
     "animalsSaved":5
 }
 ```
