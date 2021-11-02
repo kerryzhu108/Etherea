@@ -2,10 +2,13 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUsername } from "../apis/profile";
+import { getTasks } from "../apis/tasks";
+import Task from "../components/Task";
 
 export default class Home extends React.Component {
     state = {
-        username: "NULL"
+        username: "NULL",
+        tasks: []
     }
 
     constructor(props) {
@@ -23,21 +26,44 @@ export default class Home extends React.Component {
         }).catch((error) => {
             console.error(error);
         })
-    }
 
+        this.state.tasks = getTasks(this.state.username)
+    }
+   
     render() {
         return (
-            <View style={styles.container}>
-                <Text style={styles.title}>Hello {this.state.username}</Text>
-                <Text style={styles.navigation} onPress={() => this.props.navigation.navigate('SignUp')}>Sign Up</Text>
-                <Text style={styles.navigation} onPress={() => this.props.navigation.navigate('Login')}>Login</Text>
+            <View style={styles.tasksWrapper}>
+            <Text style={styles.sectionTitle}>Your Tasks</Text>
+
+            <View style={styles.items}>
+              {
+                this.state.tasks.map((item, index) => {
+                  return (
+                    <TouchableOpacity key={index}>
+                      <Task text={item['descript']} /> 
+                    </TouchableOpacity>
+                  )
+                })
+              }
             </View>
+          </View>
         );
     }
 
 }
 
 const styles = StyleSheet.create({
+    tasksWrapper: {
+        paddingTop: 80,
+        paddingHorizontal: 20,
+      },
+      sectionTitle: {
+        fontSize: 24,
+        fontWeight: 'bold'
+      },
+      items: {
+        marginTop: 30,
+      },
     container: {
         alignItems: 'center',
         justifyContent: 'center',
