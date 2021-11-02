@@ -50,9 +50,24 @@ We are not planning on making many changes to our process, even to those we deem
 ## Product - Review
 
 #### Q4. How was your product demo?
- * How did you prepare your demo?
- * What did you manage to demo to your partner?
- * Did your partner accept the features?
- * Were there change requests?
- * What did you learn from the demo from either a process or product perspective?
- * *This section will be marked very leniently so keep it brief and just make sure the points are addressed*
+How did you prepare your demo?
+
+* Went through the features we a mock account, demoed to partner via sharing screens on mobile, each person explained the features they had been responsible for.
+
+What did you manage to demo to your partner?
+
+* We demoed the Login in and Sign up validations, selecting monthly tasks as new user, checking off tasks every day, the user's changing impact statistics, and the global leaderboard of the most impactful users.
+
+Did your partner accept the features?
+
+* Yes, they had no major issues with existing feature.
+
+Were there change requests?
+
+* The only changes requested were UI tweaks such as having the daily tasks display a checkmark instead of dissapear, and also additional infographics to display when the users select their tasks.
+
+What did you learn from the demo from either a process or product perspective?
+
+* Sometimes a feature that took a lot of work does not seem very impressive over demo. Like the sign up and login functionality. Client/customors are more impressed by good looking UI. Going through the demo with a brand new account on different phones is also an important process to catch unexpected bugs.  
+
+* *This section will be marked very leniently so keep it brief and just make sure the points are addressed*

@@ -22,7 +22,7 @@ export default class SignUp extends React.Component {
     });
   }
   
-  signUpButtonHandler = (response) => {
+  signUpButtonHandler = (response, nav) => {
     const status = response.status;
     var messageString = "";
     response.json().then((responseData) => {
@@ -33,7 +33,7 @@ export default class SignUp extends React.Component {
           type: "success",
           duration: 4000,
         });
-        this.props.navigation.navigate('Login');
+        setTimeout(function(){nav.navigate('Login');}, 500)
         return;
       }
       if (status === 400) {
@@ -132,7 +132,7 @@ export default class SignUp extends React.Component {
 
         <Button title='Sign Up' onPress={() => {
           signUp(this.state.firstName, this.state.lastName, this.state.email, this.state.password, this.state.confirmPassword)
-          .then(response => this.signUpButtonHandler(response));
+          .then(response => this.signUpButtonHandler(response, this.props.navigation));
         }}/>
 
         <FlashMessage position="top" />
