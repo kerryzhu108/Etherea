@@ -1,9 +1,10 @@
 'use strict'
 import React from "react";
 import { useFocusEffect } from '@react-navigation/native';
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { getImpactStats } from "../apis/progress";
 import NavigationPanel from '../components/navigationPanel.js';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default class Progress extends React.Component { 
   constructor(props) {
@@ -45,19 +46,22 @@ function FetchImpact(type) {
 
   useFocusEffect(
     React.useCallback(() => {
-      getImpactStats('1').then(resp => resp.json()).then(stat => {
-        if (stat.userid) { 
-          setImpact1(stat.get(stat.keySet().toArray()[0]))
-          setImpact2(stat.get(stat.keySet().toArray()[1]))
-        }
-        setImpact1('N/A')
-        setImpact2('N/A')
-      });
+      AsyncStorage.getItem('userid').then(id => {
+        getImpactStats(id).then(resp => resp.json()).then(stat => {
+          if (stat[0]) {
+            setImpact1(stat[0]['animalssaved'])
+            setImpact2(stat[0]['emissionsreduced'])
+            return
+          }
+          setImpact1('N/A')
+          setImpact2('N/A')
+        });
+      })
     }, [])
   );
 
   const textStyle = {fontSize: 25, marginTop: 35, color: 'white', fontWeight: 'bold'}
-  return <Text style={textStyle}>{type=="Animal" ? getImpact1 : getImpact2}</Text>
+  return <Text style={textStyle}>{type['type']=="Animals" ? getImpact1 : getImpact2}</Text>
 }
 
 const styles = StyleSheet.create({
