@@ -59,7 +59,7 @@ export default function SelectTasks() {
                 })
               }
             </View>
-            <Button title="Submit" onClick={()=> handleSubmit()}/>
+            <Button title="Submit" onPress={()=> handleSubmit()}/>
           </View>
         
         );
