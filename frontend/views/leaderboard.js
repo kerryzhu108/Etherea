@@ -38,7 +38,6 @@ export default class Leaderboard extends React.Component {
           return user
         })
         this.setState({ data: data_rank })
-        console.log(this.state.data)
       })
       .catch((error) => {
         console.error(error);
