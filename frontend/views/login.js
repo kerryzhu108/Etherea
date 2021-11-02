@@ -5,7 +5,7 @@ import { showMessage } from "react-native-flash-message";
 import FlashMessage from "react-native-flash-message";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default class SignUp extends React.Component { 
+export default class Login extends React.Component { 
   constructor(props) {
     super(props);
     this.state = {

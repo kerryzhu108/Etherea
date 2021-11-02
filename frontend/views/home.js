@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUsername } from "../apis/profile";
 
-export default class Landing extends React.Component {
+export default class Home extends React.Component {
     state = {
         username: "NULL"
     }
