@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Text, StyleSheet, ImageBackground } from "react-native";
-import NavigationPanel from '../components/navigationPanel.js';
 
 export default class Landing extends React.Component { 
   constructor(props) {
@@ -15,7 +14,6 @@ export default class Landing extends React.Component {
             <Text style={styles.navigation} onPress={() => this.props.navigation.navigate('Login')}>Login</Text>
             <Text style={styles.navigation} onPress={() => this.props.navigation.navigate('SignUp')}>Sign Up</Text>
           </View>
-          <NavigationPanel navigation={this.props.navigation}/>
         </ImageBackground>
       </View>
     );

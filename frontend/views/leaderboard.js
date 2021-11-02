@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    marginTop: 10,
+    marginTop: 50,
     alignSelf: 'center',
     // fontFamily:"Poppins",
     fontWeight: 'bold',

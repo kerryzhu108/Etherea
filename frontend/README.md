@@ -4,7 +4,7 @@ Enable usb debugging, connect phone to computer
 Install adb so it can be accesed from command line
 run: adb start-server
 run: adb reverse tcp:3000 tcp:3000
-set API.js domain to 'http://{IPaddress}:3000/'
+set headers.js domain to 'http://{IPaddress}:3000/'
 run: expo start
 Click "Run on android device/Emulator"
 

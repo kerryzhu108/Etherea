@@ -1,5 +1,5 @@
 import React from "react";
-import { View, KeyboardAvoidingView, Text, StyleSheet, TextInput, TouchableOpacity, Image } from "react-native";
+import { View, ImageBackground, Text, StyleSheet, TextInput, TouchableOpacity, Image } from "react-native";
 import { login } from "../apis/login.js";
 import { showMessage } from "react-native-flash-message";
 import FlashMessage from "react-native-flash-message";
@@ -38,32 +38,32 @@ export default class Login extends React.Component {
 
   render() { 
     return (
-      <KeyboardAvoidingView style={styles.container}>
-        <FlashMessage position="top" />
-        <Text style={styles.title}>Login</Text>
+      <View style={styles.container}>
+          <ImageBackground style={styles.background} source={require('../assets/loginBackground.png')}>
+          <FlashMessage position="top" />
+          <Text style={styles.title}>Login</Text>
 
-        <TextInput 
-          placeholder="Email" 
-          style={styles.input} 
-          onChangeText={text => this.onChangeInputHandler('email', text)}
-        />
+          <TextInput 
+            placeholder="Email" 
+            style={styles.input} 
+            onChangeText={text => this.onChangeInputHandler('email', text)}
+          />
 
-        <TextInput 
-          placeholder="Password" 
-          style={styles.input}
-          onChangeText={text => this.onChangeInputHandler('password', text)}
-        />
+          <TextInput 
+            placeholder="Password" 
+            style={styles.input}
+            onChangeText={text => this.onChangeInputHandler('password', text)}
+          />
 
-        <Text style={styles.goSignup} onPress={() => this.props.navigation.navigate('SignUp')}>Don't have an account? Click here.</Text>
+          <Text style={styles.goSignup} onPress={() => this.props.navigation.navigate('SignUp')}>Don't have an account? Click here.</Text>
 
-        <TouchableOpacity style={styles.loginButton} onPress={() => {
-          login(this.state.email, this.state.password).then(response => this.loginHandler.bind(this)(response))
-        }}>
-          <Image source={require('../assets/loginButton.png')}/>
-        </TouchableOpacity>
-
-        <View style={styles.greenBottom}/>
-      </KeyboardAvoidingView>
+          <TouchableOpacity style={styles.loginButton} onPress={() => {
+            login(this.state.email, this.state.password).then(response => this.loginHandler.bind(this)(response))
+          }}>
+            <Image source={require('../assets/loginButton.png')}/>
+          </TouchableOpacity>
+        </ImageBackground>
+      </View>
     );
   }
 }
@@ -71,15 +71,16 @@ export default class Login extends React.Component {
 const styles = StyleSheet.create({
   container: {
     marginTop: 50,
-    backgroundColor: '#fff',
-    alignItems: 'center',
     flex: 1,
   },
-  top: {
-    marginTop: 80
+  background: {
+    flex: 1,
+    alignItems: 'center',
   },
   title: {
-    fontSize: 30,
+    marginTop: 15,
+    fontSize: 35,
+    fontWeight: 'bold',
     color: '#A0E3B2',
   },
   input: {
