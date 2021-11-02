@@ -15,11 +15,6 @@ export function signUp(firstName, lastName, email, password, confirmPassword) {
       "confirmPassword" : confirmPassword
     })
   }).then((response) => { return response; })
-  // response.json())
-  // .then((responseData) => {
-  //   //console.log(responseData);
-  //   return responseData;
-  // })
 }
 
 export function login(email, password) {

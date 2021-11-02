@@ -26,16 +26,14 @@ export default class SignUp extends React.Component {
     const status = response.status;
     var messageString = "";
     response.json().then((responseData) => {
-      console.log(responseData);
       if (status === 200) {
-        console.log("successful");
         showMessage({
           message: "Congratulations!",
           description: "You have successfully registered",
           type: "success",
           duration: 4000,
         });
-        setTimeout(() => { this.props.navigation.navigate('SelectTasks') }, 3000);
+        setTimeout(() => { this.props.navigation.navigate('SelectTasks') }, 2000);
         return;
       }
       if (status === 400) {
@@ -132,8 +130,7 @@ export default class SignUp extends React.Component {
 
         <Text style={styles.goLogin} onPress={() => this.props.navigation.navigate('Login')}>Already have an account? Click here.</Text>
 
-        <Button title='Sign Up' onPress={() => { 
-          console.log(this.state.firstName, this.state.lastName, this.state.email, this.state.password, this.state.confirmPassword);
+        <Button title='Sign Up' onPress={() => {
           signUp(this.state.firstName, this.state.lastName, this.state.email, this.state.password, this.state.confirmPassword)
           .then(response => this.signUpButtonHandler(response));
         }}/>

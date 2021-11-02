@@ -9,7 +9,7 @@ Our app encourages Sustainable Development Goals such as preventing pollution an
 - **JWT authentication**: The backend REST API uses JWT authentication to ensure requests sent to the API cannot be forged as another user.
 - **Leaderboard**: A global leaderboard that displays the top users for a month's theme based on their gathered amount of points.
 - **Impact Statistics**: Displays statistics on the impact a user has had based on their contributions and completed tasks.
-- **Tasks**: Allows a user to choose and check off tasks as they are completed.
+- **Tasks**: Allows a user to choose their daily tasks for the month and check them off daily for points.
 
 ## Instructions
 ### Accessing the Application
@@ -19,7 +19,7 @@ Our app encourages Sustainable Development Goals such as preventing pollution an
 ### Using the application
 1. Initially, no users are created. You will be prompted with a login and sign up button to create your profile.
 2. Tap the sign up button and enter the required information.
-3. Once signed up, login using the credentials provided during the registration process.
+3. Once signed up, it will redirect you to the homepage for you to pick your monthly tasks.
  
  ## Development requirements
 - Local development requires `node`, `npm` and `expo-cli` as well as a postgresql database.
@@ -42,8 +42,8 @@ IP= # The IP the backend server will bind to
 
 ### Frontend Application Setup
 1. Ensure `expo-cli` is installed.
-2. In the frontend folder, install necessary libraries using `npm install`.
-3. Start the frontend application using `npm start`.
+2. CD into the frontend folder, install necessary libraries using `npm install`.
+3. Start the frontend application using `expo start`.
 4. Scan the generated QR code in the Expo Go app to test the application on your Android phone.
  
  ## Deployment and Github Workflow

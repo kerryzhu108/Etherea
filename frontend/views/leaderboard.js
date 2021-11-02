@@ -38,7 +38,6 @@ export default class Leaderboard extends React.Component {
           return user
         })
         this.setState({ data: data_rank })
-        console.log(this.state.data)
       })
       .catch((error) => {
         console.error(error);
@@ -142,7 +141,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    marginTop: 10,
+    marginTop: 50,
     alignSelf: 'center',
     // fontFamily:"Poppins",
     fontWeight: 'bold',

@@ -8,6 +8,7 @@ import SignUp from './views/signUp.js'
 import Login from './views/login.js'
 import Home from './views/home.js'
 import Leaderboard from './views/leaderboard.js'
+import Progress from './views/progress.js'
 
 const Stack = createNativeStackNavigator();
 class App extends Component {
@@ -26,6 +27,7 @@ class App extends Component {
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Leaderboard" component={Leaderboard} />
+          <Stack.Screen name="Progress" component={Progress} />
         </Stack.Navigator>
       </NavigationContainer>
     )

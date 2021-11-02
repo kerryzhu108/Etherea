@@ -34,7 +34,7 @@ export default class NavigationPanel extends React.Component {
           <Image source={require('../assets/leaderboardIcon.png')} style={styles.images}/>
           <Text>Leaderboard  </Text>  
         </TouchableOpacity>
-        <TouchableOpacity onPress={()=>this.props.navigation.navigate('Leaderboard')} style={styles.navigationItem}>
+        <TouchableOpacity onPress={()=>this.props.navigation.navigate('Progress')} style={styles.navigationItem}>
           <Image source={require('../assets/progressIcon.png')} style={styles.images}/>
           <Text>Progess  </Text>  
         </TouchableOpacity>
