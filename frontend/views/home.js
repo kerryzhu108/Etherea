@@ -27,7 +27,7 @@ export default class Home extends React.Component {
             console.error(error);
         })
 
-        this.state.tasks = getTasks(this.state.username)
+        this.state.tasks = getTasks(AsyncStorage.getItem('userid'))
     }
    
     render() {
