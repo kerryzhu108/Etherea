@@ -17,9 +17,11 @@ Our app encourages Sustainable Development Goals such as preventing pollution an
 - Note: The backend API is deployed to [https://etherea-dev.herokuapp.com/](https://etherea-dev.herokuapp.com/) and calls can be made to the REST API there.
 
 ### Using the application
-1. Initially, no users are created. You will be prompted with a login and sign up button to create your profile.
-2. Tap the sign up button and enter the required information.
-3. Once signed up, it will redirect you to the homepage for you to pick your monthly tasks.
+1. You will be prompted with a login and sign up button to create your profile.
+2. After sign up, it will redirect you to the login page. We have some server side validation like if an email is already taken, but due to our free plan the server response may take up to 30 seconds to arrive, espcially initially.
+3. Upon logging in for the first time, the user will be able to choose their daily tasks for the month. Currently there is only a flash to indicate that they have been selected, multiple clicks will not cause them to be selected twice.
+4. After choosing, the next page (Home) shows the user's daily tasks, tapping them will indicate that it has been done and it will also change the user's impact metrics in the "Progress" page.
+5. Each task is currently associated with a hidden amount of points so the user does not pick based on their score, however, each task is recorded and will be used to calculate the user's position on the leaderboard, if they are in the top.  
  
  ## Development requirements
 - Local development requires `node`, `npm` and `expo-cli` as well as a postgresql database.

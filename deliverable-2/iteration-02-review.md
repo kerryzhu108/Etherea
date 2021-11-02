@@ -64,7 +64,7 @@ Did your partner accept the features?
 
 Were there change requests?
 
-* The only changes requested were UI tweaks such as having the daily tasks display a checkmark instead of dissapear, and also additional infographics to display when the users select their tasks.
+* The only changes requested were UI tweaks such as having the daily tasks display a checkmark instead of dissapear, and also additional infographics to display when the users select their tasks, and display points for the tasks after a user has chosen them.
 
 What did you learn from the demo from either a process or product perspective?
 
