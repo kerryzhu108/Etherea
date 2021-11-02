@@ -8,10 +8,12 @@ Our app encourages Sustainable Development Goals such as preventing pollution an
 - **User registration/login**: Users can create accounts and sign into those accounts from the application. Passwords are hashed and salted using bcrypt before being stored in the database.
 - **JWT authentication**: The backend REST API uses JWT authentication to ensure requests sent to the API cannot be forged as another user.
 - **Leaderboard**: A global leaderboard that displays the top users for a month's theme based on their gathered amount of points.
+- **Impact Statistics**: Displays statistics on the impact a user has had based on their contributions and completed tasks.
+- **Tasks**: Allows a user to choose and check off tasks as they are completed.
 
 ## Instructions
 ### Accessing the Application
-1. Install the Expo Go app on an Android device. The application can be accessed from the following Expo project page: [https://expo.dev/@zacharyvincze/eth](https://expo.dev/@zacharyvincze/eth)
+1. Install the Expo Go app on an Android device. The application can be accessed from the following Expo project page: [https://expo.io/@ethereadev/eth](https://expo.io/@ethereadev/eth)
 - Note: The backend API is deployed to [https://etherea-dev.herokuapp.com/](https://etherea-dev.herokuapp.com/) and calls can be made to the REST API there.
 
 ### Using the application
@@ -46,18 +48,26 @@ IP= # The IP the backend server will bind to
  
  ## Deployment and Github Workflow
 
-Describe your Git / GitHub workflow. Essentially, we want to understand how your team members shares a codebase, avoid conflicts and deploys the application.
+ ### Github Workflow
+- Although we didn't use many git pulls, we ensured that we worked on our separate files through constant communication to avoid merge conflicts.
+- For the backend especially, modular routing ensured that merge conflicts did not occur.
 
- * Be concise, yet precise. For example, "we use pull-requests" is not a precise statement since it leaves too many open questions - Pull-requests from where to where? Who reviews the pull-requests? Who is responsible for merging them? etc.
- * If applicable, specify any naming conventions or standards you decide to adopt.
- * Describe your overall deployment process from writing code to viewing a live applicatioon
- * What deployment tool(s) are you using and how
- * Don't forget to **briefly explain why** you chose this workflow or particular aspects of it!
+#### Reasons for this workflow
+Since our tasks were distributed and understood early on, we ensured that code remained modular. Additionally, we did not want to have to spend too much time reviewing and merging pull requests. This workflow allows our group to freely commit changes without merge conflicts, however, it is up to the individual to ensure that they take responsibility for their piece of code.
+
+### Deployment
+- Testing amongst our team was done mostly locally and did not require deployment. Deployment was only done once our team agreed on the current state of the project.
+- The backend was deployed using a shared Heroku account which allowed any member of our team to manually deploy once features were added and tested.
+- The frontend was deployed using a shared Expo account.
+
+#### Deployment Process
+1. The changes get committed and pushed.
+2. The backend is manually deployed from the Github branch using the Heroku web application dashboard.
+3. The frontend is deployed from the command line using `expo publish`.
+4. The frontend is run using the Expo Go app and scanning the provided QR code on the published project's page.
 
  ## Licenses 
 
- Keep this section as brief as possible. You may read this [Github article](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/licensing-a-repository) for a start.
+ We will be using the GPLv3 license in our codebase. This allows the code to be modified and shared freely, but requires the source code to be disclosed.
 
- * What type of license will you apply to your codebase?
- * What affect does it have on the development and use of your codebase?
- * Why did you or your partner make this choice?
+ Our partner has permitted the sharing of anything in our codebase that we have made on our own, but any additional changes made by the partner will be close-sourced and not available to the public.

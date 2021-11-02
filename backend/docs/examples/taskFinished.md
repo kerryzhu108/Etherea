@@ -1,4 +1,4 @@
-# Finished a trask
+# Finished a task
 User has finished one task.
 
 **URL** : `/taskFinished`
