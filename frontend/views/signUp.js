@@ -35,7 +35,7 @@ export default class SignUp extends React.Component {
           type: "success",
           duration: 4000,
         });
-        setTimeout(() => { this.props.navigation.navigate('Home') }, 3000);
+        setTimeout(() => { this.props.navigation.navigate('SelectTasks') }, 3000);
         return;
       }
       if (status === 400) {
