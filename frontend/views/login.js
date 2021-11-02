@@ -1,11 +1,11 @@
 import React from "react";
-import { View, Text, Button, StyleSheet, TextInput } from "react-native";
+import { View, KeyboardAvoidingView, Text, StyleSheet, TextInput, TouchableOpacity, Image } from "react-native";
 import { login } from "../apis/login.js";
 import { showMessage } from "react-native-flash-message";
 import FlashMessage from "react-native-flash-message";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default class SignUp extends React.Component { 
+export default class Login extends React.Component { 
   constructor(props) {
     super(props);
     this.state = {
@@ -38,9 +38,9 @@ export default class SignUp extends React.Component {
 
   render() { 
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView style={styles.container}>
         <FlashMessage position="top" />
-        <Text style={{fontSize: 30}}>Login</Text>
+        <Text style={styles.title}>Login</Text>
 
         <TextInput 
           placeholder="Email" 
@@ -56,10 +56,14 @@ export default class SignUp extends React.Component {
 
         <Text style={styles.goSignup} onPress={() => this.props.navigation.navigate('SignUp')}>Don't have an account? Click here.</Text>
 
-        <Button title='Login' onPress={() => {
-            login(this.state.email, this.state.password).then(response => this.loginHandler.bind(this)(response))
-          }}/>
-      </View>
+        <TouchableOpacity style={styles.loginButton} onPress={() => {
+          login(this.state.email, this.state.password).then(response => this.loginHandler.bind(this)(response))
+        }}>
+          <Image source={require('../assets/loginButton.png')}/>
+        </TouchableOpacity>
+
+        <View style={styles.greenBottom}/>
+      </KeyboardAvoidingView>
     );
   }
 }
@@ -69,10 +73,14 @@ const styles = StyleSheet.create({
     marginTop: 50,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center'
+    flex: 1,
   },
   top: {
     marginTop: 80
+  },
+  title: {
+    fontSize: 30,
+    color: '#A0E3B2',
   },
   input: {
     marginTop: 20,
@@ -80,10 +88,22 @@ const styles = StyleSheet.create({
     height: 40,
     paddingHorizontal: 10,
     borderRadius: 50,
-    backgroundColor: '#DCDCDC',
+    borderWidth: 1
   },
   goSignup: {
     margin: 20,
-    textDecorationLine: 'underline'
+    textDecorationLine: 'underline',
+  },
+  loginButton: {
+    position: "absolute",
+    marginTop: 250,
+  },
+  greenBottom: {
+    backgroundColor: '#A0E3B2',
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 260,
   }
 });

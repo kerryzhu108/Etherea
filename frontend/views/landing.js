@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, ImageBackground } from "react-native";
+import NavigationPanel from '../components/navigationPanel.js';
 
 export default class Landing extends React.Component { 
   constructor(props) {
@@ -8,9 +9,14 @@ export default class Landing extends React.Component {
   render() { 
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Etherea</Text>
-        <Text style={styles.navigation} onPress={() => this.props.navigation.navigate('SignUp')}>Sign Up</Text>
-        <Text style={styles.navigation} onPress={() => this.props.navigation.navigate('Login')}>Login</Text>
+        <ImageBackground source={require('../assets/landingPage.png')}
+          resizeMode="cover" style={styles.background}>
+          <View style={styles.loginButtons}>
+            <Text style={styles.navigation} onPress={() => this.props.navigation.navigate('Login')}>Login</Text>
+            <Text style={styles.navigation} onPress={() => this.props.navigation.navigate('SignUp')}>Sign Up</Text>
+          </View>
+          <NavigationPanel navigation={this.props.navigation}/>
+        </ImageBackground>
       </View>
     );
   }
@@ -19,8 +25,11 @@ export default class Landing extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
     flex: 1
+  },
+  background: {
+    flex: 1,
+    alignItems: 'center',
   },
   title: {
     fontSize: 30,
@@ -28,8 +37,11 @@ const styles = StyleSheet.create({
   },
   navigation: {
     fontSize: 20,
-    marginTop: 80,
-    textDecorationLine: 'underline'
-
+    marginTop: 480,
+    textDecorationLine: 'underline',
+    marginRight: 15,
+  },
+  loginButtons: {
+    flexDirection: 'row'
   }
 });
