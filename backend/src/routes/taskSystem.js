@@ -16,7 +16,7 @@ Returns the following json:
 router.get("/progressInfo/:userid", async(req, res) =>{
     const { userid } = req.params
     try {
-        const info = await pool.query("SELECT * FROM progressInfo WHERE id = $1", [userid]);
+        const info = await pool.query("SELECT id, (exp/50) AS level, (exp-(exp/50)*50) AS exp, streak from progressinfo WHERE id = $1;", [userid]);
         res.json(info.rows[0])
     } catch (error) {
         return res.status(400).send(error.message);
@@ -220,19 +220,12 @@ router.put('/taskFinished', async(req, res) => {
                 let points = pointsRow.rows[0].points;
 
                 // Get user's points
-                const userPointsQ = "SELECT exp, level FROM progressInfo WHERE id = $1";
+                const userPointsQ = "SELECT exp FROM progressInfo WHERE id = $1";
                 const userRow = await client.query(userPointsQ, [userid]);
                 const userPoints = userRow.rows[0].exp;
-                const userLevel = userRow.rows[0].level;
 
                 let newPoints = points + userPoints;
-                let newLevel = userLevel;
-
-                if(newPoints >= 50){ // > 50, points-=50 and level++
-                    newPoints = newPoints - 50;
-                    newLevel = newLevel + 1;
-                }
-
+  
                 const daysFromNoQ =    
                 `SELECT count(*) AS allDays FROM
                 (SELECT DISTINCT (datetodo) FROM taskCompletion
@@ -253,11 +246,12 @@ router.put('/taskFinished', async(req, res) => {
                 const txtStatus = "UPDATE taskCompletion SET complete = $1 WHERE userID=$2 AND taskID=$3 AND datetodo = $4 RETURNING *";
                 const updsts = await client.query(txtStatus,[true, userid, taskid, new Date()]) ;
 
-                // Update user progress info(level, exp)
-                const txtLv = "UPDATE progressInfo SET level = $1, exp = $2, streak = $3 WHERE id = $4";
-                const updLv = await client.query(txtLv, [newLevel, newPoints, streak, userid]);
+                // Update user progress info(exp, steak)
+                const txtLv = "UPDATE progressInfo SET exp = $1, streak = $2 WHERE id = $3";
+                const updLv = await client.query(txtLv, [newPoints, streak, userid]);
                 
                 await client.query('COMMIT')
+                //res.send("Updated task completion and user progress!")
             } catch (e) {
                 await client.query('ROLLBACK')
                 throw e
