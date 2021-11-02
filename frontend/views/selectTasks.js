@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Button } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getTasksForTheme, chooseTasks } from "../apis/tasks.js";
 import Task from '../components/Task';
@@ -59,7 +59,7 @@ export default function SelectTasks() {
                 })
               }
             </View>
-            <button onClick={()=> handleSubmit()}>Submit</button>
+            <Button title="Submit" onClick={()=> handleSubmit()}/>
           </View>
         
         );

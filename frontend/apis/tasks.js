@@ -21,5 +21,9 @@ export function getTasksForTheme(themeID) {
 
 //Get the users selected tasks
 export function getTasks(userid) {
-    return 
+    return fetch(domain + '/userTask' + userid,
+    {
+        method: 'GET',
+        headers: defaultHeaders
+    }).then(response => response.json()).then(data => {return data;})
  }
