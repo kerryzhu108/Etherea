@@ -8,7 +8,7 @@ import SignUp from './views/signUp.js'
 import Login from './views/login.js'
 import Home from './views/home.js'
 import Leaderboard from './views/leaderboard.js'
-import Progress from './views/progress.js'
+import Progress from './views/Progress.js'
 import SelectTasks from './views/selectTasks.js'
 
 const Stack = createNativeStackNavigator();
