@@ -6,7 +6,7 @@ const { pool } = require('../config');
 module.exports = router;
 
 // Create new task and add to database
-router.post("/themesTasks", async(req, res) =>{
+router.post("/themesTasks/:themeID", async(req, res) =>{
     try{
         // Create task
         const {themeid, theme, taskid, descript, points} = req.body;
@@ -22,6 +22,18 @@ router.post("/themesTasks", async(req, res) =>{
                 }
             }
         )
+        
+        // Get any rows in database that have the same taskID
+        pool.query("SELECT * FROM v_theme_task WHERE taskid=$1", [new_entry.taskid], 
+            (error, result) => {
+                if(err){
+                    return res.status(500).json({ error: { message: error.toString() }});
+                }else if(result.rows.length > 0){
+                    return res.status(400).json({ error: { message: "This task ID is already taken. "}});
+                }
+            }
+        )
+
         // Adding new task to database
         pool.query("INSERT INTO themesTasks (themeID, theme, taskID, descript, points) VALUES ($1, $2, $3, $4, $5) RETURNING *", [themeid, theme, taskid, descript, points]);
         return res.status(200).json({message: "The new task has successfully been created."});
@@ -49,6 +61,16 @@ router.post("/themesAll", async(req, res) =>{
                     return res.status(500).json({ error: { message : error.toString()}})
                 }else if(results.rows.length > 0){
                     return res.status(400).json({ error: { message : "Theme already added. "}});
+                }
+            }
+        )
+
+        pool.query("SELECT * FROM v_theme_task WHERE themeID=$1", [new_entry.id], 
+            (error, result) => {
+                if(err){
+                    return res.status(500).json({ error: { message: error.toString() }});
+                }else if(result.rows.length > 0){
+                    return res.status(400).json({ error: { message: "This themeID already exists. "}});
                 }
             }
         )
