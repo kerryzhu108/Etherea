@@ -24,7 +24,7 @@ router.post("/themesTasks/:themeID", async(req, res) =>{
         )
         
         // Get any rows in database that have the same taskID
-        pool.query("SELECT * FROM v_theme_task WHERE taskid=$1", [new_entry.taskid], 
+        pool.query("SELECT * FROM v_theme_task WHERE theme=$1", [new_entry.theme], 
             (error, result) => {
                 if(err){
                     return res.status(500).json({ error: { message: error.toString() }});
@@ -75,3 +75,5 @@ router.post("/themesAll", async(req, res) =>{
         res.end();
     }
 })
+
+module.exports = router
