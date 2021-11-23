@@ -65,16 +65,6 @@ router.post("/themesAll", async(req, res) =>{
             }
         )
 
-        pool.query("SELECT * FROM v_theme_task WHERE themeID=$1", [new_entry.id], 
-            (error, result) => {
-                if(err){
-                    return res.status(500).json({ error: { message: error.toString() }});
-                }else if(result.rows.length > 0){
-                    return res.status(400).json({ error: { message: "This themeID already exists. "}});
-                }
-            }
-        )
-
         // Adding new theme to database
         pool.query("INSERT INTO themesAll VALUES ($1, $2, $3) RETURNING *", [id, theme, datelaunched]);
 
