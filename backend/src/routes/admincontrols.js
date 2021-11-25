@@ -36,7 +36,7 @@ router.post("/themesTasks/:themeID", async(req, res) =>{
 
         // Adding new task to database
         pool.query("INSERT INTO themesTasks (themeID, theme, taskID, descript, points) VALUES ($1, $2, $3, $4, $5) RETURNING *", [themeid, theme, taskid, descript, points]);
-        return res.status(200).json({message: "The new task has successfully been created."});
+        return res.json({message: "The new task has successfully been created."});
     } catch(error) {
         return res.status(400).send(error.message);
     } finally{
@@ -66,9 +66,9 @@ router.post("/themesAll", async(req, res) =>{
         )
 
         // Adding new theme to database
-        pool.query("INSERT INTO themesAll VALUES ($1, $2, $3) RETURNING *", [id, theme, datelaunched]);
+        pool.query("INSERT INTO themes (id, theme, datelaunched) VALUES ($1, $2, $3) RETURNING *", [id, theme, datelaunched]);
 
-        return res.status(200).json({ message: "A new theme has been successfully added to the list of themes."});
+        return res.json({ message: "A new theme has been successfully added to the list of themes."});
     } catch(error) {
         return res.status(400).send(error.message);
     } finally{
