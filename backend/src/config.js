@@ -72,7 +72,7 @@ async function createTables() {
     await client.query(`CREATE TABLE IF NOT EXISTS users (
                 uid BIGSERIAL PRIMARY KEY NOT NULL,
                 email VARCHAR(100) NOT NULL,
-                password VARCHAR(100) NOT NULL,
+                password VARCHAR(100),
                 firstname VARCHAR(50) NOT NULL,
                 lastname VARCHAR(50) NOT NULL,
                 refresh VARCHAR(255),

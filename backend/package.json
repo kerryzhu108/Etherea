@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "test": "jest",
+    "dev": "nodemon src/index.js",
     "start": "node src/index.js"
   },
   "author": "Zachary Vincze",
@@ -20,6 +21,7 @@
     "express-validator": "^6.12.2",
     "jest": "^27.2.4",
     "jsonwebtoken": "^8.5.1",
+    "multer": "^1.4.3",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "pg": "^8.5.1"

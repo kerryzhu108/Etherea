@@ -108,4 +108,37 @@ router.post("/refresh", [
     }
 });
 
+router.post("/googleClient", 
+    async (req, res) => {
+        // front end send email, first_name, last_name
+        const body = req.body;
+
+        var uid = 0;
+        try {
+            // Determine if this email is already registered into the database 
+            var result = await pool.query("SELECT uid FROM users WHERE email=$1", [body.email]);
+            // user is already registered into the database
+            if (result.rows.length > 0) {
+                uid = result.rows[0].uid;
+            } else {
+                // register user into the database 
+                result = await pool.query(`INSERT INTO Users (email, firstname, lastname) 
+                                           values ($1, $2, $3) RETURNING uid`,
+                    [body.email, body.first_name, body.last_name]);
+    
+                uid = result.rows[0].uid;
+                result = await pool.query("INSERT INTO progressInfo (id) VALUES ($1)", [uid]);
+                result = await pool.query("INSERT INTO impactStats (uid) VALUES ($1)", [uid]);
+            }
+            const access_token = generateAccessToken(body.email);
+            const refresh_token = generateRefreshToken(body.email);
+
+            result = await pool.query("UPDATE users SET refresh=$1 WHERE email=$2", [refresh_token, body.email]);
+            return res.json({ userid: uid, tokens: { access: access_token, refresh: refresh_token } });
+
+        } catch (err) {
+            return res.status(500).json({ error: { message: err.toString() } });
+        }
+    });
+
 module.exports = router;

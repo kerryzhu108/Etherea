@@ -29,3 +29,17 @@ export function login(email, password) {
    })
  })
 }
+
+export function googleSignIn(firstName, lastName, email) {
+  return fetch(domain + 'auth/googleClient', {
+   method: 'POST',
+   headers: defaultHeaders,
+   mode: 'cors',
+   cache: 'default',
+   body: JSON.stringify({
+     "first_name": firstName,
+     "last_name": lastName,
+     "email": email
+   })
+ }).then((response) => { return response; })
+}

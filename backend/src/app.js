@@ -7,6 +7,7 @@ var leaderboardRouter = require("./routes/leaderboard");
 var impactStatsRouter = require("./routes/impactStats");
 var profileRouter = require("./routes/profile");
 var authRouter = require("./routes/auth");
+var imageRouter = require("./routes/imageupload");
 
 require("dotenv").config();
 const { createTables, dropTables } = require("./config.js");
@@ -29,5 +30,6 @@ app.use("/", leaderboardRouter);
 app.use("/", impactStatsRouter);
 app.use("/auth/", authRouter);
 app.use("/profile/", profileRouter);
+app.use("/", imageRouter);
 
 module.exports = app;
