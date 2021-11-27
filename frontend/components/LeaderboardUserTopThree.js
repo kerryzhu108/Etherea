@@ -1,11 +1,23 @@
 import React from "react";
-import { View, Text, StyleSheet, ImageBackground} from "react-native";
+import { View, Text, StyleSheet, Image} from "react-native";
 
 export class LeaderboardUserTopThree extends React.Component{
     render(){
-      const { name, exp } = this.props
+      const { name, exp, place } = this.props
       return(
         <View style={styles.item}>
+        <Image source={require('../assets/profilePictureDefault.png')} style={styles.profileImages}/>
+             
+        {place == '1' ? 
+        <Image source={require('../assets/leaderboardFirstPlaceIcon.png')} style={styles.iconImagesFirst}/>
+        : null}
+        {place == '2' ? 
+        <Image source={require('../assets/leaderboardSecondPlaceIcon.png')} style={styles.iconImages}/>
+        : null}   
+        {place == '3' ? 
+        <Image source={require('../assets/leaderboardThirdPlaceIcon.png')} style={styles.iconImages}/>
+        : null}
+
           <View style={styles.textContainer}>
             <Text style={styles.itemTextName}>{name}</Text>
           <View style={styles.pointsContainer}>
@@ -20,8 +32,25 @@ export class LeaderboardUserTopThree extends React.Component{
 
 
 const styles = StyleSheet.create({
+    item:{
+      alignItems: 'center'
+    },
     textContainer:{
       flexDirection: 'column'
+    },
+    profileImages:{
+      height: 50,
+      width: 50,
+      borderRadius: 100,
+      overflow: 'hidden'
+    },
+    iconImagesFirst:{
+      position: 'absolute',
+      marginTop: '-20%'
+    },
+    iconImages:{
+      position: 'absolute',
+      top: '100%'
     },
     pointsContainer:{
       flexDirection: 'row',
@@ -30,20 +59,17 @@ const styles = StyleSheet.create({
     itemTextName:{
       fontSize: 15,
       color: "#707070",
-      //fontFamily:"Poppins",
       alignSelf: "center"
     },
     itemTextPoints:{
       fontSize: 20,
       color: "#707070",
-      //fontFamily:"Poppins",
       fontWeight: 'bold',
       textAlign: 'right'
     },
     itemTextPointsLetter:{
       fontSize: 16,
       color: "#707070",
-      marginTop: "1%",
-      //fontFamily:"Poppins",
+      marginTop: "1%"
     }
   });
