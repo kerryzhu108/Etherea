@@ -55,7 +55,7 @@ router.post("/themesAll", async(req, res) =>{
         const new_entry = req.body;
 
         // Trying to determine if any themes are already in the database
-        pool.query("SELECT * FROM theme WHERE theme=$1", [new_entry.theme],
+        pool.query("SELECT * FROM themes WHERE theme=$1", [new_entry.theme],
             (error, results) => {
                 if(error) {
                     return res.status(500).json({ error: { message : error.toString()}})
