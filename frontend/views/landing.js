@@ -5,30 +5,27 @@ import AppIntroSlider from 'react-native-app-intro-slider';
 const slides = [
   {
     key: 'one',
-    title: 'Title 1',
     text: 'Description.\nSay something cool',
     image: require('../assets/landingPage.png'),
     backgroundColor: '#59b2ab',
   },
   {
     key: 'two',
-    title: 'Title 2',
     text: 'Other cool stuff',
-    image: require('../assets/landingPage.png'),
+    image: require('../assets/introSlide1.png'),
     backgroundColor: '#febe29',
   },
   {
     key: 'three',
     title: 'Rocket guy',
     text: 'I\'m already out of descriptions\n\nLorem ipsum bla bla bla',
-    image: require('../assets/landingPage.png'),
+    image: require('../assets/introSlide2.png'),
     backgroundColor: '#22bcb5',
   },
   {
     key: 'four',
-    title: 'Rocket guy',
     text: 'I\'m already out of descriptions\n\nLorem ipsum bla bla bla',
-    image: require('../assets/landingPage.png'),
+    image: require('../assets/introSlide3.png'),
     backgroundColor: '#22bcb5',
   }
 ];
@@ -37,9 +34,7 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showRealApp: false,
-      showNextButton: false,
-      showDoneButton: false
+      showRealApp: false
     }
   }
   _renderItem = ({ item }) => {
@@ -64,22 +59,13 @@ export default class App extends React.Component {
       return <AppIntroSlider 
       renderItem={this._renderItem} 
       data={slides}
-      
-      showNextButton={this.state.showNextButton}
-      showDoneButton={this.state.showDoneButton}/>;
+      showNextButton={false}
+      showDoneButton={false}/>;
     }
   }
 }
 
 const styles = StyleSheet.create({
-  buttonCircle: {
-    width: 40,
-    height: 40,
-    backgroundColor: 'rgba(0, 0, 0, .2)',
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   container: {
     flex: 1
   },
