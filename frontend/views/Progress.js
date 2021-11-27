@@ -3,6 +3,7 @@ import React from "react";
 import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, StyleSheet } from "react-native";
 import { getImpactStats } from "../apis/progress";
+import { Calendar } from 'react-native-calendars';
 import NavigationPanel from '../components/navigationPanel.js';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -28,9 +29,44 @@ export default class Progress extends React.Component {
             <Text style={styles.circleText}>Animals Saved</Text>
           </View>
           <View style={styles.circle2}>
-            <FetchImpact type='Co2'/>
-            <Text style={styles.circleText}>Co2</Text>
+            <FetchImpact type='CO2'/>
+            <Text style={styles.circleText}>CO2</Text>
           </View>
+        </View>
+        <Text style={styles.subtitle}>Missions Completed</Text>
+        <View style={styles.rectanglesWrapper}>
+          <View style={styles.rectangle}>
+            <Text style={styles.rectanglesText}>S</Text>
+          </View>
+          <View style={styles.rectangle}>
+            <Text style={styles.rectanglesText}>M</Text>
+          </View>
+          <View style={styles.rectangle}>
+            <Text style={styles.rectanglesText}>T</Text>
+          </View>
+          <View style={styles.rectangle}>
+            <Text style={styles.rectanglesText}>W</Text>
+          </View>
+          <View style={styles.rectangle}>
+            <Text style={styles.rectanglesText}>TH</Text>
+          </View>
+          <View style={styles.rectangle}>
+            <Text style={styles.rectanglesText}>F</Text>
+          </View>
+          <View style={styles.rectangle}>
+            <Text style={styles.rectanglesText}>ST</Text>
+          </View>
+        </View>
+          <View style={{ paddingTop: 10, flex: 1 }}>
+          <Calendar
+            // Set minimum date to be first day of month
+            minDate={'2021-11-1'}
+            // Set maximum date to be last day of month
+            maxDate={'2021-11-30'}
+            hideArrows={true}
+            disableMonthChange={true}
+            firstDay={1}
+          />
         </View>
         <NavigationPanel navigation={this.props.navigation}/>
       </View>
@@ -75,8 +111,15 @@ const styles = StyleSheet.create({
     color: "#747070",
     marginTop: 120,
   },
+  subtitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: "#747070",
+    marginTop: 15,
+  },
   desc: {
     margin: 30,
+    marginTop: 5,
     textAlign: 'center',
     color: 'grey',
   },
@@ -86,6 +129,8 @@ const styles = StyleSheet.create({
   circle1: {
     width: 120,
     height: 120,
+    margin: 10,
+    marginTop: -20,
     borderRadius: 120/2,
     alignItems: 'center',
     backgroundColor: '#F296B8',
@@ -93,13 +138,35 @@ const styles = StyleSheet.create({
  circle2: {
   width: 120,
   height: 120,
+  margin: 10,
+  marginTop: -20,
   borderRadius: 120/2,
   alignItems: 'center',
   backgroundColor: '#98E396'
 },
  circleText: {
-   marginTop: 10,
-   fontSize: 12,
+   marginTop: 80,
+   fontSize: 14,
    color: 'white',
- }
+   fontWeight: 'bold',
+ },
+ rectanglesWrapper:{
+  flexDirection:'row',
+},
+rectangle:{
+  width: 27,
+  height: 100,
+  borderRadius: 60,
+  margin: 5,
+  alignItems: 'center',
+  backgroundColor: '#dcdcdc',
+  borderColor: 'white',
+},
+rectanglesText: {
+  fontSize: 12,
+  fontWeight: 'bold',
+  marginTop: 100,
+  alignItems: 'center',
+  color: '#afeeee',
+},
 });
