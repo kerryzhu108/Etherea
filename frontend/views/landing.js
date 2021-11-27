@@ -1,14 +1,51 @@
-import React from "react";
-import { View, Text, StyleSheet, ImageBackground } from "react-native";
+import React from 'react';
+import { View, Text, StyleSheet, ImageBackground, Image } from 'react-native';
+import AppIntroSlider from 'react-native-app-intro-slider';
 
-export default class Landing extends React.Component { 
+const slides = [
+  {
+    key: 'one',
+    title: 'Title 1',
+    text: 'Description.\nSay something cool',
+    image: require('../assets/landingPage.png'),
+    backgroundColor: '#59b2ab',
+  },
+  {
+    key: 'two',
+    title: 'Title 2',
+    text: 'Other cool stuff',
+    image: require('../assets/landingPage.png'),
+    backgroundColor: '#febe29',
+  },
+  {
+    key: 'three',
+    title: 'Rocket guy',
+    text: 'I\'m already out of descriptions\n\nLorem ipsum bla bla bla',
+    image: require('../assets/landingPage.png'),
+    backgroundColor: '#22bcb5',
+  },
+  {
+    key: 'four',
+    title: 'Rocket guy',
+    text: 'I\'m already out of descriptions\n\nLorem ipsum bla bla bla',
+    image: require('../assets/landingPage.png'),
+    backgroundColor: '#22bcb5',
+  }
+];
+
+export default class App extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      showRealApp: false,
+      showNextButton: false,
+      showDoneButton: false
+    }
   }
-  render() { 
+  _renderItem = ({ item }) => {
     return (
       <View style={styles.container}>
-        <ImageBackground source={require('../assets/landingPage.png')}
+        <ImageBackground source={item.image}
           resizeMode="cover" style={styles.background}>
           <View style={styles.loginButtons}>
             <Text style={styles.login} onPress={() => this.props.navigation.navigate('Login')}>Login</Text>
@@ -19,10 +56,30 @@ export default class Landing extends React.Component {
       </View>
     );
   }
- 
+
+  render() {
+    if (this.state.showRealApp) {
+      return <App />;
+    } else {
+      return <AppIntroSlider 
+      renderItem={this._renderItem} 
+      data={slides}
+      
+      showNextButton={this.state.showNextButton}
+      showDoneButton={this.state.showDoneButton}/>;
+    }
+  }
 }
 
 const styles = StyleSheet.create({
+  buttonCircle: {
+    width: 40,
+    height: 40,
+    backgroundColor: 'rgba(0, 0, 0, .2)',
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
     flex: 1
   },
