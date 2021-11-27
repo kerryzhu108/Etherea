@@ -18,7 +18,8 @@ export default class Leaderboard extends React.Component {
 
   state = {
     usersList: [],
-    usersTopThree: null
+    usersTopThree: null,
+    currUser: null
   }
 
   constructor(props) {
@@ -29,7 +30,8 @@ export default class Leaderboard extends React.Component {
     const users = await leaderboard()
     this.setState({
       usersList: users[1], 
-      usersTopThree: users[0]
+      usersTopThree: users[0],
+      currUser: users[2]
     })
   }
   
@@ -66,12 +68,15 @@ export default class Leaderboard extends React.Component {
               windowSize={6}
               keyExtractor={(item, index) => index.toString()}
             />
-            <LeaderboardUser 
-              pos='1'
-              name='FirstName LastName'
-              level='2' 
-              exp='87'
-              color='#7AD7E0'/>
+            {this.state.currUser !== null ? 
+              <LeaderboardUser 
+                style={styles.currUser}
+                pos={this.state.currUser.rank}
+                name={this.state.currUser.name}
+                level={this.state.currUser.level} 
+                exp={this.state.currUser.exp}
+                color='#7AD7E0'/>
+              : null}
         </ImageBackground>
         <NavigationPanel navigation={this.props.navigation}/>
       </View>

@@ -11,7 +11,7 @@ export class LeaderboardUser extends React.Component{
           <Text style={styles.itemTextName}>{name}</Text>
           <View style={styles.viewLevel}>
             <ImageBackground source={require('../assets/leaderboardLevelBanner.png')} style={styles.imageLevelBackground}>
-              <Text style={styles.itemTextLevel}>5</Text>
+              <Text style={styles.itemTextLevel}>{level}</Text>
             </ImageBackground>
           </View>
           <Text style={styles.itemTextPoints}>{exp}</Text>
