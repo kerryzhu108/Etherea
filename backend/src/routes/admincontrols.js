@@ -51,7 +51,7 @@ router.post("/themesAll", async(req, res) =>{
         // Do not want January to be represented by 0;we want each month to be represented by 1-12
         const dataLaunched = new Date(currentDay.getFullYear(), ("0" + (currentDay.getMonth() + 1)).slice(-2), currentDay.getDate());
         // ID and theme name will be sent by the front-end, date will not be sent by front-end
-        const {id, theme, datelaunched} = req.body;
+        const {id, theme, statName, multiplier, datelaunched} = req.body;
         const new_entry = req.body;
 
         // Trying to determine if any themes are already in the database
@@ -66,7 +66,7 @@ router.post("/themesAll", async(req, res) =>{
         )
 
         // Adding new theme to database
-        pool.query("INSERT INTO themes (id, theme, datelaunched) VALUES ($1, $2, $3) RETURNING *", [id, theme, datelaunched]);
+        pool.query("INSERT INTO themes (id, theme, statName, multiplier, datelaunched) VALUES ($1, $2, $3, $4, $5) RETURNING *", [id, theme, statName, multiplier, datelaunched]);
 
         return res.json({ message: "A new theme has been successfully added to the list of themes."});
     } catch(error) {
