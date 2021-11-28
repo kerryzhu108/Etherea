@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Button, StyleSheet, TextInput } from "react-native";
+import { View, Text, Button, StyleSheet, TextInput, ImageBackground, TouchableOpacity, Image } from "react-native";
 import FlashMessage from "react-native-flash-message";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { signUp, googleLogIn, facebookLogIn } from "../apis/login.js";
@@ -117,8 +117,11 @@ export default class SignUp extends React.Component {
   render() { 
     return (
       <View style={styles.container}>
-        <Text style={{fontSize: 30}}>Sign Up</Text>
-        <TextInput 
+          <ImageBackground style={styles.background} source={require('../assets/signUpBackground.png')}>
+          <FlashMessage position="top"/>
+          <Text style={styles.title}>Sign Up</Text>
+
+          <TextInput 
           placeholder="First Name" 
           style={styles.input} 
           onChangeText={text => this.onChangeInputHandler('firstName', text)}
@@ -150,14 +153,24 @@ export default class SignUp extends React.Component {
 
         <Text style={styles.goLogin} onPress={() => this.props.navigation.navigate('Login')}>Already have an account? Click here.</Text>
 
-        <Button title='Sign Up' onPress={() => {
+          <TouchableOpacity style={styles.signUpButton} onPress={() => {
           signUp(this.state.firstName, this.state.lastName, this.state.email, this.state.password, this.state.confirmPassword)
           .then(response => this.signUpButtonHandler(response, this.props.navigation));
-        }}/>
+        }}>
+            <Image source={require('../assets/loginButton.png')}/>
+          </TouchableOpacity>
 
-        <Text style={styles.googleLoginButton} onPress={() => googleLogIn().then(response => this.externalLoginHandler(response))}>Log in with Google</Text>
-        <Text style={styles.facebookLoginButton} onPress={() => facebookLogIn().then(response => this.externalLoginHandler(response))}>Log in with Facebook</Text>
+          <TouchableOpacity style={styles.facebookLoginButton} 
+            onPress={() => facebookLogIn().then(response => this.externalLoginHandler(response))}>
+            <Image source={require('../assets/loginFacebookGreen.png')}/>
+          </TouchableOpacity>
 
+          <TouchableOpacity style={styles.googleLoginButton} 
+            onPress={() => googleLogIn().then(response => this.externalLoginHandler(response))}>
+            <Image source={require('../assets/loginGoogleGreen.png')}/>
+          </TouchableOpacity>
+      
+        </ImageBackground>
         <FlashMessage position="top" />
       </View>
     );
@@ -166,38 +179,45 @@ export default class SignUp extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50,
-    backgroundColor: '#fff',
+    flex: 1,
+    backgroundColor: '#A0E3B2'
+  },
+  background: {
+    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    backgroundColor: '#A0E3B2'
   },
   title: {
-    marginTop: 55,
+    marginTop: 105,
     fontSize: 45,
     fontWeight: 'bold',
     color: 'white',
   },
-  top: {
-    marginTop: 80
-  },
   input: {
-    marginTop: 20,
+    marginTop: 22,
     width: 300,
     height: 40,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
     borderRadius: 50,
-    backgroundColor: '#DCDCDC',
+    borderWidth: 1,
+    backgroundColor: 'white'
   },
   goLogin: {
-    margin: 20,
-    textDecorationLine: 'underline'
+    margin: 10,
+    textDecorationLine: 'underline',
+    fontStyle: 'italic',
+    color: 'white',
+  },
+  signUpButton: {
+    position: "absolute",
+    marginTop: 510,
   },
   googleLoginButton: {
-    marginTop: 250,
+    marginTop: 20,
     textDecorationLine: 'underline',
   },
   facebookLoginButton: {
-    marginTop: 30,
+    marginTop: 150,
     textDecorationLine: 'underline',
   }
 });

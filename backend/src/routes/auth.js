@@ -108,7 +108,7 @@ router.post("/refresh", [
     }
 });
 
-router.post("/googleClient", 
+router.post("/externalClient", 
     async (req, res) => {
         // front end send email, first_name, last_name
         const body = req.body;
@@ -139,6 +139,6 @@ router.post("/googleClient",
         } catch (err) {
             return res.status(500).json({ error: { message: err.toString() } });
         }
-    });
+});
 
 module.exports = router;
