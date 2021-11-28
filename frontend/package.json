@@ -18,11 +18,12 @@
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
+    "react-native-app-intro-slider": "^4.0.4",
+    "react-native-calendars": "^1.1269.0",
     "react-native-flash-message": "^0.2.0",
     "react-native-screens": "^3.8.0",
     "react-native-web": "^0.17.5",
-    "react-navigation": "^4.4.4",
-    "react-native-calendars": "^1.198.0"
+    "react-navigation": "^4.4.4"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"

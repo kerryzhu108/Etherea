@@ -42,16 +42,19 @@ export default class Leaderboard extends React.Component {
                          resizeMode="cover" 
                          style={styles.imageScreenBackground}>
             <Text style={styles.title}>LEADERBOARD</Text>
-            <View>
+            <View style={styles.topThree}>
               {this.state.usersTopThree !== null ? 
               <View style={styles.topThreeView}>
-                <LeaderboardUserTopThree name={this.state.usersTopThree[0].name} 
-                                        exp={this.state.usersTopThree[0].exp}/>
+              <LeaderboardUserTopThree name={this.state.usersTopThree[0].name} 
+                                      exp={this.state.usersTopThree[0].exp}
+                                      place='1'/>
                 <View style={styles.twoThreeContainer}> 
                   <LeaderboardUserTopThree name={this.state.usersTopThree[1].name} 
-                                          exp={this.state.usersTopThree[1].exp}/>
+                                          exp={this.state.usersTopThree[1].exp}
+                                          place='2'/>
                   <LeaderboardUserTopThree name={this.state.usersTopThree[2].name} 
-                                          exp={this.state.usersTopThree[2].exp}/>
+                                          exp={this.state.usersTopThree[2].exp}
+                                          place='3'/>
                 </View>
               </View>
               : null}
@@ -65,18 +68,17 @@ export default class Leaderboard extends React.Component {
               windowSize={6}
               keyExtractor={(item, index) => index.toString()}
             />
-
             {this.state.currUser !== null ? 
               <LeaderboardUser 
                 style={styles.currUser}
                 pos={this.state.currUser.rank}
                 name={this.state.currUser.name}
-                level='2' 
+                level={this.state.currUser.level} 
                 exp={this.state.currUser.exp}
                 color='#7AD7E0'/>
               : null}
-        <NavigationPanel navigation={this.props.navigation}/>
         </ImageBackground>
+        <NavigationPanel navigation={this.props.navigation}/>
       </View>
     );
   }
@@ -88,36 +90,35 @@ const styles = StyleSheet.create({
   },
   imageScreenBackground: {
     flex: 1, 
+    top: 20,
     width: '100%',
     height: '100%',
     alignItems: 'center'
   },
   title: {
     fontSize: 20,
-    marginTop: '10%',
     alignSelf: 'center',
-    //fontFamily:"Poppins",
+    marginTop: '5%',
     fontWeight: 'bold',
     color:'#747070'
   },
   list: {
-    height:'45%',
+    height:'40%',
     flexGrow: 0,
     width: '100%',
     marginLeft: '5%'
   },
-  topThreeView:{
-    marginTop: '2%',
-    height: '25%'
+  topThree:{
+    marginTop: '5%',
+    height: '30%'
+
   },
   twoThreeContainer:{
-    marginTop: '5%',
-    marginLeft: '25%',
-    width: '50%',
+    justifyContent:'space-between',
     flexDirection: 'row',
-    alignContent:'center',
-    justifyContent:'space-between'
-  },
-  currUser:{
+    position: 'absolute',
+    marginTop: '40%',
+    width: '300%',
+    alignSelf: 'center'
   }
 });

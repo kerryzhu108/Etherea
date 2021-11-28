@@ -21,7 +21,6 @@ export function leaderboard(){
             const currentUser = data_unrank.filter(obj => {
                 return obj.uid === id
               })
-            console.log(currentUser[0])
             return [data_rank.slice(0, 3), data_rank.slice(3), currentUser[0]]
           })
     })
