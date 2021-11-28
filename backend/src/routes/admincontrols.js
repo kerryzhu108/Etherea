@@ -9,61 +9,35 @@ module.exports = router;
 router.post("/themesTasks/:themeID", async(req, res) =>{
     try{
         // Create task
-        const {themeid, theme, taskid, descript, points} = req.body;
+        const {themeid, theme, taskid, taskname, descript, points} = req.body;
         const new_entry = req.body;
 
-        // Get any rows in database that have the same theme and description
-        pool.query("SELECT * FROM v_theme_task WHERE theme=$1, descript=$2", [new_entry.theme, new_entry.descript], 
-            (error, result) => {
-                if(err){
-                    return res.status(500).json({ error: { message: error.toString() }});
-                }else if(result.rows.length > 0){
-                    return res.status(400).json({ error: { message: "This task already exists. "}});
-                }
-            }
-        )
-        
-        // Get any rows in database that have the same taskID
-        pool.query("SELECT * FROM v_theme_task WHERE theme=$1", [new_entry.theme], 
-            (error, result) => {
-                if(err){
-                    return res.status(500).json({ error: { message: error.toString() }});
-                }else if(result.rows.length > 0){
-                    return res.status(400).json({ error: { message: "This task ID is already taken. "}});
-                }
-            }
-        )
+        // Get any rows in database that have the same theme and task name
+        var result = pool.query("SELECT * FROM v_theme_task WHERE theme=$1, taskname=$2", [new_entry.theme, new_entry.taskname])
+        if(result.rows.length > 0){
+            return res.status(500).json({ error: {message: "A task with this theme and name already exists."}})
+        }
 
         // Adding new task to database
-        pool.query("INSERT INTO themesTasks (themeID, theme, taskID, descript, points) VALUES ($1, $2, $3, $4, $5) RETURNING *", [themeid, theme, taskid, descript, points]);
+        pool.query("INSERT INTO themesTasks (themeID, theme, taskID, taskname, descript, points) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [themeid, theme, taskid, taskname, descript, points]);
         return res.json({message: "The new task has successfully been created."});
     } catch(error) {
         return res.status(400).send(error.message);
-    } finally{
-        res.end();
     }
 })
 
 // Create new theme and add to database
 router.post("/themesAll", async(req, res) =>{
     try{
-        const currentDay = new Date();
-        // Do not want January to be represented by 0;we want each month to be represented by 1-12
-        const dataLaunched = new Date(currentDay.getFullYear(), ("0" + (currentDay.getMonth() + 1)).slice(-2), currentDay.getDate());
-        // ID and theme name will be sent by the front-end, date will not be sent by front-end
+        // Setting the id, theme, statName, multiplier, and date to be launched
         const {id, theme, statName, multiplier, datelaunched} = req.body;
         const new_entry = req.body;
 
         // Trying to determine if any themes are already in the database
-        pool.query("SELECT * FROM themes WHERE theme=$1", [new_entry.theme],
-            (error, results) => {
-                if(error) {
-                    return res.status(500).json({ error: { message : error.toString()}})
-                }else if(results.rows.length > 0){
-                    return res.status(400).json({ error: { message : "Theme already added. "}});
-                }
-            }
-        )
+        var result = pool.query("SELECT * FROM themes WHERE theme=$1", [new_entry.theme])
+        if(result.rows.length > 0){
+            return res.status(500).json({ error: {message: "This task has already been created."}})
+        }
 
         // Adding new theme to database
         pool.query("INSERT INTO themes (id, theme, statName, multiplier, datelaunched) VALUES ($1, $2, $3, $4, $5) RETURNING *", [id, theme, statName, multiplier, datelaunched]);
@@ -71,8 +45,6 @@ router.post("/themesAll", async(req, res) =>{
         return res.json({ message: "A new theme has been successfully added to the list of themes."});
     } catch(error) {
         return res.status(400).send(error.message);
-    } finally{
-        res.end();
     }
 })
 
