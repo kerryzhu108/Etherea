@@ -2,7 +2,8 @@ import React from "react";
 import { View, Text, Button, StyleSheet, TextInput } from "react-native";
 import FlashMessage from "react-native-flash-message";
 import { showMessage, hideMessage } from "react-native-flash-message";
-import { signUp } from "../apis/login.js";
+import { signUp, googleLogIn, facebookLogIn } from "../apis/login.js";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class SignUp extends React.Component { 
   constructor(props) {
@@ -90,9 +91,28 @@ export default class SignUp extends React.Component {
           type: "danger",
           duration: 6000,
         });
+      }
+    })
+  }
+
+  externalLoginHandler = (response) => {
+    if (!response) return;
+    response.json().then((responseData) => {
+      if (!responseData.tokens) {
+        showMessage({
+          message: "Internal Server Error. Please try again later.",
+          description: "The server encountered an internal error or misconfiguration and was unable to complete your request.",
+          type: "danger",
+          duration: 6000,
+        });
+        return;
+      }
+      else {
+        AsyncStorage.setItem('userid', responseData.userid)
+        this.props.navigation.navigate('Home')
+      }
     }
-  })
-}
+    )}
 
   render() { 
     return (
@@ -135,6 +155,9 @@ export default class SignUp extends React.Component {
           .then(response => this.signUpButtonHandler(response, this.props.navigation));
         }}/>
 
+        <Text style={styles.googleLoginButton} onPress={() => googleLogIn().then(response => this.externalLoginHandler(response))}>Log in with Google</Text>
+        <Text style={styles.facebookLoginButton} onPress={() => facebookLogIn().then(response => this.externalLoginHandler(response))}>Log in with Facebook</Text>
+
         <FlashMessage position="top" />
       </View>
     );
@@ -147,6 +170,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  title: {
+    marginTop: 55,
+    fontSize: 45,
+    fontWeight: 'bold',
+    color: 'white',
   },
   top: {
     marginTop: 80
@@ -162,5 +191,13 @@ const styles = StyleSheet.create({
   goLogin: {
     margin: 20,
     textDecorationLine: 'underline'
+  },
+  googleLoginButton: {
+    marginTop: 250,
+    textDecorationLine: 'underline',
+  },
+  facebookLoginButton: {
+    marginTop: 30,
+    textDecorationLine: 'underline',
   }
 });

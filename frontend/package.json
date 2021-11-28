@@ -23,7 +23,8 @@
     "react-native-flash-message": "^0.2.0",
     "react-native-screens": "^3.8.0",
     "react-native-web": "^0.17.5",
-    "react-navigation": "^4.4.4"
+    "react-navigation": "^4.4.4",
+    "expo-facebook": "~11.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"
