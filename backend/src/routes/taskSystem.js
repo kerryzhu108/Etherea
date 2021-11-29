@@ -16,8 +16,50 @@ Returns the following json:
 router.get("/progressInfo/:userid", async(req, res) =>{
     const { userid } = req.params
     try {
-        const info = await pool.query("SELECT id, (exp/50) AS level, (exp-(exp/50)*50) AS exp, streak from progressinfo WHERE id = $1;", [userid]);
-        res.json(info.rows[0])
+
+        await (async () => {
+            const client = await pool.connect()
+            let info
+            try {
+                await client.query('BEGIN') //start transaction
+                let streak
+
+                // Get number of days from date previous streak was broken
+                // Aka number of days of current ongoing streak, and assume all tasks today have been completed
+                const daysFromNoQ =    
+                `SELECT count(*) AS completedDays FROM
+                (SELECT DISTINCT (datetodo) FROM taskCompletion
+                WHERE datetodo BETWEEN( -- select day after last incomplete task day    to    today
+                    SELECT COALESCE(MAX(datetodo), $4) FROM taskCompletion 
+                        WHERE userID = $1 AND complete = $2 AND datetodo < $3)+1
+                    AND $3) fromNo`
+                const daysFromNo= await client.query(daysFromNoQ, [userid, false, new Date(), new Date(2021, 01, 01)]);
+                streak = daysFromNo.rows[0].completeddays
+                
+                // Check if all tasks for today have been completed
+                // Get number of tasks not completed today
+                const todayFalseQ =
+                `SELECT count(complete) AS falsesToday
+                FROM taskCompletion
+                WHERE userID = $1 AND datetodo = $2 and complete = false`
+                const todayFalse = await pool.query(todayFalseQ, [userid, new Date()])
+                if (todayFalse.rows[0].falsestoday > 0){
+                    streak = streak - 1
+                }
+
+                info = await pool.query("SELECT id, (exp/50) AS level, (exp-(exp/50)*50) AS exp from progressinfo WHERE id = $1;", [userid]);
+                info.rows[0].streak = streak
+
+                await client.query('COMMIT')
+            } catch (error) {
+                await client.query('ROLLBACK')
+                return res.status(400).send(error.message);
+            } finally {
+                res.json(info.rows[0])
+            }
+          })
+          ().catch(e => console.error(e.stack))
+
     } catch (error) {
         return res.status(400).send(error.message);
     }
@@ -27,7 +69,7 @@ router.get("/progressInfo/:userid", async(req, res) =>{
 })
 
 
-/*Add new user row with default game values.
+/*Add new user row with default values.
 Pass the following body for this post request:
 {
     "userid":1
@@ -120,7 +162,7 @@ router.get("/themesTasks/:themeid", async(req, res) =>{
 send them all at once in array taskID when the user hits Choose Habits.
 {
     "userid":1,
-    "taskID":[2, 3, 5]
+    "taskid":[2, 3, 5]
 }
 */
 router.post("/chooseTasks", async(req, res) =>{
@@ -219,49 +261,32 @@ router.put('/taskFinished', async(req, res) => {
                 const pointsRow = await client.query(pointsQuery,[taskid]);
                 let points = pointsRow.rows[0].points;
 
-                // Get user's points
+                // Get user's current points
                 const userPointsQ = "SELECT exp FROM progressInfo WHERE id = $1";
                 const userRow = await client.query(userPointsQ, [userid]);
                 const userPoints = userRow.rows[0].exp;
 
                 let newPoints = points + userPoints;
-  
-                const daysFromNoQ =    
-                `SELECT count(*) AS allDays FROM
-                (SELECT DISTINCT (datetodo) FROM taskCompletion
-                WHERE datetodo BETWEEN( -- select day after last incomplete task day    to    today
-                    SELECT COALESCE(MAX(datetodo), $4) FROM taskCompletion 
-                        WHERE userID = $1 AND complete = $2 AND datetodo < $3)+1
-                    AND $3) fromNo`;
-                const daysFromNo= await client.query(daysFromNoQ, [userid, false, new Date(), new Date(2021, 01, 01)]);
-                
-                const todayQ = 
-                `SELECT count(*) AS today FROM 
-                (SELECT DISTINCT(datetodo) FROM taskCompletion
-                WHERE userID = $1 AND complete = $2 AND datetodo = $3) totalCount`;
-                const today = await client.query(todayQ, [userid, false, new Date()]);
 
-                const streak = daysFromNo.rows[0].alldays - today.rows[0].today;
                 // Update task completed to true
                 const txtStatus = "UPDATE taskCompletion SET complete = $1 WHERE userID=$2 AND taskID=$3 AND datetodo = $4 RETURNING *";
                 const updsts = await client.query(txtStatus,[true, userid, taskid, new Date()]) ;
-
-                // Update user progress info(exp, steak)
+  
+                // Update user progress info(exp, streak)
                 const txtLv = "UPDATE progressInfo SET exp = $1, streak = $2 WHERE id = $3";
-                const updLv = await client.query(txtLv, [newPoints, streak, userid]);
+                const updLv = await client.query(txtLv, [newPoints, 0, userid]);
                 
                 await client.query('COMMIT')
-                //res.send("Updated task completion and user progress!")
-            } catch (e) {
+            } catch (error) {
                 await client.query('ROLLBACK')
-                throw e
+                return res.status(400).send(error.message);
             } finally {
-                client.release()
             }
           })
           ().catch(e => console.error(e.stack))
         
     } catch (error) {
+        return res.status(400).send(error.message);
         
     }
     finally{

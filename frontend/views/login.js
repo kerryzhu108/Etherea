@@ -1,10 +1,9 @@
 import React from "react";
 import { View, ImageBackground, Text, StyleSheet, TextInput, TouchableOpacity, Image } from "react-native";
-import { login, googleSignIn } from "../apis/login.js";
+import { login, googleLogIn, facebookLogIn } from "../apis/login.js";
 import { showMessage } from "react-native-flash-message";
 import FlashMessage from "react-native-flash-message";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Google from 'expo-google-app-auth';
 
 export default class Login extends React.Component { 
   constructor(props) {
@@ -37,50 +36,24 @@ export default class Login extends React.Component {
     })
   }
 
-
-
-  googleLoginHandler = () => {
-    const config = { iosClientId: `931919465131-5hg7mbiqsr7sh45aui3123r2regk1uit.apps.googleusercontent.com`,
-                     androidClientId: `931919465131-c6oj3h4dpm6ji00q6usg7g1t9th1p2it.apps.googleusercontent.com`,
-                     scopes: ['profile', 'email'] 
-                    };
-    Google
-      .logInAsync(config)
-      .then((result) => {
-        const {type, user} = result;
-        if (type == 'success') {
-          console.log('Google signin successfully');
-          const { email, givenName, familyName } = user;
-          googleSignIn(givenName, familyName, email)
-            .then(response => { 
-              console.log("return from googleSignIn");
-              
-              response.json()
-                .then((responseData) => {
-                  console.log(responseData);
-                  if (!responseData.tokens) {
-                    showMessage({
-                      message: "Internal Server Error. Please try again later.",
-                      description: "The server encountered an internal error or misconfiguration and was unable to complete your request.",
-                      type: "danger",
-                      duration: 6000,
-                    });
-                    return;
-                  } else {
-                    AsyncStorage.setItem('userid', responseData.userid)
-                    this.props.navigation.navigate('Home')
-                  }
-                })
-            });
-        } else {
-          console.log('Google signin was cancelled');
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      })
-  }
-
+  externalLoginHandler = (response) => {
+    if (!response) return;
+    response.json().then((responseData) => {
+      if (!responseData.tokens) {
+        showMessage({
+          message: "Internal Server Error. Please try again later.",
+          description: "The server encountered an internal error or misconfiguration and was unable to complete your request.",
+          type: "danger",
+          duration: 6000,
+        });
+        return;
+      }
+      else {
+        AsyncStorage.setItem('userid', responseData.userid)
+        this.props.navigation.navigate('Home')
+      }
+    }
+    )}
 
   render() { 
     return (
@@ -91,13 +64,13 @@ export default class Login extends React.Component {
 
           <TextInput 
             placeholder="Email" 
-            style={styles.input} 
+            style={styles.inputEmail} 
             onChangeText={text => this.onChangeInputHandler('email', text)}
           />
 
           <TextInput 
             placeholder="Password" 
-            style={styles.input}
+            style={styles.inputPassword}
             onChangeText={text => this.onChangeInputHandler('password', text)}
           />
 
@@ -108,9 +81,17 @@ export default class Login extends React.Component {
           }}>
             <Image source={require('../assets/loginButton.png')}/>
           </TouchableOpacity>
-          
-          <Text style={styles.temp} onPress={() => this.googleLoginHandler()}>Log in with Google</Text>
 
+          <TouchableOpacity style={styles.facebookLoginButton} 
+            onPress={() => facebookLogIn().then(response => this.externalLoginHandler(response))}>
+            <Image source={require('../assets/loginFacebookWhite.png')}/>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.googleLoginButton} 
+            onPress={() => googleLogIn().then(response => this.externalLoginHandler(response))}>
+            <Image source={require('../assets/loginGoogleWhite.png')}/>
+          </TouchableOpacity>
+      
         </ImageBackground>
       </View>
     );
@@ -127,26 +108,36 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    marginTop: 15,
-    fontSize: 35,
+    marginTop: 55,
+    fontSize: 45,
     fontWeight: 'bold',
     color: '#A0E3B2',
   },
-  input: {
-    marginTop: 20,
+  inputEmail: {
+    marginTop: 100,
     width: 300,
     height: 40,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15,
+    borderRadius: 50,
+    borderWidth: 1
+  },
+  inputPassword: {
+    marginTop: 70,
+    width: 300,
+    height: 40,
+    paddingHorizontal: 15,
     borderRadius: 50,
     borderWidth: 1
   },
   goSignup: {
-    margin: 20,
+    margin: 10,
     textDecorationLine: 'underline',
+    fontStyle: 'italic',
+    color: '#A0E3B2',
   },
   loginButton: {
     position: "absolute",
-    marginTop: 250,
+    marginTop: 480,
   },
   greenBottom: {
     backgroundColor: '#A0E3B2',
@@ -156,8 +147,12 @@ const styles = StyleSheet.create({
     right: 0,
     height: 260,
   }, 
-  temp: {
-    marginTop: 370,
+  googleLoginButton: {
+    marginTop: 20,
+    textDecorationLine: 'underline',
+  },
+  facebookLoginButton: {
+    marginTop: 220,
     textDecorationLine: 'underline',
   }
 });
