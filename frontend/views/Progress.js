@@ -150,17 +150,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1
   },
+  scrollView: {
+    alignItems: 'center',
+    flex: 1
+  },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
     color: "#747070",
-    marginTop: 120,
+    marginTop: 100,
+    textAlign: 'center'
   },
   subtitle: {
     fontSize: 20,
     fontWeight: 'bold',
     color: "#747070",
     marginTop: 15,
+    textAlign: 'center'
   },
   desc: {
     margin: 30,
@@ -179,6 +185,8 @@ const styles = StyleSheet.create({
     borderRadius: 120/2,
     alignItems: 'center',
     backgroundColor: '#F296B8',
+    textAlign: 'center',
+    flex: 1
  },
  circle2: {
   width: 120,
@@ -187,7 +195,8 @@ const styles = StyleSheet.create({
   marginTop: -20,
   borderRadius: 120/2,
   alignItems: 'center',
-  backgroundColor: '#98E396'
+  backgroundColor: '#98E396',
+  flex: 1
 },
  circleText: {
    marginTop: 80,
@@ -205,13 +214,13 @@ rectangle:{
   margin: 5,
   alignItems: 'center',
   backgroundColor: '#dcdcdc',
-  borderColor: 'white',
+  textAlign: 'center',
+  flex: 1
 },
 rectanglesText: {
   fontSize: 12,
   fontWeight: 'bold',
-  marginTop: 100,
-  alignItems: 'center',
-  color: '#afeeee',
+  marginTop: 81,
+  color: 'black',
 },
 });
