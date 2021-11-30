@@ -1,5 +1,5 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, TextInput, Text, ScrollView, Button, Alert } from "react-native";
+import { StyleSheet, TextInput, Text, ScrollView, Button } from "react-native";
 import NavigationPanel from '../components/navigationPanel.js';
 
 export default class adminPanel extends React.Component { 
@@ -23,12 +23,12 @@ export default class adminPanel extends React.Component {
   }
   
   themeButton = () => {
-    if(typeof this.newThemeName === 'undefined' || typeof this.statName === 'undefined' || typeof this.color === 'undefined' || typeof this.dateLaunched === 'undefined'){
+    if(this.state.newThemeName === '' || this.state.statName === '' || this.state.color === '' || this.state.dateLaunched === ''){
       alert('You are missing a field.')
       return
     }
 
-    let multiplier_cast = parseInt(this.multiplier)
+    let multiplier_cast = parseInt(this.state.multiplier)
     if(isNaN(multiplier_cast) || multiplier_cast <= 0){
       alert('Your multiplier value is invalid.')
       return
@@ -39,19 +39,21 @@ export default class adminPanel extends React.Component {
   }
 
   taskButton = () => {
-    if(this.taskName == '' || this.description == ''){
+    if(this.state.taskName === '' || this.state.description === ''){
       alert('You are missing a field.')
       return
     }
 
-    let id_cast = parseInt(this.themeID)
+    let id_cast = parseInt(this.state.themeID)
     if(isNaN(id_cast) || id_cast < 0){
       alert('Your Theme ID value is invalid.')
+      return
     }
 
-    let points_cast = parseInt(this.points)
+    let points_cast = parseInt(this.state.points)
     if(isNaN(points_cast) || points_cast <= 0){
       alert('Your points value is invalid.')
+      return
     }
 
     alert('You have successfully created a new task.')
@@ -60,7 +62,6 @@ export default class adminPanel extends React.Component {
 
   render(){
     return (
-      <SafeAreaView>
       <ScrollView>
         <Text style={styles.title}>ADMIN PANEL</Text>
         <Text style={styles.desc}>
@@ -118,13 +119,13 @@ export default class adminPanel extends React.Component {
             style={styles.input}
             onChangeText={color => this.onChangeText('color', color)}
           />
-        </ScrollView>
         <Button
             title="Confirm New Theme"
             onPress={this.themeButton}
             color="blue"
-          />
-      </SafeAreaView>
+        />
+        <NavigationPanel/>
+        </ScrollView>
     );
   }
 }
