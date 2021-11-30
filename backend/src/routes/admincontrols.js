@@ -9,7 +9,7 @@ module.exports = router;
 router.post("/themesTasks/:themeID", async(req, res) =>{
     try{
         // Create task
-        const {id, themeID, descript, taskName, points} = req.body;
+        const {themeID, descript, taskName, points} = req.body;
         const new_entry = req.body;
 
         // Get any rows in database that have the same task name
@@ -19,7 +19,7 @@ router.post("/themesTasks/:themeID", async(req, res) =>{
         }
 
         // Adding new task to database
-        await pool.query("INSERT INTO themesTasks (id, themeID, descript, taskName, points) VALUES ($1, $2, $3, $4, $5) RETURNING *", [new_entry.id, new_entry.themeID, new_entry.descript, new_entry.taskName, new_entry.points]);
+        await pool.query("INSERT INTO themesTasks (themeID, descript, taskName, points) VALUES ($1, $2, $3, $4) RETURNING *", [new_entry.themeID, new_entry.descript, new_entry.taskName, new_entry.points]);
         return res.json({message: "The new task has successfully been created."});
     } catch(error) {
         return res.status(400).send(error.message);
@@ -40,7 +40,7 @@ router.post("/themesAll", async(req, res) =>{
         }
 
         // Adding new theme to database
-        await pool.query("INSERT INTO themes (id, theme, multiplier, statName, datelaunched, color) VALUES ($1, $2, $3, $4, $5) RETURNING *", [id, theme, multiplier, statName, datelaunched, color]);
+        await pool.query("INSERT INTO themes (theme, multiplier, statName, datelaunched, color) VALUES ($1, $2, $3, $4, $5) RETURNING *", [theme, multiplier, statName, datelaunched, color]);
 
         return res.json({ message: "A new theme has been successfully added to the list of themes."});
     } catch(error) {
