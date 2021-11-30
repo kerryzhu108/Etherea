@@ -187,7 +187,7 @@ async function createTables() {
             );
             INSERT INTO taskList VALUES(1, 1, 'Eat vegetarian', 'Vegetarian Challenge', 10);
             INSERT INTO taskList VALUES(2, 1, 'Make your commute green', 'A New Way to Travel', 20);
-            INSERT INTO taskList VALUES(3, 1, 'Reduce use of plastic packaging', 'Reduce, Reuse, Recycle', 30);
+            INSERT INTO taskList VALUES(3, 1, 'Reduce use of plastic', 'Reduce, Reuse, Recycle', 30);
             INSERT INTO taskList VALUES(4, 1, 'Support youth-led Movements', 'Supporting the Youth', 10);
 
             INSERT INTO taskList VALUES(5, 2, 'Shadow work', 'Shadow', 5);
