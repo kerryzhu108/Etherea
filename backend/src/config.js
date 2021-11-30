@@ -14,7 +14,6 @@ const pool = new Pool({
 });
 
 
-
 // const config = {
 //     db: {
 //         host: process.env.DB_HOST,
@@ -225,6 +224,31 @@ async function createTables() {
                 console.log(err);
             } else {
                 console.log("Table taskCompletion created.")
+            }
+        });
+
+    await client.query(`CREATE VIEW v_theme_task AS
+                    SELECT themes.id themeID, theme, taskList.id taskID, descript, points FROM themes 
+                    JOIN taskList ON taskList.themeID = themes.id;`,
+        (err, result) => {
+            if (err) {
+                console.log("Error creating view v_theme_task.")
+                console.log(err);
+            } else {
+                console.log("Table v_theme_task created.")
+            }
+        });
+
+    await client.query(`CREATE or REPLACE VIEW v_userTask AS 
+                        SELECT userID, vt.taskID, descript, themeID, theme, complete, dateTodo,points
+                        FROM taskCompletion tc
+                        JOIN v_theme_task vt ON vt.taskID = tc.taskID;`,
+        (err, result) => {
+            if (err) {
+                console.log("Error creating view v_userTak.")
+                console.log(err);
+            } else {
+                console.log("Table v_userTask created.")
             }
         });
 
