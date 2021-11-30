@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     borderWidth: 1
   },
   inputPassword: {
-    marginTop: 70,
+    marginTop: 5,
     width: 300,
     height: 40,
     paddingHorizontal: 15,
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     position: "absolute",
-    marginTop: 480,
+    marginTop: '110%',
   },
   greenBottom: {
     backgroundColor: '#A0E3B2',
@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   facebookLoginButton: {
-    marginTop: 220,
+    marginTop: '50%',
     textDecorationLine: 'underline',
   }
 });

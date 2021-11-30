@@ -79,20 +79,20 @@ const styles = StyleSheet.create({
   },
   login: {
     fontSize: 20,
-    marginTop: 780,
+    marginTop: '170%',
     marginRight: 15,
     color: '#4C494A',
     fontWeight: '500'
   },
   signup: {
     fontSize: 20,
-    marginTop: 780,
+    marginTop: '170%',
     marginLeft: 15,
     color: '#4C494A',
     fontWeight: '500'
   },
   verticleLine: {
-    marginTop: 770,
+    marginTop: '170%',
     height: '6%',
     width: 2,
     backgroundColor: '#4C494A',
