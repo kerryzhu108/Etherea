@@ -21,7 +21,7 @@ export default class Home extends React.Component {
         // Get and set the username for the user
         AsyncStorage.getItem('userid').then((item) => {
             return getUsername(item);
-        }).then((response) => response.json()).then((json) => {
+        }).then(response => response.json()).then((json) => {
             this.setState((state, props) => ({
                 username: json.name,
             }));

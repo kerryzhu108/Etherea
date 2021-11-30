@@ -116,7 +116,6 @@ function getLastDay(){
       yearString = yearString.concat("28");
     }
   }
-  console.log(yearString);
   return yearString
 }
 
