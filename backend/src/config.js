@@ -153,7 +153,7 @@ async function createTables() {
             }
         });
     
-
+    const themeColumns = '(theme, multiplier, statName, dateLaunched, colour)'
     await client.query(`CREATE TABLE IF NOT EXISTS themes(
                 id BIGSERIAL PRIMARY KEY NOT NULL,
                 theme varchar(100),
@@ -162,10 +162,10 @@ async function createTables() {
                 dateLaunched DATE,
                 colour varchar(100)
                 );
-                INSERT INTO themes VALUES ('Climate Change', 2, 'CO2', to_date('2021-10-01','yyyy-mm-dd'), '#A0E3B2');
-                INSERT INTO themes VALUES ('Mental Health', 5, 'Mental Health', to_date('2021-11-01','yyyy-mm-dd'), '#A0E3B2');
-                INSERT INTO themes VALUES ('Animal Cruelty', 3, 'Animals', to_date('2021-12-01','yyyy-mm-dd'), '#F296B8');
-                INSERT INTO themes VALUES ('Social Justice', 4, 'Social', to_date('2022-01-01','yyyy-mm-dd'), '#F296B8');
+                INSERT INTO themes ${columns} VALUES ('Climate Change', 2, 'CO2', to_date('2021-10-01','yyyy-mm-dd'), '#A0E3B2');
+                INSERT INTO themes ${columns} VALUES ('Mental Health', 5, 'Mental Health', to_date('2021-11-01','yyyy-mm-dd'), '#A0E3B2');
+                INSERT INTO themes ${columns} VALUES ('Animal Cruelty', 3, 'Animals', to_date('2021-12-01','yyyy-mm-dd'), '#F296B8');
+                INSERT INTO themes ${columns} VALUES ('Social Justice', 4, 'Social', to_date('2022-01-01','yyyy-mm-dd'), '#F296B8');
                 `,
         (err, result) => {
             if (err) {
@@ -176,6 +176,7 @@ async function createTables() {
             }
         });
     
+    const taskListColumns = '(themeID, descript, taskName, points)'
     await client.query(`CREATE TABLE IF NOT EXISTS taskList(
                 id BIGSERIAL PRIMARY KEY NOT NULL,
                 themeID int,
@@ -186,10 +187,10 @@ async function createTables() {
                     FOREIGN KEY (themeID)
                         REFERENCES themes(id)
             );
-            INSERT INTO taskList VALUES(1, 'Eat vegetarian', 'Vegetarian Challenge', 10);
-            INSERT INTO taskList VALUES(1, 'Make your commute green', 'A New Way to Travel', 20);
-            INSERT INTO taskList VALUES(1, 'Reduce use of plastic', 'Reduce, Reuse, Recycle', 30);
-            INSERT INTO taskList VALUES(1, 'Support youth-led Movements', 'Supporting the Youth', 10);
+            INSERT INTO taskList ${taskListColumns} VALUES(1, 'Eat vegetarian', 'Vegetarian Challenge', 10);
+            INSERT INTO taskList ${taskListColumns} VALUES(1, 'Make your commute green', 'A New Way to Travel', 20);
+            INSERT INTO taskList ${taskListColumns} VALUES(1, 'Reduce use of plastic', 'Reduce, Reuse, Recycle', 30);
+            INSERT INTO taskList ${taskListColumns} VALUES(1, 'Support youth-led Movements', 'Supporting the Youth', 10);
 
             INSERT INTO taskList VALUES(2, 'Shadow work', 'Shadow', 5);
             INSERT INTO taskList VALUES(2, 'Gratitude list', 'Be Happy', 5);
@@ -243,7 +244,7 @@ async function createTables() {
         });
 
     await client.query(`CREATE or REPLACE VIEW v_userTask AS 
-                        SELECT userID, vt.taskID, taskName, descript, themeID, theme, complete, dateTodo,points
+                        SELECT userID, vt.taskID, taskName, descript, themeID, theme, colour, complete, dateTodo,points
                         FROM taskCompletion tc
                         JOIN v_theme_task vt ON vt.taskID = tc.taskID;`,
         (err, result) => {
