@@ -162,10 +162,10 @@ async function createTables() {
                 dateLaunched DATE,
                 colour varchar(100)
                 );
-                INSERT INTO themes ${columns} VALUES ('Climate Change', 2, 'CO2', to_date('2021-10-01','yyyy-mm-dd'), '#A0E3B2');
-                INSERT INTO themes ${columns} VALUES ('Mental Health', 5, 'Mental Health', to_date('2021-11-01','yyyy-mm-dd'), '#A0E3B2');
-                INSERT INTO themes ${columns} VALUES ('Animal Cruelty', 3, 'Animals', to_date('2021-12-01','yyyy-mm-dd'), '#F296B8');
-                INSERT INTO themes ${columns} VALUES ('Social Justice', 4, 'Social', to_date('2022-01-01','yyyy-mm-dd'), '#F296B8');
+                INSERT INTO themes ${themeColumns} VALUES ('Climate Change', 2, 'CO2', to_date('2021-10-01','yyyy-mm-dd'), '#A0E3B2');
+                INSERT INTO themes ${themeColumns} VALUES ('Mental Health', 5, 'Mental Health', to_date('2021-11-01','yyyy-mm-dd'), '#A0E3B2');
+                INSERT INTO themes ${themeColumns} VALUES ('Animal Cruelty', 3, 'Animals', to_date('2021-12-01','yyyy-mm-dd'), '#F296B8');
+                INSERT INTO themes ${themeColumns} VALUES ('Social Justice', 4, 'Social', to_date('2022-01-01','yyyy-mm-dd'), '#F296B8');
                 `,
         (err, result) => {
             if (err) {
@@ -192,16 +192,16 @@ async function createTables() {
             INSERT INTO taskList ${taskListColumns} VALUES(1, 'Reduce use of plastic', 'Reduce, Reuse, Recycle', 30);
             INSERT INTO taskList ${taskListColumns} VALUES(1, 'Support youth-led Movements', 'Supporting the Youth', 10);
 
-            INSERT INTO taskList VALUES(2, 'Shadow work', 'Shadow', 5);
-            INSERT INTO taskList VALUES(2, 'Gratitude list', 'Be Happy', 5);
-            INSERT INTO taskList VALUES(2, 'Meditation', 'Calm', 10);
-            INSERT INTO taskList VALUES(2, 'Yoga', 'Calm Again', 10);
-            INSERT INTO taskList VALUES(2, 'Breathing exercises', 'In.... Out' ,10);
-            INSERT INTO taskList VALUES(2, 'Social Media Detox', 'No Social Media', 20);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Shadow work', 'Shadow', 5);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Gratitude list', 'Be Happy', 5);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Meditation', 'Calm', 10);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Yoga', 'Calm Again', 10);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Breathing exercises', 'In.... Out' ,10);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Social Media Detox', 'No Social Media', 20);
 
-            INSERT INTO taskList VALUES(3, 'Dairy-free Diet', 'Save the Cows', 20);
-            INSERT INTO taskList VALUES(3, 'Meat-free Diet', 'Save the Meat', 15);
-            INSERT INTO taskList VALUES(3, 'Only use vegan makeup and clothes', 'A New Lifestyle', 20);
+            INSERT INTO taskList ${taskListColumns} VALUES(3, 'Dairy-free Diet', 'Save the Cows', 20);
+            INSERT INTO taskList ${taskListColumns} VALUES(3, 'Meat-free Diet', 'Save the Meat', 15);
+            INSERT INTO taskList ${taskListColumns} VALUES(3, 'Only use vegan makeup and clothes', 'A New Lifestyle', 20);
             `,
         (err, result) => {
             if (err) {

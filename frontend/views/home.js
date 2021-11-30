@@ -1,11 +1,12 @@
 import React from "react";
 import { useFocusEffect } from '@react-navigation/native';
-import { View, Text, StyleSheet, TouchableOpacity, Button, Image } from "react-native";
+import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUsername } from "../apis/profile";
 import { getUserType } from "../apis/auth";
 import { getTasks, finishTask } from "../apis/tasks";
 import Task from "../components/Task";
+import Popup from '../components/Popup';
 import NavigationPanel from '../components/navigationPanel.js';
 
 export default class Home extends React.Component {
@@ -42,12 +43,14 @@ export default class Home extends React.Component {
    
     render() {
         return (
-            <View style={styles.container}>
+          <ScrollView style={styles.container} contentContainerStyle={{ flexGrow: 1, justifyContent: 'space-between', flexDirection: 'column' }}>
             <Text style={styles.title}>Hello,</Text>
             <Text style={styles.username}>{this.state.username}</Text>
             <FetchTasks navigation={this.props.navigation}/>
-            <NavigationPanel navigation={this.props.navigation}/>
-          </View>
+            <View style={styles.navigation}>
+              <NavigationPanel navigation={this.props.navigation}/>              
+            </View>
+          </ScrollView>
         );
     }
 
@@ -56,7 +59,11 @@ export default class Home extends React.Component {
 // Need this to use onload hook
 function FetchTasks( props ) {
   const [getDailyTasks, setDailyTasks] = React.useState([]);
+  const [getSelectedTasks, setSelectedTasks] = React.useState([]);
   const [getAllTasksDoneStatus, setAllTasksDoneStatus] = React.useState(false);
+  const [getPopupInfo, setPopupInfo] = React.useState(['titel', 'details'])
+  const [isHidden, setIsHidden] = React.useState(true)
+  const [getThemeColour, setThemeColour] = React.useState('white')
 
   const loadTasks = () => {
     return AsyncStorage.getItem('userid').then(userid => {
@@ -65,7 +72,7 @@ function FetchTasks( props ) {
           props.navigation.navigate('SelectTasks')
           return
         }
-        console.log(tasks)
+        setThemeColour(tasks[0]['colour'])
         setDailyTasks(tasks)
         allTasksDone(tasks)
       })
@@ -78,6 +85,21 @@ function FetchTasks( props ) {
       loadTasks()
     }, [])
   );
+
+  const selectTask = (taskid) => {
+    if(!getSelectedTasks.includes(taskid)){
+      setSelectedTasks([...getSelectedTasks, taskid])
+    } else {
+      let selctedTasks = getSelectedTasks
+      selctedTasks.splice(getSelectedTasks.indexOf(taskid), 1)
+      setSelectedTasks(selctedTasks)
+    }
+  }
+
+  const togglePopup = (taskName, taskDetails) => {
+    setIsHidden(!isHidden)
+    setPopupInfo([taskName, taskDetails])
+  }
 
   const allTasksDone = (tasks) => {
     let allDone = true
@@ -97,6 +119,13 @@ function FetchTasks( props ) {
       return getDailyTasks[0]['theme'].toUpperCase()
     }
   }
+  
+  const handleSubmit = async () => {
+    const userid = await AsyncStorage.getItem('userid')
+    // for (let i=0; i<getSelectedTasks.length; i++){
+    //     getSelectedTasks[i]
+    // }
+  }
 
   return (
     <View>
@@ -106,37 +135,31 @@ function FetchTasks( props ) {
       </View>
       <Text style={styles.todaysChallenge}>Today's challenges</Text>
       
-      {
+      <View style={styles.items}>
+      { 
         getDailyTasks.map((item, index) => {
           if (item['complete'] == true) {
             return
           }
-          console.log(item)
           return (
-            <Task key={index} taskName={item['taskname']} 
-              selectTask={selectTask} 
-              taskid={item['taskid']} 
-              themeColour={item['points']}
-              taskPoints={item['points']}
-              showArrow={true}
-              showPopup={togglePopup}
-              taskDetails={item['descript']}
-            />
-            // <TouchableOpacity 
-            //   key={index}
-            //   style={styles.taskItem}
-            //   onPress={()=>{ finishTask(item['userid'], item['taskid']).then(()=>{loadTasks()} )}}>  
-            //   <View style={{flexDirection: 'row'}}>
-            //     <Text style={styles.taskText}>{item['descript']}</Text>
-            //     <View style={styles.verticleLine} opacity={0.5}></View>
-            //     <Text style={styles.taskText}>{item['points']}</Text>
-            //     <Text style={{fontSize: 13, color: 'white', top: '2.2%'}}>{'pts'}</Text>
-            //   </View>
-            // </TouchableOpacity>
+              <Task style={styles.taskItem} key={index} taskName={item['taskname']} 
+                selectTask={selectTask} 
+                taskid={item['taskid']} 
+                themeColour={item['colour']}
+                taskPoints={item['points']}
+                showPopup={togglePopup}
+                taskDetails={item['descript']}
+              />
           )
         })
       }
-      { getAllTasksDoneStatus && <Text style={styles.tasksCompleted}>You have completed your daily tasks!</Text>} 
+      <TouchableOpacity style={styles.submit} onPress={()=> handleSubmit()}>
+          <Text style={styles.habitText}>Mark as completed</Text>
+      </TouchableOpacity>
+      </View>
+
+      { getAllTasksDoneStatus && <Text style={styles.tasksCompleted}>You have completed your daily tasks!</Text>}
+      { !isHidden && <Popup themeColour={getThemeColour} closePopup={togglePopup} title={getPopupInfo[0]} desc={getPopupInfo[1]}/> }
     </View>
   )
 }
@@ -147,21 +170,22 @@ const styles = StyleSheet.create({
       },
       title: {
         fontSize: 35,
-        top: 130,
+        marginTop: 50,
+        marginBottom: 0,
         left: 30,
         fontWeight: 'bold',
         color: '#A0E3B2',
       },
       username: {
+        marginTop: -10,
         fontSize: 60,
-        top: 125,
         left: 30,
         fontWeight: "bold",
         color: '#A0E3B2',
       },
       topic: {
         color: 'grey',
-        marginTop: 155,
+        marginTop: 10,
         left: 30,
         fontSize: 20,
         fontWeight: "bold"
@@ -181,38 +205,36 @@ const styles = StyleSheet.create({
       },
       todaysChallenge: {
         fontSize: 20,
-        marginTop: 35,
+        marginTop: 15,
         marginLeft: 30,
         color: 'grey',
         fontWeight: "bold"
-      },
-      taskItem: {
-        top: 30,
-        left: 30,
-        height: 55,
-        width: 350,
-        backgroundColor: "#A0E3B2",
-        borderRadius: 18,
-        paddingVertical: 15,
-        paddingHorizontal: 12,
-        borderColor: '#707070',
-        borderWidth: 1,
       },
       tasksCompleted: {
         marginTop: 80,
         textAlign: 'center',
         fontSize: 15
       },
-      taskText: {
-        fontSize: 20,
-        color: 'white',
-        textTransform: 'capitalize'
+      items: {
+        paddingLeft: 30,
+        paddingRight: 30,
       },
-      verticleLine: {
-        marginStart: '2.5%',
-        marginEnd: '2.5%',
-        height: '120%',
-        width: 2,
-        backgroundColor: 'white',
+      submit: {
+        backgroundColor: '#4B4B4B',
+        padding: 20,
+        borderRadius: 20,
+        marginTop: 40,
+        textAlign: 'center',
+        marginBottom: 30,
+      },
+      habitText: {
+        color: 'white',
+        fontSize: 16,
+        textAlign: 'center',
+        fontWeight: 'bold'
+      },
+      navigation: {
+        marginTop: 50,
+        justifyContent: 'flex-end'
       },
 });
