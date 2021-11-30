@@ -1,7 +1,7 @@
 'use strict'
 import React from "react";
 import { useFocusEffect } from '@react-navigation/native';
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { getImpactStats } from "../apis/progress";
 import { Calendar } from 'react-native-calendars';
 import NavigationPanel from '../components/navigationPanel.js';
@@ -15,7 +15,7 @@ export default class Progress extends React.Component {
   render() { 
     return (
       <View style={styles.container}>
-
+        <ScrollView style={styles.scrollView}>
         <Text style={styles.title}>PROGRESS</Text>
         <Text style={styles.desc}>
           Welcome to the Progress section! Here you can see the 
@@ -68,6 +68,7 @@ export default class Progress extends React.Component {
             firstDay={1}
           />
         </View>
+        </ScrollView>
         <NavigationPanel navigation={this.props.navigation}/>
       </View>
     );
