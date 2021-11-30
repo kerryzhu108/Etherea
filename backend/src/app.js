@@ -13,7 +13,9 @@ var adminRouter = require("./routes/admincontrols")
 require("dotenv").config();
 const { createTables, dropTables } = require("./config.js");
 
-dropTables().then(() => createTables());
+if (process.env.resetDB=='true') {
+  dropTables().then(() => createTables());
+}
 
 const app = express();
 

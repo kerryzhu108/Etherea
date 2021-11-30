@@ -10,11 +10,15 @@ export default function SelectTasks({ navigation }) {
 
     const [allTasksToPickFrom, setAllTasksToPickFrom] = useState([]);
     const [allTasksSelected, setAllTasksSelected] = useState([]);
+    const [getThemeColour, setThemeColour] = useState('white');
 
     // reloads tasks every time page loads
     useFocusEffect(
       React.useCallback(() => {
-        getTasksForTheme(1).then(response=>response.json()).then(tasks => {setAllTasksToPickFrom(tasks)})
+        getTasksForTheme(1).then(response=>response.json()).then(tasks => {
+          setAllTasksToPickFrom(tasks)
+          setThemeColour(tasks[0]['colour'])
+        })
       }, [])
     );
  
@@ -31,42 +35,45 @@ export default function SelectTasks({ navigation }) {
     }
  
     return (
-            <View style={styles.tasksWrapper}>
-            <Text style={styles.sectionTitle}>Climate Change Tasks</Text>
-            <Text style={styles.sectionTitleTwo}>Choose your tasks for this month</Text>
- 
-            <View style={styles.items}>
-              {
-                allTasksToPickFrom.map((item, index) => {
-                  return (
-                    <TouchableOpacity key={index}  onPress={() => selectTask(index)}>
-                      <Task text={item['descript']} />
-                    </TouchableOpacity>
-                  )
-                })
-              }
-            </View>
-            <Button title="Submit" onPress={()=> handleSubmit()}/>
-          </View>
-       
-        );
-      }
+      <View style={styles.tasksWrapper}>
+        <View style={[styles.themeWrapper, {backgroundColor: getThemeColour}]}>
+          <Text style={styles.sectionTitle}>Climate Change Tasks</Text>
+          <Text style={styles.sectionTitleTwo}>Choose your tasks for this month</Text>
+        </View>
+        
+        <View style={styles.items}>
+          {
+            allTasksToPickFrom.map((item, index) => {
+              return (
+                <Task key={index} taskName={item['descript']} selectTask={selectTask} index={index} themeColour={item['colour']}/>
+              )
+            })
+          }
+        </View>
+        <Button title="Submit" onPress={()=> handleSubmit()}/>
+      </View>     
+    );
+  }
  
 const styles = StyleSheet.create({
     tasksWrapper: {
-        paddingTop: 80,
-        paddingHorizontal: 20,
-      },
-      sectionTitle: {
-        fontSize: 24,
-        fontWeight: 'bold'
-      },
-      sectionTitleTwo: {
-        fontSize: 18,
-        fontWeight: 'bold'
-      },
-      items: {
-        marginTop: 30,
-      },
+      paddingTop: 80,
+      paddingHorizontal: 20,
+    },
+    themeWrapper: {
+      padding: 30,
+      borderRadius: 25,
+    },
+    sectionTitle: {
+      fontSize: 24,
+      fontWeight: 'bold'
+    },
+    sectionTitleTwo: {
+      fontSize: 18,
+      fontWeight: 'bold'
+    },
+    items: {
+      marginTop: 30,
+    },
   });
 
