@@ -40,7 +40,7 @@ router.post("/themesAll", async(req, res) =>{
         }
 
         // Adding new theme to database
-        pool.query("INSERT INTO themes (id, theme, multiplier, statName, datelaunched) VALUES ($1, $2, $3, $4, $5) RETURNING *", [id, theme, multiplier, statName, datelaunched, color]);
+        pool.query("INSERT INTO themes (id, theme, multiplier, statName, datelaunched, color) VALUES ($1, $2, $3, $4, $5) RETURNING *", [id, theme, multiplier, statName, datelaunched, color]);
 
         return res.json({ message: "A new theme has been successfully added to the list of themes."});
     } catch(error) {
