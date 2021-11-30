@@ -157,14 +157,15 @@ async function createTables() {
     await client.query(`CREATE TABLE IF NOT EXISTS themes(
                 id int PRIMARY KEY,
                 theme varchar(100),
-                dateLaunched DATE -- first day of month launch
+                dateLaunched DATE,
+                color VARCHAR(7) NOT NULL -- color code of the theme
                 );
-                INSERT INTO themes VALUES (1, 'Climate Change', to_date('2021-10-01','yyyy-mm-dd'));
-                INSERT INTO themes VALUES (2, 'Mental Health', to_date('2021-11-01','yyyy-mm-dd'));
-                INSERT INTO themes VALUES (3, 'Animal Cruelty', to_date('2021-12-01','yyyy-mm-dd'));
-                INSERT INTO themes VALUES (4, 'Social Justice', to_date('2022-01-01','yyyy-mm-dd'));
-                INSERT INTO themes VALUES (5, 'Physical Health', to_date('2022-02-01','yyyy-mm-dd'));
-                INSERT INTO themes VALUES (6, 'Poverty', to_date('2022-03-01','yyyy-mm-dd'));
+                INSERT INTO themes VALUES (1, 'Climate Change', to_date('2021-10-01','yyyy-mm-dd'), '#A0E3B2');
+                INSERT INTO themes VALUES (2, 'Mental Health', to_date('2021-11-01','yyyy-mm-dd'), '#7AD7E0');
+                INSERT INTO themes VALUES (3, 'Animal Cruelty', to_date('2021-12-01','yyyy-mm-dd'), '#F296B8');
+                INSERT INTO themes VALUES (4, 'Social Justice', to_date('2022-01-01','yyyy-mm-dd'), '#DADEDE');
+                INSERT INTO themes VALUES (5, 'Physical Health', to_date('2022-02-01','yyyy-mm-dd'), '#DADEDE');
+                INSERT INTO themes VALUES (6, 'Poverty', to_date('2022-03-01','yyyy-mm-dd'), '#DADEDE');
                 `,
         (err, result) => {
             if (err) {
