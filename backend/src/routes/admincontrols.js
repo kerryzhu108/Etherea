@@ -9,17 +9,17 @@ module.exports = router;
 router.post("/themesTasks/:themeID", async(req, res) =>{
     try{
         // Create task
-        const {themeid, theme, taskid, taskname, descript, points} = req.body;
+        const {id, themeID, descript, taskName, points} = req.body;
         const new_entry = req.body;
 
-        // Get any rows in database that have the same theme and task name
-        var result = pool.query("SELECT * FROM v_theme_task WHERE theme=$1, taskname=$2", [new_entry.theme, new_entry.taskname])
+        // Get any rows in database that have the same task name
+        var result = pool.query("SELECT * FROM v_theme_task WHERE taskName=$1", [new_entry.taskName])
         if(result.rows.length > 0){
-            return res.status(500).json({ error: {message: "A task with this theme and name already exists."}})
+            return res.status(500).json({ error: {message: "A task with this name already exists."}})
         }
 
         // Adding new task to database
-        pool.query("INSERT INTO themesTasks (themeID, theme, taskID, taskname, descript, points) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", [themeid, theme, taskid, taskname, descript, points]);
+        pool.query("INSERT INTO themesTasks (id, themeID, descript, taskName, points) VALUES ($1, $2, $3, $4, $5) RETURNING *", [new_entry.id, new_entry.themeID, new_entry.descript, new_entry.taskName, new_entry.points]);
         return res.json({message: "The new task has successfully been created."});
     } catch(error) {
         return res.status(400).send(error.message);
@@ -40,7 +40,7 @@ router.post("/themesAll", async(req, res) =>{
         }
 
         // Adding new theme to database
-        pool.query("INSERT INTO themes (id, theme, statName, multiplier, datelaunched) VALUES ($1, $2, $3, $4, $5) RETURNING *", [id, theme, statName, multiplier, datelaunched]);
+        pool.query("INSERT INTO themes (id, theme, multiplier, statName, datelaunched) VALUES ($1, $2, $3, $4, $5) RETURNING *", [id, theme, multiplier, statName, datelaunched]);
 
         return res.json({ message: "A new theme has been successfully added to the list of themes."});
     } catch(error) {

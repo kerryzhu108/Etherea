@@ -157,14 +157,16 @@ async function createTables() {
     await client.query(`CREATE TABLE IF NOT EXISTS themes(
                 id int PRIMARY KEY,
                 theme varchar(100),
+                multiplier int,
+                statName varchar(100),
                 dateLaunched DATE -- first day of month launch
                 );
-                INSERT INTO themes VALUES (1, 'Climate Change', to_date('2021-10-01','yyyy-mm-dd'));
-                INSERT INTO themes VALUES (2, 'Mental Health', to_date('2021-11-01','yyyy-mm-dd'));
-                INSERT INTO themes VALUES (3, 'Animal Cruelty', to_date('2021-12-01','yyyy-mm-dd'));
-                INSERT INTO themes VALUES (4, 'Social Justice', to_date('2022-01-01','yyyy-mm-dd'));
-                INSERT INTO themes VALUES (5, 'Physical Health', to_date('2022-02-01','yyyy-mm-dd'));
-                INSERT INTO themes VALUES (6, 'Poverty', to_date('2022-03-01','yyyy-mm-dd'));
+                INSERT INTO themes VALUES (1, 'Climate Change', 2, 'CO2', to_date('2021-10-01','yyyy-mm-dd'));
+                INSERT INTO themes VALUES (2, 'Mental Health', 5, 'Mental Health', to_date('2021-11-01','yyyy-mm-dd'));
+                INSERT INTO themes VALUES (3, 'Animal Cruelty', 3, 'Animals', to_date('2021-12-01','yyyy-mm-dd'));
+                INSERT INTO themes VALUES (4, 'Social Justice', 4, 'Social', to_date('2022-01-01','yyyy-mm-dd'));
+                INSERT INTO themes VALUES (5, 'Physical Health', 1, 'Physical Health', to_date('2022-02-01','yyyy-mm-dd'));
+                INSERT INTO themes VALUES (6, 'Poverty', 10, 'Social', to_date('2022-03-01','yyyy-mm-dd'));
                 `,
         (err, result) => {
             if (err) {
@@ -179,26 +181,27 @@ async function createTables() {
                 id int PRIMARY KEY,
                 themeID int,
                 descript varchar(200),
+                taskName varchar(100),
                 points int,
                 CONSTRAINT fk_themes -- foreign key from themes
                     FOREIGN KEY (themeID)
                         REFERENCES themes(id)
             );
-            INSERT INTO taskList VALUES(1, 1, 'Eat vegetarian', 10);
-            INSERT INTO taskList VALUES(2, 1, 'Make your commute green', 20);
-            INSERT INTO taskList VALUES(3, 1, 'Reduce use of plastic packaging', 30);
-            INSERT INTO taskList VALUES(4, 1, 'Support youth-led Movements', 10);
+            INSERT INTO taskList VALUES(1, 1, 'Eat vegetarian', 'Vegetarian Challenge', 10);
+            INSERT INTO taskList VALUES(2, 1, 'Make your commute green', 'A New Way to Travel', 20);
+            INSERT INTO taskList VALUES(3, 1, 'Reduce use of plastic packaging', 'Reduce, Reuse, Recycle', 30);
+            INSERT INTO taskList VALUES(4, 1, 'Support youth-led Movements', 'Supporting the Youth', 10);
 
-            INSERT INTO taskList VALUES(5, 2, 'Shadow work', 5);
-            INSERT INTO taskList VALUES(6, 2, 'Gratitude list', 5);
-            INSERT INTO taskList VALUES(7, 2, 'Meditation', 10);
-            INSERT INTO taskList VALUES(8, 2, 'Yoga', 10);
-            INSERT INTO taskList VALUES(9, 2, 'Breathing exercises', 10);
-            INSERT INTO taskList VALUES(10, 2, 'Social Media Detox', 20);
+            INSERT INTO taskList VALUES(5, 2, 'Shadow work', 'Shadow', 5);
+            INSERT INTO taskList VALUES(6, 2, 'Gratitude list', 'Be Happy', 5);
+            INSERT INTO taskList VALUES(7, 2, 'Meditation', 'Calm', 10);
+            INSERT INTO taskList VALUES(8, 2, 'Yoga', 'Calm Again', 10);
+            INSERT INTO taskList VALUES(9, 2, 'Breathing exercises', 'In.... Out' ,10);
+            INSERT INTO taskList VALUES(10, 2, 'Social Media Detox', 'No Social Media', 20);
 
-            INSERT INTO taskList VALUES(11, 3, 'Dairy-free Diet', 20);
-            INSERT INTO taskList VALUES(12, 3, 'Meat-free Diet', 15);
-            INSERT INTO taskList VALUES(13, 3, 'Only use vegan makeup and clothes', 20);
+            INSERT INTO taskList VALUES(11, 3, 'Dairy-free Diet', 'Save the Cows', 20);
+            INSERT INTO taskList VALUES(12, 3, 'Meat-free Diet', 'Save the Meat', 15);
+            INSERT INTO taskList VALUES(13, 3, 'Only use vegan makeup and clothes', 'A New Lifestyle', 20);
             `,
         (err, result) => {
             if (err) {
