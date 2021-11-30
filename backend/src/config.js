@@ -186,7 +186,7 @@ async function createTables() {
                     FOREIGN KEY (themeID)
                         REFERENCES themes(id)
             );
-            INSERT INTO taskList VALUES(1, 1, 'Eat vegetarian', 'Vegetarian Challenge', 10);
+            INSERT INTO taskList VALUES(1, 1, 'Spend your day eating vegetarian, did you know that pound for pound, grains are the most calorie efficient food?', 'Vegetarian Challenge', 10);
             INSERT INTO taskList VALUES(2, 1, 'Make your commute green', 'A New Way to Travel', 20);
             INSERT INTO taskList VALUES(3, 1, 'Reduce use of plastic', 'Reduce, Reuse, Recycle', 30);
             INSERT INTO taskList VALUES(4, 1, 'Support youth-led Movements', 'Supporting the Youth', 10);
@@ -231,7 +231,7 @@ async function createTables() {
         });
 
     await client.query(`CREATE VIEW v_theme_task AS
-                    SELECT themes.id themeID, theme, taskList.id taskID, descript, points, colour FROM themes 
+                    SELECT themes.id themeID, theme, taskList.id taskID, taskName, descript, points, colour FROM themes 
                     JOIN taskList ON taskList.themeID = themes.id;`,
         (err, result) => {
             if (err) {
@@ -243,7 +243,7 @@ async function createTables() {
         });
 
     await client.query(`CREATE or REPLACE VIEW v_userTask AS 
-                        SELECT userID, vt.taskID, descript, themeID, theme, complete, dateTodo,points
+                        SELECT userID, vt.taskID, taskName, descript, themeID, theme, complete, dateTodo,points
                         FROM taskCompletion tc
                         JOIN v_theme_task vt ON vt.taskID = tc.taskID;`,
         (err, result) => {

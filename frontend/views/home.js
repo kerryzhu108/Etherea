@@ -65,6 +65,7 @@ function FetchTasks( props ) {
           props.navigation.navigate('SelectTasks')
           return
         }
+        console.log(tasks)
         setDailyTasks(tasks)
         allTasksDone(tasks)
       })
@@ -110,18 +111,28 @@ function FetchTasks( props ) {
           if (item['complete'] == true) {
             return
           }
+          console.log(item)
           return (
-            <TouchableOpacity 
-              key={index}
-              style={styles.taskItem}
-              onPress={()=>{ finishTask(item['userid'], item['taskid']).then(()=>{loadTasks()} )}}>  
-              <View style={{flexDirection: 'row'}}>
-                <Text style={styles.taskText}>{item['descript']}</Text>
-                <View style={styles.verticleLine} opacity={0.5}></View>
-                <Text style={styles.taskText}>{item['points']}</Text>
-                <Text style={{fontSize: 13, color: 'white', top: '2.2%'}}>{'pts'}</Text>
-              </View>
-            </TouchableOpacity>
+            <Task key={index} taskName={item['taskname']} 
+              selectTask={selectTask} 
+              taskid={item['taskid']} 
+              themeColour={item['points']}
+              taskPoints={item['points']}
+              showArrow={true}
+              showPopup={togglePopup}
+              taskDetails={item['descript']}
+            />
+            // <TouchableOpacity 
+            //   key={index}
+            //   style={styles.taskItem}
+            //   onPress={()=>{ finishTask(item['userid'], item['taskid']).then(()=>{loadTasks()} )}}>  
+            //   <View style={{flexDirection: 'row'}}>
+            //     <Text style={styles.taskText}>{item['descript']}</Text>
+            //     <View style={styles.verticleLine} opacity={0.5}></View>
+            //     <Text style={styles.taskText}>{item['points']}</Text>
+            //     <Text style={{fontSize: 13, color: 'white', top: '2.2%'}}>{'pts'}</Text>
+            //   </View>
+            // </TouchableOpacity>
           )
         })
       }
