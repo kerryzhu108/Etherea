@@ -23,7 +23,7 @@ class App extends Component {
   render() {
     return (
       <NavigationContainer theme={MyTheme}>
-        <Stack.Navigator initialRouteName="Landing" screenOptions={{headerShown: false}} style={styles.container}>
+        <Stack.Navigator initialRouteName="SelectTasks" screenOptions={{headerShown: false}} style={styles.container}>
           <Stack.Screen name="Landing" component={Landing}/>
           <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="Login" component={Login} />

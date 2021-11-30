@@ -8,12 +8,14 @@ var impactStatsRouter = require("./routes/impactStats");
 var profileRouter = require("./routes/profile");
 var authRouter = require("./routes/auth");
 var imageRouter = require("./routes/imageupload");
-var adminRouter = require("./routes/admincontrols")
+var adminRouter = require("./routes/admincontrols");
 
 require("dotenv").config();
 const { createTables, dropTables } = require("./config.js");
 
-dropTables().then(() => createTables());
+if (process.env.resetDB=='true') {
+  dropTables().then(() => createTables());
+}
 
 const app = express();
 

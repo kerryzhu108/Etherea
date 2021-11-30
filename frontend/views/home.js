@@ -3,6 +3,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { View, Text, StyleSheet, TouchableOpacity, Button, Image } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUsername } from "../apis/profile";
+import { getUserType } from "../apis/auth";
 import { getTasks, finishTask } from "../apis/tasks";
 import Task from "../components/Task";
 import NavigationPanel from '../components/navigationPanel.js';
@@ -16,17 +17,27 @@ export default class Home extends React.Component {
         super(props);
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         // Get and set the username for the user
         AsyncStorage.getItem('userid').then((item) => {
             return getUsername(item);
-        }).then((response) => response.json()).then((json) => {
+        }).then(response => response.json()).then((json) => {
             this.setState((state, props) => ({
                 username: json.name,
             }));
         }).catch((error) => {
             console.error(error);
-        })
+        });
+
+        // Check this user's type
+        // TODO: (Zachary) Ensure that we show the admin button to users
+        // who are admin. Have to figure out how to do this.
+        try {
+            const type = await getUserType();   // Gets the user's type based off of their access token
+            console.log(type);
+        } catch (error) {
+            console.error(error);
+        }
     }
    
     render() {

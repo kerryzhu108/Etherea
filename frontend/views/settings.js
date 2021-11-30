@@ -21,7 +21,6 @@ export default class Settings extends React.Component {
     const options = {
       noData: true
     }
-    console.log("Hi")
     console.log(ImagePicker.launchImageLibrary)
     ImagePicker.launchImageLibrary(options, response =>{
       console.log("Working!")
