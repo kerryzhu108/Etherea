@@ -141,4 +141,21 @@ router.post("/externalClient",
         }
 });
 
+// Get user type based on the sent token
+router.get("/type", authenticateToken, async (req, res) => {
+    // Once user has been verified (through middleware authenticateToken)
+    // obtain their user type from the database.
+    try {
+        const result = await pool.query("SELECT type from USERS WHERE email=($1)", [req.user.email]);
+        if (result.rows.length == 0) return res.status(404).json({error: {message: "User with provided access token not found"}});
+        const type = result.rows[0].type;
+
+        // Otherwise, return the user type back to the sender
+        return res.json({type: type});
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({error: {message: "Internal server error"}});
+    }
+});
+
 module.exports = router;
