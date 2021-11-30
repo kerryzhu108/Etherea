@@ -12,6 +12,7 @@ import Progress from './views/Progress.js'
 import SelectTasks from './views/selectTasks.js'
 
 const Stack = createNativeStackNavigator();
+
 class App extends Component {
 
   state = {

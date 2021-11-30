@@ -1,6 +1,6 @@
 import React from "react";
 import { useFocusEffect } from '@react-navigation/native';
-import { View, Text, StyleSheet, TouchableOpacity, Button } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Button, Image } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUsername } from "../apis/profile";
 import { getTasks, finishTask } from "../apis/tasks";
@@ -82,7 +82,7 @@ function FetchTasks( props ) {
 
   const renderThemeName = () => {
     if (getDailyTasks[0]) {
-      return getDailyTasks[0]['theme']
+      return getDailyTasks[0]['theme'].toUpperCase()
     }
   }
 
@@ -92,7 +92,7 @@ function FetchTasks( props ) {
       <View style={styles.theme}>
         <Text style={styles.themeText}>{renderThemeName()}</Text>
       </View>
-      <Text style={styles.todaysChallenge}>Today's challenges:</Text>
+      <Text style={styles.todaysChallenge}>Today's challenges</Text>
       
       {
         getDailyTasks.map((item, index) => {
@@ -103,9 +103,13 @@ function FetchTasks( props ) {
             <TouchableOpacity 
               key={index}
               style={styles.taskItem}
-              onPress={()=>{ finishTask(item['userid'], item['taskid']).then(()=>{loadTasks()} )}}
-            >
-              <Task text={item['descript']} /> 
+              onPress={()=>{ finishTask(item['userid'], item['taskid']).then(()=>{loadTasks()} )}}>  
+              <View style={{flexDirection: 'row'}}>
+                <Text style={styles.taskText}>{item['descript']}</Text>
+                <View style={styles.verticleLine} opacity={0.5}></View>
+                <Text style={styles.taskText}>{item['points']}</Text>
+                <Text style={{fontSize: 13, color: 'white', top: '2.2%'}}>{'pts'}</Text>
+              </View>
             </TouchableOpacity>
           )
         })
@@ -120,49 +124,73 @@ const styles = StyleSheet.create({
         flex: 1
       },
       title: {
-        fontSize: 30,
-        top: 70,
+        fontSize: 35,
+        top: 130,
         left: 30,
         fontWeight: 'bold',
         color: '#A0E3B2',
       },
       username: {
         fontSize: 60,
-        top: 55,
+        top: 125,
         left: 30,
         fontWeight: "bold",
         color: '#A0E3B2',
       },
       topic: {
         color: 'grey',
-        marginTop: 80,
+        marginTop: 155,
         left: 30,
         fontSize: 20,
+        fontWeight: "bold"
       },
       theme: {
         marginTop: 10,
         backgroundColor: '#A0E3B2',
-        height: 50,
+        height: 65,
         justifyContent: 'center'
       },
       themeText: {
-        fontSize: 25,
+        fontSize: 28,
         color: 'white',
         textAlign: 'center',
+        fontWeight: "bold"
+        
       },
       todaysChallenge: {
         fontSize: 20,
-        marginTop: 25,
+        marginTop: 35,
         marginLeft: 30,
         color: 'grey',
+        fontWeight: "bold"
       },
       taskItem: {
         top: 30,
         left: 30,
+        height: 55,
+        width: 350,
+        backgroundColor: "#A0E3B2",
+        borderRadius: 18,
+        paddingVertical: 15,
+        paddingHorizontal: 12,
+        borderColor: '#707070',
+        borderWidth: 1,
       },
       tasksCompleted: {
         marginTop: 80,
         textAlign: 'center',
         fontSize: 15
-      }
+      },
+      taskText: {
+        fontSize: 20,
+        color: 'white',
+        textTransform: 'capitalize'
+      },
+      verticleLine: {
+        marginStart: '2.5%',
+        marginEnd: '2.5%',
+        height: '120%',
+        width: 2,
+        backgroundColor: 'white',
+      },
 });
