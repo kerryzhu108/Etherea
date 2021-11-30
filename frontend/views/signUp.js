@@ -1,9 +1,11 @@
 import React from "react";
-import { View, Text, Button, StyleSheet, TextInput, ImageBackground, TouchableOpacity, Image } from "react-native";
+import { View, Text, Button, StyleSheet, TextInput, ImageBackground, TouchableOpacity, Image, Dimensions } from "react-native";
 import FlashMessage from "react-native-flash-message";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import { signUp, googleLogIn, facebookLogIn } from "../apis/login.js";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
+const { height } = Dimensions.get('window');
 
 export default class SignUp extends React.Component { 
   constructor(props) {
@@ -188,7 +190,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#A0E3B2'
   },
   title: {
-    marginTop: 105,
+    marginTop: 50,
     fontSize: 45,
     fontWeight: 'bold',
     color: 'white',
@@ -209,15 +211,13 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   signUpButton: {
-    position: "absolute",
-    marginTop: 510,
+    marginTop: 10
   },
   googleLoginButton: {
-    marginTop: 20,
+    marginTop: 7,
     textDecorationLine: 'underline',
   },
   facebookLoginButton: {
-    marginTop: 150,
     textDecorationLine: 'underline',
   }
 });

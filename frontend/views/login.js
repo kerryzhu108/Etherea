@@ -1,10 +1,11 @@
 import React from "react";
-import { View, ImageBackground, Text, StyleSheet, TextInput, TouchableOpacity, Image } from "react-native";
+import { View, ImageBackground, Text, StyleSheet, TextInput, TouchableOpacity, Image, Dimensions } from "react-native";
 import { login, googleLogIn, facebookLogIn } from "../apis/login.js";
 import { showMessage } from "react-native-flash-message";
 import FlashMessage from "react-native-flash-message";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const { height } = Dimensions.get('window');
 export default class Login extends React.Component { 
   constructor(props) {
     super(props);
@@ -58,7 +59,7 @@ export default class Login extends React.Component {
   render() { 
     return (
       <View style={styles.container}>
-          <ImageBackground style={styles.background} source={require('../assets/loginBackground.png')}>
+        <ImageBackground style={styles.background} source={require('../assets/loginBackground.png')}>
           <FlashMessage position="top" />
           <Text style={styles.title}>Login</Text>
 
@@ -91,7 +92,6 @@ export default class Login extends React.Component {
             onPress={() => googleLogIn().then(response => this.externalLoginHandler(response))}>
             <Image source={require('../assets/loginGoogleWhite.png')}/>
           </TouchableOpacity>
-      
         </ImageBackground>
       </View>
     );
@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     alignItems: 'center',
+    height: height,
   },
   title: {
     marginTop: 55,
@@ -136,23 +137,17 @@ const styles = StyleSheet.create({
     color: '#A0E3B2',
   },
   loginButton: {
-    position: "absolute",
-    marginTop: '110%',
+    position: 'absolute',
+    marginTop: height / 1.8,
   },
-  greenBottom: {
-    backgroundColor: '#A0E3B2',
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 260,
-  }, 
   googleLoginButton: {
-    marginTop: 20,
+    position: 'absolute',
+    marginTop: height / 1.2,
     textDecorationLine: 'underline',
   },
   facebookLoginButton: {
-    marginTop: '50%',
+    position: 'absolute',
+    marginTop: height / 1.4,
     textDecorationLine: 'underline',
   }
 });
