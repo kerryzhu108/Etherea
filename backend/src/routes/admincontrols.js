@@ -30,7 +30,7 @@ router.post("/themesTasks/:themeID", async(req, res) =>{
 router.post("/themesAll", async(req, res) =>{
     try{
         // Setting the id, theme, statName, multiplier, and date to be launched
-        const {id, theme, statName, multiplier, datelaunched} = req.body;
+        const {id, theme, statName, multiplier, datelaunched, color} = req.body;
         const new_entry = req.body;
 
         // Trying to determine if any themes are already in the database
@@ -40,7 +40,7 @@ router.post("/themesAll", async(req, res) =>{
         }
 
         // Adding new theme to database
-        pool.query("INSERT INTO themes (id, theme, multiplier, statName, datelaunched) VALUES ($1, $2, $3, $4, $5) RETURNING *", [id, theme, multiplier, statName, datelaunched]);
+        pool.query("INSERT INTO themes (id, theme, multiplier, statName, datelaunched) VALUES ($1, $2, $3, $4, $5) RETURNING *", [id, theme, multiplier, statName, datelaunched, color]);
 
         return res.json({ message: "A new theme has been successfully added to the list of themes."});
     } catch(error) {
