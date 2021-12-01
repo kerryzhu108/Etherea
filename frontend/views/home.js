@@ -1,6 +1,6 @@
 import React from "react";
 import { useFocusEffect } from '@react-navigation/native';
-import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Image, Dimensions } from "react-native";
+import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUsername, getExp } from "../apis/profile";
 import { getTasks, finishTask, getAllThemes, changeTheme } from "../apis/tasks";
@@ -8,7 +8,7 @@ import Task from "../components/Task";
 import Popup from '../components/Popup';
 import NavigationPanel from '../components/navigationPanel.js';
 import { Entypo } from '@expo/vector-icons'; 
-import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger} from "react-native-popup-menu";
+import { Menu, MenuProvider, MenuOptions, MenuTrigger} from "react-native-popup-menu";
 import { Avatar, Title } from 'react-native-paper';
 
 const { height, width } = Dimensions.get('window');
@@ -16,13 +16,19 @@ const { height, width } = Dimensions.get('window');
 export default class Home extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+          changeTasks: false
+        }
     }
     render() {
+      const taskChanger = () => {
+        this.setState({changeTasks: !this.state.changeTasks})
+      }
         return (
           <MenuProvider style={{ flexDirection: "column"}}>
-            <SideMenu/>
+            <SideMenu changeTask={taskChanger}/>
             <ScrollView style={styles.container} contentContainerStyle={styles.scrollViewContainer}>
-              <FetchTasks navigation={this.props.navigation}/>
+              <FetchTasks changeTask={this.state.changeTasks} navigation={this.props.navigation}/>
               <View style={styles.navigation}>
                 <NavigationPanel navigation={this.props.navigation}/>              
               </View>
@@ -85,7 +91,7 @@ function SideMenu() {
               getThemes.map((item, index)=>{
                 return (
                   <TouchableOpacity key={index} style={[styles.menuItem, {backgroundColor: item['colour']}]}
-                    onPress={async ()=>{await changeTheme(item['id']);   }}>
+                    onPress={async ()=>{await changeTheme(item['id']); this.props.changeTask()}}>
                     <Text style={styles.menuContent}>{item['theme']}</Text>
                   </TouchableOpacity>
                 )

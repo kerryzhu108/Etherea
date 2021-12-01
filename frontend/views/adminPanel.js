@@ -188,7 +188,7 @@ export default class adminPanel extends React.Component {
         <TouchableOpacity style={styles.newThemeBtn}
             onPress={()=>this.themeButton()}
         ><Text style={{color: 'white'}}>Confirm New Theme</Text></TouchableOpacity>
-        <NavigationPanel/>
+        <NavigationPanel navigation={this.props.navigation}/>
         </ScrollView>
     );
   }

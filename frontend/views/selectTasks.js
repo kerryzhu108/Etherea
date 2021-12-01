@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
       borderRadius: 20,
       marginTop: 50,
       textAlign: 'center',
+      position: 'absolute'
     },
     habitText: {
       color: 'white',

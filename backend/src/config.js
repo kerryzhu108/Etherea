@@ -113,10 +113,10 @@ async function createTables() {
                 lastname VARCHAR(50) NOT NULL,
                 refresh VARCHAR(255),
                 type VARCHAR(50) DEFAULT 'user',
-                theme INT DEFAULT 0,
+                theme INT DEFAULT 1,
                 UNIQUE(email)
                 );
-                INSERT INTO users ${userRequiredColumns} VALUES ('adam.joe@gmail.com', '${hashed_password}', 'Adam', 'Joe', 'admin');
+                INSERT INTO users ${userRequiredColumns} VALUES ('a.a@gmail.com', '${hashed_password}', 'Adam', 'Joe', 'admin');
                 `,
         (err, result) => {
             if (err) {
