@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
     container: {
       paddingTop: 80,
       paddingHorizontal: 20,
+      paddingBottom: 80,
     },
     themeWrapper: {
       padding: 30,
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
       color: 'white',
       fontSize: 16,
       textAlign: 'center',
-      fontWeight: 'bold'
+      fontWeight: 'bold',
     },
   });
 

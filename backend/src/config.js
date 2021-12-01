@@ -202,11 +202,14 @@ async function createTables() {
             INSERT INTO taskList ${taskListColumns} VALUES(2, 'Meditation', 'Find a 10-20 min guided meditation set to a specific intention (i.e relieve stress, build confidence etc) and do it everyday.', 10);
             INSERT INTO taskList ${taskListColumns} VALUES(2, 'Yoga', 'Find a 5-10 min guided yoga routine of your preference and do it every morning.', 10);
             INSERT INTO taskList ${taskListColumns} VALUES(2, 'Breathing exercises', 'Close your mouth and inhale quietly through your nose to a mental count of 4. Hold your breath for a count of 7. Exhale completely through your mouth, making a whoosh sound to a count of 8. Repeat this for 5 min, setting an intention to relax and nourish your body. ' ,10);
-            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Social Media Detox', 'Set aside 1 hour a day where you don’t use any form of social media (snap, twitter, instagram, tiktok, Facebook or reddit)', 20);
 
             INSERT INTO taskList ${taskListColumns} VALUES(3, 'Dairy-free Diet', 'Cut out dairy (cheese, milk, yogurt etc.) from your diet. You could replace them with vegan alternatives. For example instead of drinking cow’s milk, try oat, soy, almond, cashew, coconut or pea milk!', 20);
             INSERT INTO taskList ${taskListColumns} VALUES(3, 'Meat-free Diet', 'Cut out meat from your diet and try replacing it with vegan alternatives (fake meat, tofu, seitan, beans and  lentils are all great sources of protein!)', 15);
-            INSERT INTO taskList ${taskListColumns} VALUES(3, 'Only use vegan makeup and clothes', 'Try to use/purchase only cruelty-free brands everyday. Look at this mission everyday to learn about big brands to look out for and gain insight on their inhumane practices!', 20);`,
+            INSERT INTO taskList ${taskListColumns} VALUES(3, 'Only use vegan makeup and clothes', 'Try to use/purchase only cruelty-free brands everyday. Look at this mission everyday to learn about big brands to look out for and gain insight on their inhumane practices!', 20);
+            
+            INSERT INTO taskList ${taskListColumns} VALUES(4, 'Unionize', 'Rally against big corporations who have profited off the pandemic and subjegated their workers to below adequate living conditions.', 20);`,
+
+            
         (err, result) => {
             if (err) {
                 console.log("Error creating table taskList.")
