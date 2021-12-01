@@ -238,7 +238,7 @@ async function createTables() {
             }
         });
 
-    await client.query(`CREATE VIEW v_theme_task AS
+    await client.query(`CREATE or REPLACE VIEW v_theme_task AS
                     SELECT themes.id themeID, theme, taskList.id taskID, taskName, descript, points, colour FROM themes 
                     JOIN taskList ON taskList.themeID = themes.id;`,
         (err, result) => {
