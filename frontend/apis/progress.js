@@ -1,11 +1,19 @@
 'use strict'
 import { domain, defaultHeaders } from "./headers";
 
-export function getImpactStats(userid) {
-    return fetch(domain + "impactStats/" + userid, {
-        method: 'GET',
-        headers: defaultHeaders,
-        mode: 'cors',
-        cache: 'default'
-    });
+export async function getImpactStats(userid) {
+    try {
+        const response = await fetch(domain + "impactStats/points/" + userid, {
+            method: 'GET',
+            headers: defaultHeaders,
+            mode: 'cors',
+            cache: 'default'
+        });
+        console.log(response);
+        const json_response = await response.json();
+        return json_response.impact;
+    } catch (error) {
+        console.error(error);
+        return;
+    }
 }

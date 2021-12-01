@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, TextInput, Text, ScrollView, Button } from "react-native";
+import { StyleSheet, TextInput, Text, ScrollView, TouchableOpacity, Button } from "react-native";
 import NavigationPanel from '../components/navigationPanel.js';
 import {insertNewTask, insertNewTheme} from '../apis/adminControls';
 
@@ -82,7 +82,7 @@ export default class adminPanel extends React.Component {
       return
     }
 
-    insertNewTheme(this.state.newThemeName, multiplier_cast, this.state.statName, this.state.dateLaunched, this.color).then((response) => {
+    insertNewTheme(this.state.newThemeName, multiplier_cast, this.state.statName, this.state.dateLaunched, this.state.color).then((response) => {
       if(response.status === 200){
         alert('You have successfully created a new theme.')
       }else if(response.status === 500){
@@ -111,7 +111,6 @@ export default class adminPanel extends React.Component {
       alert('Your points value is invalid.')
       return
     }
-
     insertNewTask(id_cast, this.state.description, this.state.taskName, points_cast).then((response) => {
       if(response.status === 200){
         alert('You have successfully created a new task.')
@@ -184,12 +183,10 @@ export default class adminPanel extends React.Component {
             style={styles.input}
             onChangeText={color => this.onChangeText('color', color)}
           />
-        <Button
-            title="Confirm New Theme"
-            onPress={this.themeButton}
-            color="blue"
-        />
-        <NavigationPanel/>
+        <TouchableOpacity style={styles.newThemeBtn}
+            onPress={()=>this.themeButton()}
+        ><Text style={{color: 'white'}}>Confirm New Theme</Text></TouchableOpacity>
+        <NavigationPanel navigation={this.props.navigation}/>
         </ScrollView>
     );
   }
@@ -233,4 +230,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     textAlign: 'center'
   },
+  newThemeBtn: {
+    marginBottom: 120,
+    backgroundColor: 'blue',
+    height: 40,
+    alignItems: 'center',
+  }
 });

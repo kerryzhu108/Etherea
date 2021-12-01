@@ -1,4 +1,5 @@
 require("dotenv").config();
+const bcrypt = require('bcrypt');
 
 const { Pool } = require('pg');
 
@@ -12,7 +13,6 @@ const pool = new Pool({
         rejectUnauthorized: false
     } : false
 });
-
 
 // const config = {
 //     db: {
@@ -102,6 +102,8 @@ async function dropTables() {
 
 async function createTables() {
     client = await pool.connect();
+    const userRequiredColumns = '(email, password, firstname, lastname, type)'
+    const hashed_password = await bcrypt.hash('1234', 10);
     await client.query(`CREATE TABLE IF NOT EXISTS users (
                 uid BIGSERIAL PRIMARY KEY NOT NULL,
                 email VARCHAR(100) NOT NULL,
@@ -110,8 +112,11 @@ async function createTables() {
                 lastname VARCHAR(50) NOT NULL,
                 refresh VARCHAR(255),
                 type VARCHAR(50) DEFAULT 'user',
+                theme INT DEFAULT 1,
                 UNIQUE(email)
-                )`,
+                );
+                INSERT INTO users ${userRequiredColumns} VALUES ('adam.a@gmail.com', '${hashed_password}', 'Adam', 'Joe', 'admin');
+                `,
         (err, result) => {
             if (err) {
                 console.log("Error creating table users.")
@@ -163,9 +168,9 @@ async function createTables() {
                 colour varchar(100)
                 );
                 INSERT INTO themes ${themeColumns} VALUES ('Climate Change', 2, 'CO2', to_date('2021-10-01','yyyy-mm-dd'), '#A0E3B2');
-                INSERT INTO themes ${themeColumns} VALUES ('Mental Health', 5, 'Mental Health', to_date('2021-11-01','yyyy-mm-dd'), '#A0E3B2');
+                INSERT INTO themes ${themeColumns} VALUES ('Mental Health', 5, 'Mental Health', to_date('2021-11-01','yyyy-mm-dd'), '#8A2BE2');
                 INSERT INTO themes ${themeColumns} VALUES ('Animal Cruelty', 3, 'Animals', to_date('2021-12-01','yyyy-mm-dd'), '#F296B8');
-                INSERT INTO themes ${themeColumns} VALUES ('Social Justice', 4, 'Social', to_date('2022-01-01','yyyy-mm-dd'), '#F296B8');
+                INSERT INTO themes ${themeColumns} VALUES ('Social Justice', 4, 'Social', to_date('2022-01-01','yyyy-mm-dd'), '#A52A2A');
                 `,
         (err, result) => {
             if (err) {
@@ -176,33 +181,35 @@ async function createTables() {
             }
         });
     
-    const taskListColumns = '(themeID, descript, taskName, points)'
+    const taskListColumns = '(themeID, taskName, descript, points)'
     await client.query(`CREATE TABLE IF NOT EXISTS taskList(
                 id BIGSERIAL PRIMARY KEY NOT NULL,
                 themeID int,
-                descript varchar(200),
-                taskName varchar(100),
+                taskName varchar(400),
+                descript varchar(500),
                 points int,
                 CONSTRAINT fk_themes -- foreign key from themes
                     FOREIGN KEY (themeID)
                         REFERENCES themes(id)
             );
-            INSERT INTO taskList ${taskListColumns} VALUES(1, 'Eat vegetarian', 'Vegetarian Challenge', 10);
-            INSERT INTO taskList ${taskListColumns} VALUES(1, 'Make your commute green', 'A New Way to Travel', 20);
-            INSERT INTO taskList ${taskListColumns} VALUES(1, 'Reduce use of plastic', 'Reduce, Reuse, Recycle', 30);
-            INSERT INTO taskList ${taskListColumns} VALUES(1, 'Support youth-led Movements', 'Supporting the Youth', 10);
+            INSERT INTO taskList ${taskListColumns} VALUES (1, 'Eat vegetarian', 'Cut out any meat from your diet (chicken, beef, pork, fish, etc.)', 10);
+            INSERT INTO taskList ${taskListColumns} VALUES(1, 'Make your commute green', 'Try to ride a bike, walk, or use public transportation, as alternatives to driving a car to your daily destinations.', 20);
+            INSERT INTO taskList ${taskListColumns} VALUES(1, 'Reduce use of plastic', 'Try to only buy/use products that have less plastic packaging(i.e  stray away from many small chip bags buy one bigger bag instead, don’t use plastic wrap, bags, or straws)', 30);
+            INSERT INTO taskList ${taskListColumns} VALUES(1, 'Support youth-led Movements', 'Take 10 min out of your day to participate in climate-based discussions, directly contact government officials to encourage them to enact new laws that limit carbon emissions and require polluters to pay for the emissions they produce, and/or post on your social media', 10);
 
-            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Shadow work', 'Shadow', 5);
-            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Gratitude list', 'Be Happy', 5);
-            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Meditation', 'Calm', 10);
-            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Yoga', 'Calm Again', 10);
-            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Breathing exercises', 'In.... Out' ,10);
-            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Social Media Detox', 'No Social Media', 20);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Shadow work', 'Every day you would be given a new prompt that helps you discover underlying truths/pains within yourself. This encourages you to recognize and redirect yourself to where you want to go.', 5);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Gratitude list', 'Everyday record 3 different things you are grateful for.', 5);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Meditation', 'Find a 10-20 min guided meditation set to a specific intention (i.e relieve stress, build confidence etc) and do it everyday.', 10);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Yoga', 'Find a 5-10 min guided yoga routine of your preference and do it every morning.', 10);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Breathing exercises', 'Close your mouth and inhale quietly through your nose to a mental count of 4. Hold your breath for a count of 7. Exhale completely through your mouth, making a whoosh sound to a count of 8. Repeat this for 5 min, setting an intention to relax and nourish your body. ' ,10);
 
-            INSERT INTO taskList ${taskListColumns} VALUES(3, 'Dairy-free Diet', 'Save the Cows', 20);
-            INSERT INTO taskList ${taskListColumns} VALUES(3, 'Meat-free Diet', 'Save the Meat', 15);
-            INSERT INTO taskList ${taskListColumns} VALUES(3, 'Only use vegan makeup and clothes', 'A New Lifestyle', 20);
-            `,
+            INSERT INTO taskList ${taskListColumns} VALUES(3, 'Dairy-free Diet', 'Cut out dairy (cheese, milk, yogurt etc.) from your diet. You could replace them with vegan alternatives. For example instead of drinking cow’s milk, try oat, soy, almond, cashew, coconut or pea milk!', 20);
+            INSERT INTO taskList ${taskListColumns} VALUES(3, 'Meat-free Diet', 'Cut out meat from your diet and try replacing it with vegan alternatives (fake meat, tofu, seitan, beans and  lentils are all great sources of protein!)', 15);
+            INSERT INTO taskList ${taskListColumns} VALUES(3, 'Only use vegan makeup and clothes', 'Try to use/purchase only cruelty-free brands everyday. Look at this mission everyday to learn about big brands to look out for and gain insight on their inhumane practices!', 20);
+            
+            INSERT INTO taskList ${taskListColumns} VALUES(4, 'Unionize', 'Rally against big corporations who have profited off the pandemic and subjegated their workers to below adequate living conditions.', 20);`,
+
+            
         (err, result) => {
             if (err) {
                 console.log("Error creating table taskList.")

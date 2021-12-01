@@ -1,25 +1,15 @@
 import React from "react";
 import { useFocusEffect } from '@react-navigation/native';
-import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Image, Dimensions } from "react-native";
+import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUsername, getExp } from "../apis/profile";
-import { getUserType } from "../apis/auth";
-import { getTasks, finishTask } from "../apis/tasks";
+import { getTasks, finishTask, getAllThemes, changeTheme } from "../apis/tasks";
 import Task from "../components/Task";
 import Popup from '../components/Popup';
 import NavigationPanel from '../components/navigationPanel.js';
 import { Entypo } from '@expo/vector-icons'; 
-import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger} from "react-native-popup-menu";
-import {
-  useTheme,
-  Avatar,
-  Title,
-  Caption,
-  Paragraph,
-  Drawer,
-  TouchableRipple,
-  Switch
-} from 'react-native-paper';
+import { Menu, MenuProvider, MenuOptions, MenuTrigger} from "react-native-popup-menu";
+import { Avatar, Title } from 'react-native-paper';
 
 const { height, width } = Dimensions.get('window');
 
@@ -27,34 +17,9 @@ export default class Home extends React.Component {
     constructor(props) {
         super(props);
     }
-
-    async componentDidMount() {
-        // // Get and set the username for the user
-        // AsyncStorage.getItem('userid').then((item) => {
-        //     return getUsername(item);
-        // }).then(response => response.json()).then((json) => {
-        //     this.setState((state, props) => ({
-        //         username: json.name,
-        //     }));
-        // }).catch((error) => {
-        //     console.error(error);
-        // });
-
-        // Check this user's type
-        // TODO: (Zachary) Ensure that we show the admin button to users
-        // who are admin. Have to figure out how to do this.
-        try {
-            const type = await getUserType();   // Gets the user's type based off of their access token
-            console.log(type);
-        } catch (error) {
-            console.error(error);
-        }
-    }
-   
     render() {
         return (
           <MenuProvider style={{ flexDirection: "column"}}>
-            <SideMenu/>
             <ScrollView style={styles.container} contentContainerStyle={styles.scrollViewContainer}>
               <FetchTasks navigation={this.props.navigation}/>
               <View style={styles.navigation}>
@@ -67,10 +32,12 @@ export default class Home extends React.Component {
 
 }
 
-function SideMenu() {
+function SideMenu(props) {
 
   const [getUserName, setUserName] = React.useState('')
   const [getPoints, setPoints] = React.useState(-1)
+  const [getThemes, setThemes] = React.useState([])
+
   const loadInfo = async () => {
     const userid = await AsyncStorage.getItem('userid')
 
@@ -81,6 +48,10 @@ function SideMenu() {
     let points = await getExp(userid)
     points = await points.json()
     setPoints(points.exp)
+
+    let themes = await getAllThemes()
+    themes = await themes.json()
+    setThemes(themes)
   }
 
   // reloads tasks every time page loads
@@ -91,13 +62,13 @@ function SideMenu() {
   );
 
   return(
-        <Menu style={{ marginTop: 45}} onSelect={value => alert(`You Clicked : ${value}`)}>
+        <Menu style={{ marginTop: 45}}>
 
           <MenuTrigger  >
             <Entypo name='menu' size={35} style={styles.menuIcon}/>
           </MenuTrigger  >
 
-          <MenuOptions optionsContainerStyle={{width:width/1.1, height:height/1.2, borderRadius: 40,}}>
+          <MenuOptions optionsContainerStyle={{width:width/1.5, height:height/1.2, borderRadius: 40,}}>
             <View style={{flexDirection:'row', marginTop: 30, marginLeft: 30 }}>
                 <Avatar.Image 
                     source={{uri: 'https://www.bhphotovideo.com/images/images500x500/Savage_60_2612_Widetone_Seamless_Background_Paper_1341499561_203856.jpg'}}
@@ -109,30 +80,16 @@ function SideMenu() {
                 </View>
             </View>
             <Text style={styles.menuCaption}>Monthly Challenges</Text>
-            <MenuOption style={styles.menuItem} value={"Climate changee".toUpperCase()}>
-              <Text style={styles.menuContent}>{"Climate change".toUpperCase()}</Text>
-            </MenuOption>
-            {/* Morgan: change color code as parameter in function later */}
-            <MenuOption style={{
-                backgroundColor: '#7AD7E0', 
-                borderRadius: 15, 
-                width: 300, 
-                height: 60, 
-                left: 30,
-                margin: '3%'
-              }} value={"Mental health".toUpperCase()}>
-              <Text style={styles.menuContent}>{"Mental health".toUpperCase()}</Text>
-            </MenuOption>
-            <MenuOption style={{
-                backgroundColor: '#F296B8', 
-                borderRadius: 15, 
-                width: 300, 
-                height: 60, 
-                left: 30,
-                margin: '3%'
-              }} value={"Animal cruelty".toUpperCase()}>
-              <Text style={styles.menuContent}>{"Animal cruelty".toUpperCase()}</Text>
-            </MenuOption>
+            {
+              getThemes.map((item, index)=>{
+                return (
+                  <TouchableOpacity key={index} style={[styles.menuItem, {backgroundColor: item['colour']}]}
+                    onPress={async ()=>{await changeTheme(item['id']); props.updateTasks()}}>
+                    <Text style={styles.menuContent}>{item['theme']}</Text>
+                  </TouchableOpacity>
+                )
+              })
+            }
           </MenuOptions>
 
         </Menu>
@@ -217,10 +174,11 @@ function FetchTasks( props ) {
 
   return (
     <View>
-      <Text style={styles.title}>Hello,</Text>
-      <Text style={styles.username}>{getUserName}</Text>
+      <SideMenu updateTasks={loadTasks}/>
+      <Text style={[styles.title, {color: getThemeColour}]}>Hello,</Text>
+      <Text style={[styles.username, {color: getThemeColour}]}>{getUserName}</Text>
       <Text style={styles.topic}>This month's topic: </Text>
-      <View style={styles.theme}>
+      <View style={[styles.theme, {backgroundColor: getThemeColour}]}>
         <Text style={styles.themeText}>{renderThemeName()}</Text>
       </View>
       <Text style={styles.todaysChallenge}>Today's challenges</Text>
@@ -364,11 +322,10 @@ const styles = StyleSheet.create({
         marginBottom: '5%'
       },
       menuItem: {
-        backgroundColor: '#A0E3B2', 
         borderRadius: 15, 
-        width: 300, 
+        width: width / 1.8, 
         height: 60, 
-        left: 30,
+        marginLeft: 25,
         margin: '3%'
       }
 });
