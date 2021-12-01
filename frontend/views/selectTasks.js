@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getTasksForTheme, chooseTasks } from "../apis/tasks.js";
 import Task from '../components/Task';
@@ -50,7 +50,7 @@ export default function SelectTasks({ navigation }) {
     }
  
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <View style={[styles.themeWrapper, {backgroundColor: getThemeColour}]}>
           <Text style={styles.sectionTitle}>Current Theme:</Text>
           <Text style={styles.sectionTitleTwo}>{getThemeName}</Text>
@@ -78,7 +78,7 @@ export default function SelectTasks({ navigation }) {
           <Text style={styles.habitText}>Choose Habits</Text>
         </TouchableOpacity>
         { !isHidden && <Popup themeColour={getThemeColour} closePopup={togglePopup} title={getPopupInfo[0]} desc={getPopupInfo[1]}/> }
-      </View>     
+      </ScrollView>     
     );
   }
  
