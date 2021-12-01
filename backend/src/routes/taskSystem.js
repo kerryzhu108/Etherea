@@ -298,14 +298,14 @@ router.put('/taskFinished', async(req, res) => {
 });
 
 // Updates a user's task
-router.post("/updateUserTheme", [authenticateToken, check("theme").isInt()], async (req, res) => {
+router.post("/updateUserTheme", [authenticateToken, check("themeid").isInt()], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ error: errors.array() });
     }
 
     try {
-        await pool.query("UPDATE users SET theme=$1 WHERE email=$2", [req.body.theme, req.user.email]);
+        await pool.query("UPDATE users SET theme=$1 WHERE email=$2", [req.body.themeid, req.user.email]);
         return res.json({message: "Successfully updated user theme"});
     } catch {
         return res.status(500).json({error: {message: "Internal server error"}});
