@@ -1,6 +1,6 @@
 'use strict'
 
-export const domain = 'https://etherea-dev.herokuapp.com/'
+export const domain = 'http://192.168.1.6:3000/'//'https://etherea-dev.herokuapp.com/'
 
 export const defaultHeaders = {
   'Accept': 'application/json',

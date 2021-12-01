@@ -166,9 +166,10 @@ function FetchTasks( props ) {
   
   const handleSubmit = async () => {
     const userid = await AsyncStorage.getItem('userid')
-    for (let i=0; i<getSelectedTasks.length; i++){
-      await finishTask(userid, getSelectedTasks[i])
-    }
+    getSelectedTasks.forEach(async (taskid) => {
+      await finishTask(userid, taskid)
+    })
+    setSelectedTasks([])
     await loadTasks()
   }
 

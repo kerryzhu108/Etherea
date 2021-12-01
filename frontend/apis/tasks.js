@@ -40,15 +40,17 @@ export function chooseTasks(userid, taskids) {
     }).then(response => {return response})
 }
 
-export function finishTask(userid, taskid) {
-    return fetch(domain + 'taskFinished', {
+export async function finishTask(userid, taskids) {
+    let response = await fetch(domain + 'taskFinished', {
         method: 'put',
         headers: defaultHeaders,
         body: JSON.stringify({
             "userid": userid,
-            "taskid": taskid
+            "taskid": taskids
         })
-    }).then(response => {return response})
+    })
+    response = response.json()
+    return response
 }
 
 export async function changeTheme(themeid) {

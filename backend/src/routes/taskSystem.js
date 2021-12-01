@@ -19,50 +19,40 @@ Returns the following json:
 router.get("/progressInfo/:userid", async(req, res) =>{
     const { userid } = req.params
     try {
-
         await (async () => {
             const client = await pool.connect()
             let info
-            try {
-                await client.query('BEGIN') //start transaction
-                let streak
+            await client.query('BEGIN') //start transaction
+            let streak
 
-                // Get number of days from date previous streak was broken
-                // Aka number of days of current ongoing streak, and assume all tasks today have been completed
-                const daysFromNoQ =    
-                `SELECT count(*) AS completedDays FROM
-                (SELECT DISTINCT (datetodo) FROM taskCompletion
-                WHERE datetodo BETWEEN( -- select day after last incomplete task day    to    today
-                    SELECT COALESCE(MAX(datetodo), $4) FROM taskCompletion 
-                        WHERE userID = $1 AND complete = $2 AND datetodo < $3)+1
-                    AND $3) fromNo`
-                const daysFromNo= await client.query(daysFromNoQ, [userid, false, new Date(), new Date(2021, 01, 01)]);
-                streak = daysFromNo.rows[0].completeddays
-                
-                // Check if all tasks for today have been completed
-                // Get number of tasks not completed today
-                const todayFalseQ =
-                `SELECT count(complete) AS falsesToday
-                FROM taskCompletion
-                WHERE userID = $1 AND datetodo = $2 and complete = false`
-                const todayFalse = await pool.query(todayFalseQ, [userid, new Date()])
-                if (todayFalse.rows[0].falsestoday > 0){
-                    streak = streak - 1
-                }
-
-                info = await pool.query("SELECT id, (exp/50) AS level, (exp-(exp/50)*50) AS exp from progressinfo WHERE id = $1;", [userid]);
-                info.rows[0].streak = streak
-
-                await client.query('COMMIT')
-            } catch (error) {
-                await client.query('ROLLBACK')
-                return res.status(400).send(error.message);
-            } finally {
-                res.json(info.rows[0])
+            // Get number of days from date previous streak was broken
+            // Aka number of days of current ongoing streak, and assume all tasks today have been completed
+            const daysFromNoQ =    
+            `SELECT count(*) AS completedDays FROM
+            (SELECT DISTINCT (datetodo) FROM taskCompletion
+            WHERE datetodo BETWEEN( -- select day after last incomplete task day    to    today
+                SELECT COALESCE(MAX(datetodo), $4) FROM taskCompletion 
+                    WHERE userID = $1 AND complete = $2 AND datetodo < $3)+1
+                AND $3) fromNo`
+            const daysFromNo= await client.query(daysFromNoQ, [userid, false, new Date(), new Date(2021, 01, 01)]);
+            streak = daysFromNo.rows[0].completeddays
+            
+            // Check if all tasks for today have been completed
+            // Get number of tasks not completed today
+            const todayFalseQ =
+            `SELECT count(complete) AS falsesToday
+            FROM taskCompletion
+            WHERE userID = $1 AND datetodo = $2 and complete = false`
+            const todayFalse = await pool.query(todayFalseQ, [userid, new Date()])
+            if (todayFalse.rows[0].falsestoday > 0){
+                streak = streak - 1
             }
-          })
-          ().catch(e => console.error(e.stack))
 
+            info = await pool.query("SELECT id, (exp/50) AS level, (exp-(exp/50)*50) AS exp from progressinfo WHERE id = $1;", [userid]);
+            info.rows[0].streak = streak
+
+            await client.query('COMMIT')
+        })
     } catch (error) {
         return res.status(400).send(error.message);
     }
@@ -267,7 +257,7 @@ router.put('/taskFinished', async(req, res) => {
         const completed = completedRow.rows[0].complete;
 
         if(completed){
-            return;
+            return res.json({'status': 'one of the tasks is already completed'})
         }
 
         // Get the points for this particular task
@@ -291,10 +281,9 @@ router.put('/taskFinished', async(req, res) => {
         const updLv = await client.query(txtLv, [newPoints, 0, userid]);
         
         await client.query('COMMIT')
-        console.log('111111')
+        return res.json({'status': 'successfully marked tasks as completed'})
     } catch (error) {
         await client.query('ROLLBACK')
-        console.log(error.message)
         return res.status(400).send(error.message);
     }
 });
