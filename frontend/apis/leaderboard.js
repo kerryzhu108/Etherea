@@ -3,7 +3,6 @@ import { domain, defaultHeaders } from "./headers";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export function leaderboard(){
-    let data_rank;
     return AsyncStorage.getItem('userid').then(id => {
         return fetch(domain + 'leaderboard', {
             method: 'GET',
@@ -12,8 +11,8 @@ export function leaderboard(){
           .then((response) => response.json())
           .then((json) => {
             let data_rank = json.results
-            
-            const currentUser = data_unrank.filter(obj => {
+
+            const currentUser = data_rank.filter(obj => {
                 return obj.uid === id
               })
 
