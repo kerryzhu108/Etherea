@@ -174,12 +174,12 @@ export default class adminPanel extends React.Component {
             style={styles.input}
             onChangeText={multiplier => this.onChangeText('multiplier', multiplier)}
           />
-          <Text style={styles.box_desc}>Date Launched</Text>
+          <Text style={styles.box_desc}>Date Launched (Ex. 2021-12-31)</Text>
           <TextInput
             style={styles.input}
             onChangeText={dateLaunched => this.onChangeText('dateLaunched', dateLaunched)}
           />
-          <Text style={styles.box_desc}>Color</Text>
+          <Text style={styles.box_desc}>Color (Ex. #0000aa)</Text>
           <TextInput
             style={styles.input}
             onChangeText={color => this.onChangeText('color', color)}
