@@ -7,14 +7,24 @@ const isProduction = process.env.NODE_ENV === "production";
 
 const connectionString = `postgresql://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
 
+// const pool = new Pool({
+//     connectionString: isProduction ? process.env.DATABASE_URL : connectionString,
+//     ssl: isProduction ? {
+//         rejectUnauthorized: false
+//     } : false
+// });
+
 const pool = new Pool({
-    connectionString: isProduction ? process.env.DATABASE_URL : connectionString,
-    ssl: isProduction ? {
-        rejectUnauthorized: false
-    } : false
+    user: "postgres",
+    password:"post",
+    database:"postgres",
+    host:"localhost",
+    port:5432
+  /*connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }*/
 });
-
-
 // const config = {
 //     db: {
 //         host: process.env.DB_HOST,
@@ -182,18 +192,18 @@ async function createTables() {
             }
         });
     
-    const taskListColumns = '(themeID, descript, taskName, points)'
+    const taskListColumns = '(themeID, taskName, descript, points)'
     await client.query(`CREATE TABLE IF NOT EXISTS taskList(
                 id BIGSERIAL PRIMARY KEY NOT NULL,
                 themeID int,
-                descript varchar(500),
                 taskName varchar(400),
+                descript varchar(500),
                 points int,
                 CONSTRAINT fk_themes -- foreign key from themes
                     FOREIGN KEY (themeID)
                         REFERENCES themes(id)
             );
-            INSERT INTO taskList ${taskListColumns} VALUES(1, 'Eat vegetarian', 'Cut out any meat from your diet (chicken, beef, pork, fish, etc.)', 10);
+            INSERT INTO taskList ${taskListColumns} VALUES (1, 'Eat vegetarian', 'Cut out any meat from your diet (chicken, beef, pork, fish, etc.)', 10);
             INSERT INTO taskList ${taskListColumns} VALUES(1, 'Make your commute green', 'Try to ride a bike, walk, or use public transportation, as alternatives to driving a car to your daily destinations.', 20);
             INSERT INTO taskList ${taskListColumns} VALUES(1, 'Reduce use of plastic', 'Try to only buy/use products that have less plastic packaging(i.e  stray away from many small chip bags buy one bigger bag instead, don’t use plastic wrap, bags, or straws)', 30);
             INSERT INTO taskList ${taskListColumns} VALUES(1, 'Support youth-led Movements', 'Take 10 min out of your day to participate in climate-based discussions, directly contact government officials to encourage them to enact new laws that limit carbon emissions and require polluters to pay for the emissions they produce, and/or post on your social media', 10);

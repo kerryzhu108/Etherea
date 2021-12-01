@@ -82,8 +82,7 @@ export default class adminPanel extends React.Component {
       return
     }
 
-    insertNewTheme(this.state.newThemeName, multiplier_cast, this.state.statName, this.state.dateLaunched, this.color).then((response) => {
-      console.log(response)
+    insertNewTheme(this.state.newThemeName, multiplier_cast, this.state.statName, this.state.dateLaunched, this.state.color).then((response) => {
       if(response.status === 200){
         alert('You have successfully created a new theme.')
       }else if(response.status === 500){
@@ -112,7 +111,6 @@ export default class adminPanel extends React.Component {
       alert('Your points value is invalid.')
       return
     }
-    console.log(id_cast, this.state.description, this.state.taskName, points_cast)
     insertNewTask(id_cast, this.state.description, this.state.taskName, points_cast).then((response) => {
       if(response.status === 200){
         alert('You have successfully created a new task.')
