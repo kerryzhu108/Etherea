@@ -3,6 +3,9 @@ const express = require("express");
 var router = express.Router();
 
 const { pool } = require('../config');
+const { post } = require("./root");
+const {generateAccessToken, authenticateToken, generateRefreshToken } = require("../token");
+const { check, validationResult, body } = require('express-validator');
 
 /* Get user's progress info (level, exp points, streak)
 Returns the following json:
@@ -292,6 +295,21 @@ router.put('/taskFinished', async(req, res) => {
     finally{
         res.end();
     }
-})
+});
+
+// Updates a user's task
+router.post("/updateUserTheme", [authenticateToken, check("theme").isInt()], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ error: errors.array() });
+    }
+
+    try {
+        await pool.query("UPDATE users SET theme=$1 WHERE email=$2", [req.body.theme, req.user.email]);
+        return res.json({message: "Successfully updated user theme"});
+    } catch {
+        return res.status(500).json({error: {message: "Internal server error"}});
+    }
+});
 
 module.exports = router;
