@@ -2,8 +2,7 @@
 import {domain, defaultHeaders} from './headers.js'
 
 export async function insertNewTask(themeID, descript, taskName, points){
-    var string_ID = toString(themeID)
-    return fetch(domain + '/themesTasks/' + string_ID,  {
+    return fetch(domain + 'themesTasks/' + themeID,  {
         method: 'POST',
         headers: defaultHeaders,
         mode: 'cors',
@@ -18,7 +17,7 @@ export async function insertNewTask(themeID, descript, taskName, points){
 }
 
 export async function insertNewTheme(theme, multiplier, statName, dateLaunched, color){
-    return fetch(domain + '/themesAll', {
+    return fetch(domain + 'themesAll', {
         method: 'POST',
         headers: defaultHeaders,
         mode: 'cors',
