@@ -151,7 +151,6 @@ const styles = StyleSheet.create({
     flex: 1
   },
   scrollView: {
-    alignItems: 'center',
     flex: 1
   },
   title: {
