@@ -65,7 +65,7 @@ export default class Progress extends React.Component {
             <Text style={styles.rectanglesText}>ST</Text>
           </View>
         </View>
-          <View style={{ paddingTop: 10, flex: 1 }}>
+          <View style={{ paddingTop: 10, paddingBottom: 80, flex: 1 }}>
           <Calendar
             // Set minimum date to be first day of month
             minDate={getFirstDay()}

@@ -258,7 +258,7 @@ router.put('/taskFinished', async (req, res)=>{
           const completed = completedRow.rows[0].complete;
   
           if(completed){
-              return;
+              return res.json({statis: 'complete'});
           }
   
           // Get the points for this particular task
@@ -285,7 +285,7 @@ router.put('/taskFinished', async (req, res)=>{
           await client.query('ROLLBACK')
           throw e
         } finally {
-          res.send("Completed")
+          res.json({status: 'complete'})
           client.release()
         }
       })().catch(e => console.error(e.stack))
