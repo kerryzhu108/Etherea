@@ -192,16 +192,16 @@ async function createTables() {
             INSERT INTO taskList ${taskListColumns} VALUES(1, 'Reduce use of plastic', 'Reduce, Reuse, Recycle', 30);
             INSERT INTO taskList ${taskListColumns} VALUES(1, 'Support youth-led Movements', 'Supporting the Youth', 10);
 
-            INSERT INTO taskList VALUES(2, 'Shadow work', 'Shadow', 5);
-            INSERT INTO taskList VALUES(2, 'Gratitude list', 'Be Happy', 5);
-            INSERT INTO taskList VALUES(2, 'Meditation', 'Calm', 10);
-            INSERT INTO taskList VALUES(2, 'Yoga', 'Calm Again', 10);
-            INSERT INTO taskList VALUES(2, 'Breathing exercises', 'In.... Out' ,10);
-            INSERT INTO taskList VALUES(2, 'Social Media Detox', 'No Social Media', 20);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Shadow work', 'Shadow', 5);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Gratitude list', 'Be Happy', 5);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Meditation', 'Calm', 10);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Yoga', 'Calm Again', 10);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Breathing exercises', 'In.... Out' ,10);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Social Media Detox', 'No Social Media', 20);
 
-            INSERT INTO taskList VALUES(3, 'Dairy-free Diet', 'Save the Cows', 20);
-            INSERT INTO taskList VALUES(3, 'Meat-free Diet', 'Save the Meat', 15);
-            INSERT INTO taskList VALUES(3, 'Only use vegan makeup and clothes', 'A New Lifestyle', 20);
+            INSERT INTO taskList ${taskListColumns} VALUES(3, 'Dairy-free Diet', 'Save the Cows', 20);
+            INSERT INTO taskList ${taskListColumns} VALUES(3, 'Meat-free Diet', 'Save the Meat', 15);
+            INSERT INTO taskList ${taskListColumns} VALUES(3, 'Only use vegan makeup and clothes', 'A New Lifestyle', 20);
             `,
         (err, result) => {
             if (err) {

@@ -10,7 +10,7 @@ import { useFocusEffect } from '@react-navigation/native';
 export default function SelectTasks({ navigation }) {
 
     const [allTasksToPickFrom, setAllTasksToPickFrom] = useState([])
-    const [allTasksSelected, setAllTasksSelected] = useState([])
+    const [getTasksSelected, settasksSelected] = useState([])
     const [getThemeColour, setThemeColour] = useState('white')
     const [getThemeName, setThemeName] = useState('')
     const [getPopupInfo, setPopupInfo] = useState(['titel', 'details'])
@@ -29,14 +29,18 @@ export default function SelectTasks({ navigation }) {
     );
  
     const selectTask = (taskid) => {
-      if(!allTasksSelected.includes(taskid)){
-          setAllTasksSelected([...allTasksSelected, taskid])
+      if(!getTasksSelected.includes(taskid)){
+          settasksSelected([...getTasksSelected, taskid])
+      } else {
+        const newSelectedTasks = getTasksSelected
+        newSelectedTasks.splice(getTasksSelected.indexOf(taskid), 1)
+        settasksSelected(newSelectedTasks)
       }
     }
  
     const handleSubmit = () => {
       AsyncStorage.getItem('userid').then(userid => {
-        chooseTasks(userid, allTasksSelected).then(setTimeout(function(){navigation.navigate('Home')}, 1000))
+        chooseTasks(userid, getTasksSelected).then(setTimeout(function(){navigation.navigate('Home')}, 1000))
       })
     }
 
@@ -62,7 +66,6 @@ export default function SelectTasks({ navigation }) {
                 taskid={item['taskid']} 
                 themeColour={getThemeColour}
                 taskPoints={item['points']}
-                showArrow={true}
                 showPopup={togglePopup}
                 taskDetails={item['descript']}
                 />
@@ -74,7 +77,7 @@ export default function SelectTasks({ navigation }) {
         <TouchableOpacity style={styles.submit} onPress={()=> handleSubmit()}>
           <Text style={styles.habitText}>Choose Habits</Text>
         </TouchableOpacity>
-        { isHidden? null : <Popup themeColour={getThemeColour} closePopup={togglePopup} title={getPopupInfo[0]} desc={getPopupInfo[1]}/> }
+        { !isHidden && <Popup themeColour={getThemeColour} closePopup={togglePopup} title={getPopupInfo[0]} desc={getPopupInfo[1]}/> }
       </View>     
     );
   }

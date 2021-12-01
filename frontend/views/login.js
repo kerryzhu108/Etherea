@@ -6,6 +6,7 @@ import FlashMessage from "react-native-flash-message";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { height } = Dimensions.get('window');
+
 export default class Login extends React.Component { 
   constructor(props) {
     super(props);

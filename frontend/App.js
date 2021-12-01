@@ -1,4 +1,6 @@
 'use strict'
+import 'react-native-gesture-handler';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import React, { Component } from 'react'
 import { StyleSheet, Text, View, ScrollView, TextInput, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -10,8 +12,11 @@ import Home from './views/home.js'
 import Leaderboard from './views/leaderboard.js'
 import Progress from './views/Progress.js'
 import SelectTasks from './views/selectTasks.js'
+import { DrawerContent } from './components/drawerContent.js';
 
+const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
+
 
 class App extends Component {
 
@@ -19,19 +24,19 @@ class App extends Component {
     selectedItems: [],
     discountCode: '',
   }
-
   render() {
     return (
       <NavigationContainer theme={MyTheme}>
-        <Stack.Navigator initialRouteName="Landing" screenOptions={{headerShown: false}} style={styles.container}>
-          <Stack.Screen name="Landing" component={Landing}/>
-          <Stack.Screen name="SignUp" component={SignUp} />
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="SelectTasks" component={SelectTasks} />
-          <Stack.Screen name="Leaderboard" component={Leaderboard} />
-          <Stack.Screen name="Progress" component={Progress} />
-        </Stack.Navigator>
+        <Drawer.Navigator initialRouteName="Landing" screenOptions={{headerShown: false}} style={styles.container}
+        drawerContent={props => <DrawerContent { ...props} />}>
+          <Drawer.Screen name="Landing" component={Landing} options={ { gestureEnabled: false } }/>
+          <Drawer.Screen name="SignUp" component={SignUp} options={ { gestureEnabled: false } }/>
+          <Drawer.Screen name="Login" component={Login} options={ { gestureEnabled: false } }/>
+          <Drawer.Screen name="Home" component={Home} />
+          <Drawer.Screen name="SelectTasks" component={SelectTasks} />
+          <Drawer.Screen name="Leaderboard" component={Leaderboard} />
+          <Drawer.Screen name="Progress" component={Progress} />
+        </Drawer.Navigator>
       </NavigationContainer>
     )
   }

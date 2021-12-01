@@ -28,12 +28,12 @@ export default class Task extends React.Component {
           <View style={styles.verticleLine} opacity={0.5}></View>
           <Text style={styles.taskText}>{this.props.taskPoints}</Text>
           <Text style={styles.pointsText}>{'pts'}</Text>
-          { this.props.showArrow? (<TouchableOpacity 
-                                      onPress={()=>this.props.showPopup(this.props.taskName, this.props.taskDetails)} 
-                                      style={styles.rightArrowBtn}
-                                    >
-                                    <Image source={require('../assets/rightArrow.png')} style={styles.rightArrowImg}/>
-                                  </TouchableOpacity>) : null }
+          <TouchableOpacity 
+            onPress={()=>this.props.showPopup(this.props.taskName, this.props.taskDetails)} 
+            style={styles.rightArrowBtn}
+          >
+          <Image source={require('../assets/rightArrow.png')} style={styles.rightArrowImg}/>
+        </TouchableOpacity>
         </View>
       </TouchableOpacity>
     )
