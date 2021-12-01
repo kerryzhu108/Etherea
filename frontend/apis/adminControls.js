@@ -27,7 +27,7 @@ export async function insertNewTheme(theme, multiplier, statName, dateLaunched, 
           "theme": theme,
           "multiplier": multiplier,
           "statName": statName,
-          "dateLaunched": dateLaunched,
+          "datelaunched": dateLaunched,
           "color": color
         })
     }).then((res) => { return res; })
