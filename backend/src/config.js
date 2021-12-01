@@ -13,7 +13,6 @@ const pool = new Pool({
     } : false
 });
 
-
 // const config = {
 //     db: {
 //         host: process.env.DB_HOST,
@@ -181,29 +180,28 @@ async function createTables() {
     await client.query(`CREATE TABLE IF NOT EXISTS taskList(
                 id BIGSERIAL PRIMARY KEY NOT NULL,
                 themeID int,
-                descript varchar(200),
-                taskName varchar(100),
+                taskName varchar(400),
+                descript varchar(500),
                 points int,
                 CONSTRAINT fk_themes -- foreign key from themes
                     FOREIGN KEY (themeID)
                         REFERENCES themes(id)
             );
-            INSERT INTO taskList ${taskListColumns} VALUES(1, 'Eat vegetarian', 'Vegetarian Challenge', 10);
-            INSERT INTO taskList ${taskListColumns} VALUES(1, 'Make your commute green', 'A New Way to Travel', 20);
-            INSERT INTO taskList ${taskListColumns} VALUES(1, 'Reduce use of plastic', 'Reduce, Reuse, Recycle', 30);
-            INSERT INTO taskList ${taskListColumns} VALUES(1, 'Support youth-led Movements', 'Supporting the Youth', 10);
+            INSERT INTO taskList ${taskListColumns} VALUES(1, 'Eat vegetarian', 'Cut out any meat from your diet (chicken, beef, pork, fish, etc.)', 10);
+            INSERT INTO taskList ${taskListColumns} VALUES(1, 'Make your commute green', 'Try to ride a bike, walk, or use public transportation, as alternatives to driving a car to your daily destinations.', 20);
+            INSERT INTO taskList ${taskListColumns} VALUES(1, 'Reduce use of plastic', 'Try to only buy/use products that have less plastic packaging(i.e  stray away from many small chip bags buy one bigger bag instead, don’t use plastic wrap, bags, or straws)', 30);
+            INSERT INTO taskList ${taskListColumns} VALUES(1, 'Support youth-led Movements', 'Take 10 min out of your day to participate in climate-based discussions, directly contact government officials to encourage them to enact new laws that limit carbon emissions and require polluters to pay for the emissions they produce, and/or post on your social media', 10);
 
-            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Shadow work', 'Shadow', 5);
-            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Gratitude list', 'Be Happy', 5);
-            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Meditation', 'Calm', 10);
-            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Yoga', 'Calm Again', 10);
-            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Breathing exercises', 'In.... Out' ,10);
-            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Social Media Detox', 'No Social Media', 20);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Shadow work', 'Every day you would be given a new prompt that helps you discover underlying truths/pains within yourself. This encourages you to recognize and redirect yourself to where you want to go.', 5);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Gratitude list', 'Everyday record 3 different things you are grateful for.', 5);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Meditation', 'Find a 10-20 min guided meditation set to a specific intention (i.e relieve stress, build confidence etc) and do it everyday.', 10);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Yoga', 'Find a 5-10 min guided yoga routine of your preference and do it every morning.', 10);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Breathing exercises', 'Close your mouth and inhale quietly through your nose to a mental count of 4. Hold your breath for a count of 7. Exhale completely through your mouth, making a whoosh sound to a count of 8. Repeat this for 5 min, setting an intention to relax and nourish your body. ' ,10);
+            INSERT INTO taskList ${taskListColumns} VALUES(2, 'Social Media Detox', 'Set aside 1 hour a day where you don’t use any form of social media (snap, twitter, instagram, tiktok, Facebook or reddit)', 20);
 
-            INSERT INTO taskList ${taskListColumns} VALUES(3, 'Dairy-free Diet', 'Save the Cows', 20);
-            INSERT INTO taskList ${taskListColumns} VALUES(3, 'Meat-free Diet', 'Save the Meat', 15);
-            INSERT INTO taskList ${taskListColumns} VALUES(3, 'Only use vegan makeup and clothes', 'A New Lifestyle', 20);
-            `,
+            INSERT INTO taskList ${taskListColumns} VALUES(3, 'Dairy-free Diet', 'Cut out dairy (cheese, milk, yogurt etc.) from your diet. You could replace them with vegan alternatives. For example instead of drinking cow’s milk, try oat, soy, almond, cashew, coconut or pea milk!', 20);
+            INSERT INTO taskList ${taskListColumns} VALUES(3, 'Meat-free Diet', 'Cut out meat from your diet and try replacing it with vegan alternatives (fake meat, tofu, seitan, beans and  lentils are all great sources of protein!)', 15);
+            INSERT INTO taskList ${taskListColumns} VALUES(3, 'Only use vegan makeup and clothes', 'Try to use/purchase only cruelty-free brands everyday. Look at this mission everyday to learn about big brands to look out for and gain insight on their inhumane practices!', 20);`,
         (err, result) => {
             if (err) {
                 console.log("Error creating table taskList.")
