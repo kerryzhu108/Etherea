@@ -11,16 +11,7 @@ export function leaderboard(){
           })
           .then((response) => response.json())
           .then((json) => {
-            let data_unrank = json.results
-            let i = 1
-            data_rank = data_unrank.map((user) =>{
-              user.rank = i
-              i = i + 1
-              return user
-            })
-            const currentUser = data_unrank.filter(obj => {
-                return obj.uid === id
-              })
+            let data_rank= json.results
 
             let topThreeArray = []
             if(data_rank.length > 0){
