@@ -15,7 +15,8 @@ export default class Home extends React.Component {
     }
 
     async componentDidMount() {
-        // // Get and set the username for the user
+        // Get and set the username for the user
+        // Moved this below because of UI spacing issues
         // AsyncStorage.getItem('userid').then((item) => {
         //     return getUsername(item);
         // }).then(response => response.json()).then((json) => {
@@ -128,10 +129,10 @@ function FetchTasks( props ) {
 
   return (
     <View>
-      <Text style={styles.title}>Hello,</Text>
-      <Text style={styles.username}>{getUserName}</Text>
+      <Text style={[styles.title, {color: getThemeColour}]}>Hello,</Text>
+      <Text style={[styles.username, {color: getThemeColour}]}>{getUserName}</Text>
       <Text style={styles.topic}>This month's topic: </Text>
-      <View style={styles.theme}>
+      <View style={[styles.theme, {backgroundColor: getThemeColour}]}>
         <Text style={styles.themeText}>{renderThemeName()}</Text>
       </View>
       <Text style={styles.todaysChallenge}>Today's challenges</Text>
@@ -182,14 +183,12 @@ const styles = StyleSheet.create({
         marginBottom: 0,
         left: 30,
         fontWeight: 'bold',
-        color: '#A0E3B2',
       },
       username: {
         marginTop: -10,
         fontSize: 60,
         left: 30,
         fontWeight: "bold",
-        color: '#A0E3B2',
       },
       topic: {
         color: 'grey',
@@ -200,7 +199,6 @@ const styles = StyleSheet.create({
       },
       theme: {
         marginTop: 10,
-        backgroundColor: '#A0E3B2',
         height: 65,
         justifyContent: 'center'
       },
