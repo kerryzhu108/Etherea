@@ -51,7 +51,7 @@ export function finishTask(userid, taskid) {
     }).then(response => {return response})
 }
 
-export async function changeTheme(userid) {
+export async function changeTheme(themeid) {
     const access_token = await AsyncStorage.getItem('access_token');
     const response = await fetch(domain + "updateUserTheme", {
         method: 'post',
@@ -62,7 +62,7 @@ export async function changeTheme(userid) {
         },
         mode: 'cors',
         body: JSON.stringify({
-            "userid": userid
+            "themeid": themeid
         })
     });
     const json = await response.json();

@@ -3,7 +3,6 @@ import { useFocusEffect } from '@react-navigation/native';
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Image, Dimensions } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUsername, getExp } from "../apis/profile";
-import { getUserType } from "../apis/auth";
 import { getTasks, finishTask, getAllThemes, changeTheme } from "../apis/tasks";
 import Task from "../components/Task";
 import Popup from '../components/Popup';
@@ -18,19 +17,6 @@ export default class Home extends React.Component {
     constructor(props) {
         super(props);
     }
-
-    async componentDidMount() {
-        // Check this user's type
-        // TODO: (Zachary) Ensure that we show the admin button to users
-        // who are admin. Have to figure out how to do this.
-        try {
-            const type = await getUserType();   // Gets the user's type based off of their access token
-            console.log(type);
-        } catch (error) {
-            console.error(error);
-        }
-    }
-   
     render() {
         return (
           <MenuProvider style={{ flexDirection: "column"}}>
@@ -99,7 +85,7 @@ function SideMenu() {
               getThemes.map((item, index)=>{
                 return (
                   <TouchableOpacity key={index} style={[styles.menuItem, {backgroundColor: item['colour']}]}
-                    onPress={async ()=>{await changeTheme(item['id'])}}>
+                    onPress={async ()=>{await changeTheme(item['id']);   }}>
                     <Text style={styles.menuContent}>{item['theme']}</Text>
                   </TouchableOpacity>
                 )

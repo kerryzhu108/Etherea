@@ -169,9 +169,9 @@ async function createTables() {
                 colour varchar(100)
                 );
                 INSERT INTO themes ${themeColumns} VALUES ('Climate Change', 2, 'CO2', to_date('2021-10-01','yyyy-mm-dd'), '#A0E3B2');
-                INSERT INTO themes ${themeColumns} VALUES ('Mental Health', 5, 'Mental Health', to_date('2021-11-01','yyyy-mm-dd'), '#A0E3B2');
+                INSERT INTO themes ${themeColumns} VALUES ('Mental Health', 5, 'Mental Health', to_date('2021-11-01','yyyy-mm-dd'), '#8A2BE2');
                 INSERT INTO themes ${themeColumns} VALUES ('Animal Cruelty', 3, 'Animals', to_date('2021-12-01','yyyy-mm-dd'), '#F296B8');
-                INSERT INTO themes ${themeColumns} VALUES ('Social Justice', 4, 'Social', to_date('2022-01-01','yyyy-mm-dd'), '#F296B8');
+                INSERT INTO themes ${themeColumns} VALUES ('Social Justice', 4, 'Social', to_date('2022-01-01','yyyy-mm-dd'), '#A52A2A');
                 `,
         (err, result) => {
             if (err) {
