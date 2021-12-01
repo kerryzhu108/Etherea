@@ -10,25 +10,21 @@ import Popup from '../components/Popup';
 import NavigationPanel from '../components/navigationPanel.js';
 
 export default class Home extends React.Component {
-    state = {
-        username: "NULL",
-    }
-
     constructor(props) {
         super(props);
     }
 
     async componentDidMount() {
-        // Get and set the username for the user
-        AsyncStorage.getItem('userid').then((item) => {
-            return getUsername(item);
-        }).then(response => response.json()).then((json) => {
-            this.setState((state, props) => ({
-                username: json.name,
-            }));
-        }).catch((error) => {
-            console.error(error);
-        });
+        // // Get and set the username for the user
+        // AsyncStorage.getItem('userid').then((item) => {
+        //     return getUsername(item);
+        // }).then(response => response.json()).then((json) => {
+        //     this.setState((state, props) => ({
+        //         username: json.name,
+        //     }));
+        // }).catch((error) => {
+        //     console.error(error);
+        // });
 
         // Check this user's type
         // TODO: (Zachary) Ensure that we show the admin button to users
@@ -43,9 +39,7 @@ export default class Home extends React.Component {
    
     render() {
         return (
-          <ScrollView style={styles.container} contentContainerStyle={{ flexGrow: 1, justifyContent: 'space-between', flexDirection: 'column' }}>
-            <Text style={styles.title}>Hello,</Text>
-            <Text style={styles.username}>{this.state.username}</Text>
+          <ScrollView style={styles.container} contentContainerStyle={styles.scrollViewContainer}>
             <FetchTasks navigation={this.props.navigation}/>
             <View style={styles.navigation}>
               <NavigationPanel navigation={this.props.navigation}/>              
@@ -58,6 +52,7 @@ export default class Home extends React.Component {
 
 // Need this to use onload hook
 function FetchTasks( props ) {
+  const [getUserName, setUserName] = React.useState('')
   const [getDailyTasks, setDailyTasks] = React.useState([]);
   const [getSelectedTasks, setSelectedTasks] = React.useState([]);
   const [getAllTasksDoneStatus, setAllTasksDoneStatus] = React.useState(false);
@@ -65,18 +60,21 @@ function FetchTasks( props ) {
   const [isHidden, setIsHidden] = React.useState(true)
   const [getThemeColour, setThemeColour] = React.useState('white')
 
-  const loadTasks = () => {
-    return AsyncStorage.getItem('userid').then(userid => {
-      getTasks(userid).then(res => res.json()).then(tasks => {
-        if (tasks.length == 0) {
-          props.navigation.navigate('SelectTasks')
-          return
-        }
-        setThemeColour(tasks[0]['colour'])
-        setDailyTasks(tasks)
-        allTasksDone(tasks)
-      })
-    })
+  const loadTasks = async () => {
+    const userid = await AsyncStorage.getItem('userid')
+    let userName = await getUsername(userid)
+    userName = await userName.json()
+    setUserName(userName.name)
+
+    let tasks = await getTasks(userid)
+    tasks = await tasks.json()
+    if (tasks.length == 0) {
+      props.navigation.navigate('SelectTasks')
+      return
+    }
+    setThemeColour(tasks[0]['colour'])
+    setDailyTasks(tasks)
+    allTasksDone(tasks)
   }
 
   // reloads tasks every time page loads
@@ -122,13 +120,16 @@ function FetchTasks( props ) {
   
   const handleSubmit = async () => {
     const userid = await AsyncStorage.getItem('userid')
-    // for (let i=0; i<getSelectedTasks.length; i++){
-    //     getSelectedTasks[i]
-    // }
+    for (let i=0; i<getSelectedTasks.length; i++){
+      await finishTask(userid, getSelectedTasks[i])
+    }
+    await loadTasks()
   }
 
   return (
     <View>
+      <Text style={styles.title}>Hello,</Text>
+      <Text style={styles.username}>{getUserName}</Text>
       <Text style={styles.topic}>This month's topic: </Text>
       <View style={styles.theme}>
         <Text style={styles.themeText}>{renderThemeName()}</Text>
@@ -153,12 +154,14 @@ function FetchTasks( props ) {
           )
         })
       }
-      <TouchableOpacity style={styles.submit} onPress={()=> handleSubmit()}>
+      { !getAllTasksDoneStatus && (
+        <TouchableOpacity style={styles.submit} onPress={()=> handleSubmit()}>
           <Text style={styles.habitText}>Mark as completed</Text>
-      </TouchableOpacity>
+        </TouchableOpacity>) 
+      }
       </View>
 
-      { getAllTasksDoneStatus && <Text style={styles.tasksCompleted}>You have completed your daily tasks!</Text>}
+      { getAllTasksDoneStatus && <Text style={styles.tasksCompleted}>You have completed your daily challenges!</Text>}
       { !isHidden && <Popup themeColour={getThemeColour} closePopup={togglePopup} title={getPopupInfo[0]} desc={getPopupInfo[1]}/> }
     </View>
   )
@@ -167,6 +170,11 @@ function FetchTasks( props ) {
 const styles = StyleSheet.create({
       container: {
         flex: 1
+      },
+      scrollViewContainer: {
+        flexGrow: 1, 
+        justifyContent: 'space-between',
+        flexDirection: 'column',
       },
       title: {
         fontSize: 35,
