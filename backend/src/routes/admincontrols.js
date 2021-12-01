@@ -34,7 +34,7 @@ router.post("/themesAll", async(req, res) =>{
         // Trying to determine if any themes are already in the database
         var result = await pool.query("SELECT * FROM themes WHERE theme=$1", [theme])
         if(result.rows.length > 0){
-            return res.status(500).json({ error: {message: "This task has already been created."}})
+            return res.status(500).json({ error: {message: "This theme has already been created."}})
         }
 
         // Adding new theme to database

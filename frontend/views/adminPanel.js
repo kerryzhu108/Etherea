@@ -82,7 +82,15 @@ export default class adminPanel extends React.Component {
       return
     }
 
-    alert('You have successfully created a new theme.')
+    insertNewTheme(this.state.newThemeName, multiplier_cast, this.state.statName, this.state.dateLaunched, this.color).then((response) => {
+      if(response.status === 200){
+        alert('You have successfully created a new theme.')
+      }else if(response.status === 500){
+        alert('This theme has already been created.')
+      }else if(response.status === 400){
+        alert('There was an internal server error and your theme was not successfully inserted.')
+      }
+    })
     return
   }
 
@@ -104,7 +112,16 @@ export default class adminPanel extends React.Component {
       return
     }
 
-    alert('You have successfully created a new task.')
+    insertNewTask(id_cast, this.state.description, this.state.taskName, points_cast).then((response) => {
+      if(response.status === 200){
+        alert('You have successfully created a new task.')
+      }else if(response.status === 500){
+        alert('A task with this name already exists.')
+      }else if(response.status === 400){
+        alert('There was an internal server error and your task was not successfully inserted.')
+      }
+    })
+    
     return
   }
 
