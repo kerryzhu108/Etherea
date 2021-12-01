@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Button } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getTasksForTheme, chooseTasks } from "../apis/tasks.js";
 import Task from '../components/Task';
@@ -9,9 +9,13 @@ import { useFocusEffect } from '@react-navigation/native';
  
 export default function SelectTasks({ navigation }) {
 
-    const [allTasksToPickFrom, setAllTasksToPickFrom] = useState([]);
-    const [allTasksSelected, setAllTasksSelected] = useState([]);
-    const [getThemeColour, setThemeColour] = useState('white');
+    const [allTasksToPickFrom, setAllTasksToPickFrom] = useState([])
+    const [getTasksSelected, settasksSelected] = useState([])
+    const [getThemeColour, setThemeColour] = useState('white')
+    const [getThemeName, setThemeName] = useState('')
+    const [getPopupInfo, setPopupInfo] = useState(['titel', 'details'])
+    const [isHidden, setIsHidden] = useState(true)
+
 
     // reloads tasks every time page loads
     useFocusEffect(
@@ -19,48 +23,53 @@ export default function SelectTasks({ navigation }) {
         getTasksForTheme(1).then(response=>response.json()).then(tasks => {
           setAllTasksToPickFrom(tasks)
           setThemeColour(tasks[0]['colour'])
+          setThemeName(tasks[0]['theme'])
         })
       }, [])
     );
  
     const selectTask = (taskid) => {
-      if(!allTasksSelected.includes(taskid)){
-          setAllTasksSelected([...allTasksSelected, taskid])
-          let ogTasks = allTasksToPickFrom
-          for (let i=0; i<ogTasks.length; i++){
-            if (ogTasks[i]['taskid'] == taskid) {
-              ogTasks.splice(i, 1)
-              return setAllTasksToPickFrom(ogTasks)
-            }
-          }
+      if(!getTasksSelected.includes(taskid)){
+          settasksSelected([...getTasksSelected, taskid])
+      } else {
+        const newSelectedTasks = getTasksSelected
+        newSelectedTasks.splice(getTasksSelected.indexOf(taskid), 1)
+        settasksSelected(newSelectedTasks)
       }
     }
  
     const handleSubmit = () => {
       AsyncStorage.getItem('userid').then(userid => {
-        chooseTasks(userid, allTasksSelected).then(setTimeout(function(){navigation.navigate('Home')}, 1000))
+        chooseTasks(userid, getTasksSelected).then(setTimeout(function(){navigation.navigate('Home')}, 1000))
       })
+    }
+
+    const togglePopup = (taskName, taskDetails) => {
+      setIsHidden(!isHidden)
+      setPopupInfo([taskName, taskDetails])
     }
  
     return (
-      <View style={styles.tasksWrapper}>
+      <View style={styles.container}>
         <View style={[styles.themeWrapper, {backgroundColor: getThemeColour}]}>
-          <Text style={styles.sectionTitle}>Climate Change Tasks</Text>
-          <Text style={styles.sectionTitleTwo}>Choose your tasks for this month</Text>
+          <Text style={styles.sectionTitle}>Current Theme:</Text>
+          <Text style={styles.sectionTitleTwo}>{getThemeName}</Text>
+          <Image source={require('../assets/earthGraphic.png')} style={styles.themeImage}/>
         </View>
         
         <View style={styles.items}>
           {
             allTasksToPickFrom.map((item, index) => {
-              if (!allTasksSelected.includes(item['taskid'])) {
-                return (
-                  <Task key={index} taskName={item['descript']} 
-                  selectTask={selectTask} taskid={item['taskid']} 
-                  themeColour={getThemeColour}
-                  taskPoints={item['points']}
-                  />
-                )
-              }
+              return (
+                <Task key={index} taskName={item['taskname']} 
+                selectTask={selectTask} 
+                taskid={item['taskid']} 
+                themeColour={getThemeColour}
+                taskPoints={item['points']}
+                showPopup={togglePopup}
+                taskDetails={item['descript']}
+                />
+              )
             })
           }
         </View>
@@ -68,27 +77,37 @@ export default function SelectTasks({ navigation }) {
         <TouchableOpacity style={styles.submit} onPress={()=> handleSubmit()}>
           <Text style={styles.habitText}>Choose Habits</Text>
         </TouchableOpacity>
-        <Popup style={styles.popup}/>
+        { !isHidden && <Popup themeColour={getThemeColour} closePopup={togglePopup} title={getPopupInfo[0]} desc={getPopupInfo[1]}/> }
       </View>     
     );
   }
  
 const styles = StyleSheet.create({
-    tasksWrapper: {
+    container: {
       paddingTop: 80,
       paddingHorizontal: 20,
     },
     themeWrapper: {
       padding: 30,
       borderRadius: 25,
+      position: 'relative',
+    },
+    themeImage: {
+      height: 60,
+      width: 60,
+      position: 'absolute',
+      right: 20,
+      top: 20,
     },
     sectionTitle: {
-      fontSize: 24,
-      fontWeight: 'bold'
+      color: 'white',
+      fontSize: 20,
+      fontWeight: 'bold',
     },
     sectionTitleTwo: {
-      fontSize: 18,
-      fontWeight: 'bold'
+      color: 'white',
+      fontSize: 24,
+      fontWeight: 'bold',
     },
     items: {
       marginTop: 10,
@@ -106,12 +125,6 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       fontWeight: 'bold'
     },
-    popup: {
-      position: 'absolute',
-      flex: 1,
-      alignItems: 'center',
-      left: '50%',
-    }
   });
 
 
