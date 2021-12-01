@@ -30,12 +30,14 @@ router.get("/impactStats/points/:userid", async (req, res) => {
             const result = await pool.query(
                 "SELECT sum(points)*$2 AS impact FROM TaskList l, TaskCompletion c WHERE c.userid = $1 AND c.taskid = l.id AND c.complete AND (c.datetodo >= $3 AND c.datetodo <= $4) AND l.themeid = $5 GROUP BY c.userid;"
                 , [userid, impact_per_point, lower_date, upper_date, themeid]);
-            res.json(result.rows);
+            if (result.rows.length <= 0) return res.json({impact: 0});
+            res.json({impact: result.rows[0].impact});
         } else {
             const result = await pool.query(
                 "SELECT sum(points)*$2 AS impact FROM TaskList l, TaskCompletion c WHERE c.userid = $1 AND c.taskid = l.id AND c.complete AND (c.datetodo >= $3 AND c.datetodo <= $4) GROUP BY c.userid;"
                 , [userid, impact_per_point, lower_date, upper_date]);
-            res.json(result.rows);
+            if (result.rows.length <= 0) return res.json({impact: 0});
+            res.json({impact: result.rows[0].impact});
         }
         
         

@@ -11,7 +11,7 @@ export default class Progress extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        impact: 0
+        impact: "0"
     }
   }
 
@@ -19,7 +19,6 @@ export default class Progress extends React.Component {
       // Set user impact stats by changing the React state
       const user_id = await AsyncStorage.getItem("userid");
       const impact = await getImpactStats(user_id);
-      console.log(impact);
       this.setState({
           impact: impact
       });

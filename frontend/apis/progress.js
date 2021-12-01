@@ -9,7 +9,6 @@ export async function getImpactStats(userid) {
             mode: 'cors',
             cache: 'default'
         });
-        console.log(response);
         const json_response = await response.json();
         return json_response.impact;
     } catch (error) {
