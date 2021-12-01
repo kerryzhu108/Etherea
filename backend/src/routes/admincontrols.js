@@ -6,7 +6,7 @@ const { pool } = require('../config');
 module.exports = router;
 
 // Create new task and add to database
-router.post("/themesTasks/:themeID", async(req, res) =>{
+router.post("/themesTasks", async(req, res) =>{
     try{
         // Create task
         const {themeID, descript, taskName, points} = req.body;
