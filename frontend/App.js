@@ -13,7 +13,6 @@ import Leaderboard from './views/leaderboard.js'
 import Progress from './views/Progress.js'
 import SelectTasks from './views/selectTasks.js'
 import adminPanel from './views/adminPanel.js'
-import { DrawerContent } from './components/drawerContent.js';
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();

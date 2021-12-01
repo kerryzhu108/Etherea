@@ -55,6 +55,8 @@ export default class Login extends React.Component {
       }
       else {
         AsyncStorage.setItem('userid', responseData.userid)
+        AsyncStorage.setItem('access_token', responseData.tokens.access);
+        AsyncStorage.setItem('refresh_token', responseData.tokens.refresh);
         this.props.navigation.navigate('Home')
       }
     }

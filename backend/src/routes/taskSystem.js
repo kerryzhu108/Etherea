@@ -245,48 +245,52 @@ router.get("/userTaskByTheme/:userid", async(req, res) =>{
     "taskid": 2
 }
 */
-router.put('/taskFinished', async(req, res) => {
-    try {
-        const {userid, taskid } = req.body;
+router.put('/taskFinished', async (req, res)=>{
+    const {userid, taskid } = req.body;
+    await (async () => {
+        // note: we don't try/catch this because if connecting throws an exception
+        // we don't need to dispose of the client (it will be undefined)
         const client = await pool.connect()
-        await client.query('BEGIN') //start transaction
-
-        // Check if this task is already completed
-        const completedQuery = "SELECT complete FROM taskCompletion WHERE userID = $1 AND taskID = $2 AND dateTodo = $3";
-        const completedRow = await client.query(completedQuery,[userid, taskid, new Date()]);
-        const completed = completedRow.rows[0].complete;
-
-        if(completed){
-            return res.json({'status': 'one of the tasks is already completed'})
+        try {
+          await client.query('BEGIN')// Check if this task is already completed
+          const completedQuery = "SELECT complete FROM taskCompletion WHERE userID = $1 AND taskID = $2 AND dateTodo = $3";
+          const completedRow = await client.query(completedQuery,[userid, taskid, new Date()]);
+          const completed = completedRow.rows[0].complete;
+  
+          if(completed){
+              return;
+          }
+  
+          // Get the points for this particular task
+          const pointsQuery = "SELECT points FROM taskList WHERE id = $1";
+          const pointsRow = await client.query(pointsQuery,[taskid]);
+          let points = pointsRow.rows[0].points;
+  
+          // Get user's current points
+          const userPointsQ = "SELECT exp FROM progressInfo WHERE id = $1";
+          const userRow = await client.query(userPointsQ, [userid]);
+          const userPoints = userRow.rows[0].exp;
+  
+          let newPoints = points + userPoints;
+  
+          // Update task completed to true
+          const txtStatus = "UPDATE taskCompletion SET complete = $1 WHERE userID=$2 AND taskID=$3 AND datetodo = $4 RETURNING *";
+          const updsts = await client.query(txtStatus,[true, userid, taskid, new Date()]) ;
+  
+          // Update user progress info(exp, streak)
+          const txtLv = "UPDATE progressInfo SET exp = $1, streak = $2 WHERE id = $3";
+          const updLv = await client.query(txtLv, [newPoints, 0, userid]);
+          await client.query('COMMIT')
+        } catch (e) {
+          await client.query('ROLLBACK')
+          throw e
+        } finally {
+          res.send("Completed")
+          client.release()
         }
-
-        // Get the points for this particular task
-        const pointsQuery = "SELECT points FROM taskList WHERE id = $1";
-        const pointsRow = await client.query(pointsQuery,[taskid]);
-        let points = pointsRow.rows[0].points;
-
-        // Get user's current points
-        const userPointsQ = "SELECT exp FROM progressInfo WHERE id = $1";
-        const userRow = await client.query(userPointsQ, [userid]);
-        const userPoints = userRow.rows[0].exp;
-
-        let newPoints = points + userPoints;
-
-        // Update task completed to true
-        const txtStatus = "UPDATE taskCompletion SET complete = $1 WHERE userID=$2 AND taskID=$3 AND datetodo = $4 RETURNING *";
-        const updsts = await client.query(txtStatus,[true, userid, taskid, new Date()]) ;
-
-        // Update user progress info(exp, streak)
-        const txtLv = "UPDATE progressInfo SET exp = $1, streak = $2 WHERE id = $3";
-        const updLv = await client.query(txtLv, [newPoints, 0, userid]);
-        
-        await client.query('COMMIT')
-        return res.json({'status': 'successfully marked tasks as completed'})
-    } catch (error) {
-        await client.query('ROLLBACK')
-        return res.status(400).send(error.message);
-    }
-});
+      })().catch(e => console.error(e.stack))
+}
+)
 
 // Updates a user's task
 router.post("/updateUserTheme", [authenticateToken, check("themeid").isInt()], async (req, res) => {
