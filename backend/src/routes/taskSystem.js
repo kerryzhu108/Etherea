@@ -233,6 +233,20 @@ router.get("/userTask/:userid", async(req, res) =>{
     }
 })
 
+router.get("/userTaskByTheme/:userid", async(req, res) =>{
+    const { userid } = req.params
+    try {
+        const theme = await pool.query("SELECT DISTINCT t.theme FROM users AS u JOIN themes as t ON u.theme = t.id WHERE u.uid = $1", [userid])
+        const info = await pool.query("SELECT * FROM v_userTask WHERE userID = $1 AND datetodo =$2 AND theme = $3", [userid, new Date(), theme.rows[0].theme]);
+        res.json(info.rows)
+    } catch (error) {
+        return res.status(400).send(error.message);
+    }
+    finally{
+        res.end();
+    }
+})
+
 
 // Update when user finishes a task/checkmarks task. Update user's level, points/exp, streak
 /* Send the following body to use this put request.
