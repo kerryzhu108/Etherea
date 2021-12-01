@@ -21,7 +21,24 @@ export function leaderboard(){
             const currentUser = data_unrank.filter(obj => {
                 return obj.uid === id
               })
-            return [data_rank.slice(0, 3), data_rank.slice(3), currentUser[0]]
+
+            let topThreeArray = []
+            if(data_rank.length > 0){
+              topThreeArray.push(data_rank[0])
+            }
+            if(data_rank.length > 1){
+              topThreeArray.push(data_rank[1])
+            }
+            if(data_rank.length > 2){
+              topThreeArray.push(data_rank[2])
+            }
+
+            if(data_rank.length < 3){
+              for(let i = 0; i < 3 - data_rank.length; i++){
+                topThreeArray.push(null)
+              }
+            }
+            return [topThreeArray, data_rank.slice(3), currentUser[0]]
           })
     })
 

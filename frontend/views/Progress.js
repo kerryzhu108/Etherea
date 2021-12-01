@@ -68,8 +68,8 @@ export default class Progress extends React.Component {
             firstDay={1}
           />
         </View>
-        </ScrollView>
         <NavigationPanel navigation={this.props.navigation}/>
+        </ScrollView>
       </View>
     );
   }
@@ -151,7 +151,6 @@ const styles = StyleSheet.create({
     flex: 1
   },
   scrollView: {
-    alignItems: 'center',
     flex: 1
   },
   title: {
