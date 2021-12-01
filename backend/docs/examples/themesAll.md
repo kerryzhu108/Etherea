@@ -18,12 +18,18 @@ Get all themes with their name and date they were launched.
     {
         "id": 1,
         "theme": "Climate Change",
-        "datelaunched": "2021-10-01T04:00:00.000Z"
+        "multiplier": 5,
+        "statName": "CO2 Emissions",
+        "datelaunched": "2021-10-01T04:00:00.000Z",
+        "colour": "#aaaaaa"
     },
     {
         "id": 2,
         "theme": "Mental Health",
-        "datelaunched": "2021-11-01T04:00:00.000Z"
+        "multiplier": 2,
+        "statName": "Mental Health",
+        "datelaunched": "2021-11-01T04:00:00.000Z",
+        "colour": "#000000"
     }
 ]
 ```
