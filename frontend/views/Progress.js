@@ -68,8 +68,8 @@ export default class Progress extends React.Component {
             firstDay={1}
           />
         </View>
-        </ScrollView>
         <NavigationPanel navigation={this.props.navigation}/>
+        </ScrollView>
       </View>
     );
   }
