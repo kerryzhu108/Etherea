@@ -30,9 +30,6 @@ const pool = new Pool({
 // module.exports = config;
 
 async function dropTables() {
-    if (isProduction) {
-        return;
-    }
     client = await pool.connect();
     await client.query(`DROP TABLE IF EXISTS users CASCADE`, 
         (err, result) => {
