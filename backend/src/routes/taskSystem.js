@@ -292,12 +292,12 @@ router.put('/taskFinished', async (req, res)=>{
           // Update user progress info(exp, streak)
           const txtLv = "UPDATE progressInfo SET exp = $1, streak = $2 WHERE id = $3";
           const updLv = await client.query(txtLv, [newPoints, 0, userid]);
-          console.log(taskid)
           await client.query('COMMIT')
         } catch (e) {
           await client.query('ROLLBACK')
           throw e
         } finally {
+          res.send("Completed")
           client.release()
         }
       })().catch(e => console.error(e.stack))
