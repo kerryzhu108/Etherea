@@ -1,6 +1,6 @@
 import React from "react";
 import { useFocusEffect } from '@react-navigation/native';
-import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Image, Dimensions } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUsername } from "../apis/profile";
 import { getUserType } from "../apis/auth";
@@ -8,6 +8,10 @@ import { getTasks, finishTask } from "../apis/tasks";
 import Task from "../components/Task";
 import Popup from '../components/Popup';
 import NavigationPanel from '../components/navigationPanel.js';
+import { Entypo } from '@expo/vector-icons'; 
+import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger} from "react-native-popup-menu";
+
+const { height, width } = Dimensions.get('window');
 
 export default class Home extends React.Component {
     constructor(props) {
@@ -40,15 +44,43 @@ export default class Home extends React.Component {
    
     render() {
         return (
-          <ScrollView style={styles.container} contentContainerStyle={styles.scrollViewContainer}>
-            <FetchTasks navigation={this.props.navigation}/>
-            <View style={styles.navigation}>
-              <NavigationPanel navigation={this.props.navigation}/>              
-            </View>
-          </ScrollView>
+          <MenuProvider style={{ flexDirection: "column"}}>
+            <SideMenu/>
+            <ScrollView style={styles.container} contentContainerStyle={styles.scrollViewContainer}>
+              <FetchTasks navigation={this.props.navigation}/>
+              <View style={styles.navigation}>
+                <NavigationPanel navigation={this.props.navigation}/>              
+              </View>
+            </ScrollView>
+          </MenuProvider>
         );
     }
 
+}
+
+function SideMenu() {
+  return(
+        <Menu style={{ marginTop: 45}} onSelect={value => alert(`You Clicked : ${value}`)}>
+
+          <MenuTrigger  >
+            <Entypo name='menu' size={35} style={styles.menuIcon}/>
+          {/* <Text style={styles.headerText}>DropDown Menu</Text> */}
+          </MenuTrigger  >
+
+          <MenuOptions optionsContainerStyle={{width:width/1.1, height:height/1.2, borderRadius: 40,}}>
+            <MenuOption value={"Climate changee".toUpperCase()}>
+              <Text style={styles.menuContent}>{"Climate change".toUpperCase()}</Text>
+            </MenuOption>
+            <MenuOption value={"Mental health".toUpperCase()}>
+              <Text style={styles.menuContent}>{"Mental health".toUpperCase()}</Text>
+            </MenuOption>
+            <MenuOption value={"Animal cruelty".toUpperCase()}>
+              <Text style={styles.menuContent}>{"Animal cruelty".toUpperCase()}</Text>
+            </MenuOption>
+          </MenuOptions>
+
+        </Menu>
+  )
 }
 
 // Need this to use onload hook
@@ -179,7 +211,7 @@ const styles = StyleSheet.create({
       },
       title: {
         fontSize: 35,
-        marginTop: 50,
+        marginTop: 30,
         marginBottom: 0,
         left: 30,
         fontWeight: 'bold',
@@ -243,4 +275,15 @@ const styles = StyleSheet.create({
         marginTop: 50,
         justifyContent: 'flex-end'
       },
+      menuIcon: {
+        margin: 20,
+        color: '#4B4B4B'
+      },
+      menuContent: {
+        color: "#4B4B4B",
+        fontWeight: "bold",
+        textAlign: 'center',
+        padding: 20,
+        fontSize: 20
+      }
 });
