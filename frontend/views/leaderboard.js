@@ -44,17 +44,23 @@ export default class Leaderboard extends React.Component {
             <Text style={styles.title}>LEADERBOARD</Text>
             <View style={styles.topThree}>
               {this.state.usersTopThree !== null ? 
-              <View style={styles.topThreeView}>
-              <LeaderboardUserTopThree name={this.state.usersTopThree[0].name} 
+                <View style={styles.topThreeView}>
+                  {this.state.usersTopThree[0] !== null ? 
+                  <LeaderboardUserTopThree name={this.state.usersTopThree[0].name} 
                                       exp={this.state.usersTopThree[0].exp}
                                       place='1'/>
+                  : null}
                 <View style={styles.twoThreeContainer}> 
+                  {this.state.usersTopThree[1] !== null ? 
                   <LeaderboardUserTopThree name={this.state.usersTopThree[1].name} 
                                           exp={this.state.usersTopThree[1].exp}
                                           place='2'/>
+                  : null}
+                  {this.state.usersTopThree[2] !== null ? 
                   <LeaderboardUserTopThree name={this.state.usersTopThree[2].name} 
                                           exp={this.state.usersTopThree[2].exp}
                                           place='3'/>
+                  : null}
                 </View>
               </View>
               : null}
