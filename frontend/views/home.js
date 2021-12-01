@@ -2,7 +2,7 @@ import React from "react";
 import { useFocusEffect } from '@react-navigation/native';
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Image, Dimensions } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getUsername } from "../apis/profile";
+import { getUsername, getExp } from "../apis/profile";
 import { getUserType } from "../apis/auth";
 import { getTasks, finishTask } from "../apis/tasks";
 import Task from "../components/Task";
@@ -10,6 +10,16 @@ import Popup from '../components/Popup';
 import NavigationPanel from '../components/navigationPanel.js';
 import { Entypo } from '@expo/vector-icons'; 
 import { Menu, MenuProvider, MenuOptions, MenuOption, MenuTrigger} from "react-native-popup-menu";
+import {
+  useTheme,
+  Avatar,
+  Title,
+  Caption,
+  Paragraph,
+  Drawer,
+  TouchableRipple,
+  Switch
+} from 'react-native-paper';
 
 const { height, width } = Dimensions.get('window');
 
@@ -58,22 +68,69 @@ export default class Home extends React.Component {
 }
 
 function SideMenu() {
+
+  const [getUserName, setUserName] = React.useState('')
+  const [getPoints, setPoints] = React.useState(-1)
+  const loadInfo = async () => {
+    const userid = await AsyncStorage.getItem('userid')
+
+    let userName = await getUsername(userid)
+    userName = await userName.json()
+    setUserName(userName.name)
+
+    let points = await getExp(userid)
+    points = await points.json()
+    setPoints(points.exp)
+  }
+
+  // reloads tasks every time page loads
+  useFocusEffect(
+    React.useCallback(() => {
+      loadInfo()
+    }, [])
+  );
+
   return(
         <Menu style={{ marginTop: 45}} onSelect={value => alert(`You Clicked : ${value}`)}>
 
           <MenuTrigger  >
             <Entypo name='menu' size={35} style={styles.menuIcon}/>
-          {/* <Text style={styles.headerText}>DropDown Menu</Text> */}
           </MenuTrigger  >
 
           <MenuOptions optionsContainerStyle={{width:width/1.1, height:height/1.2, borderRadius: 40,}}>
-            <MenuOption value={"Climate changee".toUpperCase()}>
+            <View style={{flexDirection:'row', marginTop: 30, marginLeft: 30 }}>
+                <Avatar.Image 
+                    source={{uri: 'https://www.bhphotovideo.com/images/images500x500/Savage_60_2612_Widetone_Seamless_Background_Paper_1341499561_203856.jpg'}}
+                    size={60}
+                />
+                <View style={{marginLeft:15, flexDirection:'column'}}>
+                    <Title style={styles.menuName}>{getUserName}</Title>
+                    <Text style={styles.menuPoint}>{getPoints} points</Text>
+                </View>
+            </View>
+            <Text style={styles.menuCaption}>Monthly Challenges</Text>
+            <MenuOption style={styles.menuItem} value={"Climate changee".toUpperCase()}>
               <Text style={styles.menuContent}>{"Climate change".toUpperCase()}</Text>
             </MenuOption>
-            <MenuOption value={"Mental health".toUpperCase()}>
+            {/* Morgan: change color code as parameter in function later */}
+            <MenuOption style={{
+                backgroundColor: '#7AD7E0', 
+                borderRadius: 15, 
+                width: 300, 
+                height: 60, 
+                left: 30,
+                margin: '3%'
+              }} value={"Mental health".toUpperCase()}>
               <Text style={styles.menuContent}>{"Mental health".toUpperCase()}</Text>
             </MenuOption>
-            <MenuOption value={"Animal cruelty".toUpperCase()}>
+            <MenuOption style={{
+                backgroundColor: '#F296B8', 
+                borderRadius: 15, 
+                width: 300, 
+                height: 60, 
+                left: 30,
+                margin: '3%'
+              }} value={"Animal cruelty".toUpperCase()}>
               <Text style={styles.menuContent}>{"Animal cruelty".toUpperCase()}</Text>
             </MenuOption>
           </MenuOptions>
@@ -217,6 +274,7 @@ const styles = StyleSheet.create({
         color: '#A0E3B2',
       },
       username: {
+        width: width/1.2,
         marginTop: -10,
         fontSize: 60,
         left: 30,
@@ -282,10 +340,35 @@ const styles = StyleSheet.create({
         color: '#4B4B4B'
       },
       menuContent: {
-        color: "#4B4B4B",
+        color: "white",
         fontWeight: "bold",
         textAlign: 'center',
-        padding: 20,
-        fontSize: 20
+        padding: 15,
+        fontSize: 18,
+      },
+      menuName: {
+        color: "#4B4B4B",
+        fontWeight: "bold",
+      },
+      menuPoint: {
+        color: "#4B4B4B",
+        marginTop: -5
+      },
+      menuCaption: {
+        fontSize: 30, 
+        width: 250, 
+        fontWeight: 'bold', 
+        color: '#4B4B4B',
+        marginLeft: '10%',
+        marginTop: '5%',
+        marginBottom: '5%'
+      },
+      menuItem: {
+        backgroundColor: '#A0E3B2', 
+        borderRadius: 15, 
+        width: 300, 
+        height: 60, 
+        left: 30,
+        margin: '3%'
       }
 });
