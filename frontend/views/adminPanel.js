@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, TextInput, Text, ScrollView, Button } from "react-native";
 import NavigationPanel from '../components/navigationPanel.js';
+import {insertNewTask, insertNewTheme} from '../apis/adminControls';
 
 export default class adminPanel extends React.Component { 
   constructor(props) {
@@ -23,11 +24,58 @@ export default class adminPanel extends React.Component {
   }
   
   themeButton = () => {
-    if(this.state.newThemeName === '' || this.state.statName === '' || this.state.color === '' || this.state.dateLaunched === ''){
+    if(this.state.newThemeName === '' || this.state.statName === ''){
       alert('You are missing a field.')
       return
     }
 
+    // Check colour
+    if(this.state.color.length != 7 || this.state.color[0] != '#'){
+      alert("Your color must have 7 characters where the first character is # and the other characters are hex digits.");
+      return
+    }
+
+    for(let i = 1;i <= 6;i++){
+      let possibleValues = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f']
+      if(!possibleValues.includes(this.state.color[i])){
+        alert("You have not properly formatted the color.")
+        return
+      }
+    }
+
+    let splitDate = this.state.dateLaunched.split('-')
+
+    // Check length of date
+    if(splitDate.length != 3){
+      alert('You have not properly formatted the date.');
+      return
+    }
+
+    let year = parseInt(splitDate[0])
+    let month = parseInt(splitDate[1])
+    let day = parseInt(splitDate[2])
+
+    // Check if fields are integers.
+    if(isNaN(year) || isNaN(month) || isNaN(day)){
+      alert("Either your year, month, or day is not a valid value.")
+      return
+    }
+
+    if(splitDate[0].length != 4 || splitDate[1].length != 2 || splitDate[2].length != 2){
+      alert("The date must be formatted as yyyy--mm-dd")
+      return
+    }else if(month < 1 || month > 12){
+      alert("Your month is not a valid value.")
+      return
+    }else{
+      let high_months = [1, 3, 5, 7, 8, 10, 12];
+      let low_months = [4, 6, 9, 11]
+      if((high_months.includes(month) && (day < 1 || day > 31)) || (low_months.includes(month) && (day < 1 || day > 30)) || (month == 2 && (day < 1 || day > 28))){
+        alert("The day is invalid for month chosen.")
+        return
+      }
+    }
+ 
     let multiplier_cast = parseInt(this.state.multiplier)
     if(isNaN(multiplier_cast) || multiplier_cast <= 0){
       alert('Your multiplier value is invalid.')
