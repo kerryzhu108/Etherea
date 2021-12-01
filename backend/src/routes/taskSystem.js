@@ -326,4 +326,19 @@ router.post("/updateUserTheme", [authenticateToken, check("themeid").isInt()], a
     }
 });
 
+// Get a user's task
+router.get("/userTheme", [authenticateToken, check("themeid").isInt()], async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ error: errors.array() });
+    }
+    try {
+        const info = await pool.query("SELECT theme FROM users WHERE email = $1", [req.user.email]);
+        res.json(info.rows)
+    } catch {
+        return res.status(500).json({error: {message: "Internal server error"}});
+    }
+});
+
+
 module.exports = router;
