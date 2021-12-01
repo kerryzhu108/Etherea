@@ -6,19 +6,19 @@ const { pool } = require('../config');
 module.exports = router;
 
 // Create new task and add to database
-router.post("/themesTasks", async(req, res) =>{
+router.post("/themesTasks/:themeID", async(req, res) =>{
     try{
         // Create task
         const {themeID, descript, taskName, points} = req.body;
 
         // Get any rows in database that have the same task name
-        var result = await pool.query("SELECT * FROM taskList WHERE taskName=$1", [taskName])
+        var result = await pool.query("SELECT * FROM v_theme_task WHERE taskName=$1", [taskName])
         if(result.rows.length > 0){
             return res.status(500).json({ error: {message: "A task with this name already exists."}})
         }
 
         // Adding new task to database
-        await pool.query("INSERT INTO taskList (themeID, descript, taskName, points) VALUES ($1, $2, $3, $4) RETURNING *", [themeID, descript, taskName, points]);
+        await pool.query("INSERT INTO v_theme_task (themeID, descript, taskName, points) VALUES ($1, $2, $3, $4) RETURNING *", [themeID, descript, taskName, points]);
         return res.json({message: "The new task has successfully been created."});
     } catch(error) {
         return res.status(400).send(error.message);
