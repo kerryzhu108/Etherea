@@ -1,8 +1,9 @@
 const app = require("./app");
 
-const port = 3000;
+const port = process.env.port || 3000;
+const ip = process.env.IP || "localhost"
 
 // Application start
-app.listen(process.env.PORT || port, () => {
-    console.log(`Server running on port ${process.env.PORT}`);
+app.listen(port, ip, () => {
+    console.log(`Server running on ${ip}:${port}`);
 });

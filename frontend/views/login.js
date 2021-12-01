@@ -36,6 +36,7 @@ export default class Login extends React.Component {
       AsyncStorage.setItem('userid', responseData.userid);
       // Store access token in local storage
       AsyncStorage.setItem('access_token', responseData.tokens.access);
+      AsyncStorage.setItem('refresh_token', responseData.tokens.refresh);
       console.log(`Access token: ${responseData.tokens.access}`);
       this.props.navigation.navigate('Home')
     })
