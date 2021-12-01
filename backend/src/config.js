@@ -110,7 +110,7 @@ async function createTables() {
                 lastname VARCHAR(50) NOT NULL,
                 refresh VARCHAR(255),
                 type VARCHAR(50) DEFAULT 'user',
-                theme INT,
+                theme INT DEFAULT 0,
                 UNIQUE(email)
                 )`,
         (err, result) => {

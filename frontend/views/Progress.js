@@ -11,18 +11,17 @@ export default class Progress extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        emissions_reduced: "N/A",
-        animals_saved: "N/A"
+        impact: 0
     }
   }
 
   async componentDidMount() {
       // Set user impact stats by changing the React state
       const user_id = await AsyncStorage.getItem("userid");
-      const response = await getImpactStats(user_id);
+      const impact = await getImpactStats(user_id);
+      console.log(impact);
       this.setState({
-          emissions_reduced: response.emissions_reduced,
-          animals_saved: response.animals_saved
+          impact: impact
       });
   }
 
@@ -38,13 +37,9 @@ export default class Progress extends React.Component {
           small action can add up to make a big difference!
         </Text>
         <View style={styles.circlesWrapper}>
-          <View style={styles.circle1}>
-            <Text style={styles.textStyle}>{this.state.animals_saved}</Text>
-            <Text style={styles.circleText}>Animals Saved</Text>
-          </View>
           <View style={styles.circle2}>
-            <Text style={styles.textStyle}>{this.state.emissions_reduced}</Text>
-            <Text style={styles.circleText}>CO2</Text>
+            <Text style={styles.textStyle}>{this.state.impact}</Text>
+            <Text style={styles.circleText}>Impact</Text>
           </View>
         </View>
         <Text style={styles.subtitle}>Missions Completed</Text>
