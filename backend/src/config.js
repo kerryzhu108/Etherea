@@ -7,24 +7,13 @@ const isProduction = process.env.NODE_ENV === "production";
 
 const connectionString = `postgresql://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
 
-// const pool = new Pool({
-//     connectionString: isProduction ? process.env.DATABASE_URL : connectionString,
-//     ssl: isProduction ? {
-//         rejectUnauthorized: false
-//     } : false
-// });
-
 const pool = new Pool({
-    user: "postgres",
-    password:"post",
-    database:"postgres",
-    host:"localhost",
-    port:5432
-  /*connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }*/
+    connectionString: isProduction ? process.env.DATABASE_URL : connectionString,
+    ssl: isProduction ? {
+        rejectUnauthorized: false
+    } : false
 });
+
 // const config = {
 //     db: {
 //         host: process.env.DB_HOST,
@@ -126,7 +115,7 @@ async function createTables() {
                 theme INT DEFAULT 1,
                 UNIQUE(email)
                 );
-                INSERT INTO users ${userRequiredColumns} VALUES ('a.a@gmail.com', '${hashed_password}', 'Adam', 'Joe', 'admin');
+                INSERT INTO users ${userRequiredColumns} VALUES ('adam.a@gmail.com', '${hashed_password}', 'Adam', 'Joe', 'admin');
                 `,
         (err, result) => {
             if (err) {

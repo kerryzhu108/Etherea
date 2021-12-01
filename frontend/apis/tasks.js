@@ -20,15 +20,6 @@ export function getTasksForTheme(themeID) {
     }).then((response) => {return response})
 }
 
-// //Get the users selected tasks
-// export function getTasks(userid) {
-//     return fetch(domain + 'userTask/' + userid,
-//     {
-//         method: 'GET',
-//         headers: defaultHeaders
-//     }).then(response => {return response})
-//  }
-
  //Get the users selected tasks under their current theme
 export function getTasks(userid) {
     return fetch(domain + 'userTaskByTheme/' + userid,
@@ -76,4 +67,19 @@ export async function changeTheme(themeid) {
     });
     const json = await response.json();
     return json
+}
+
+export async function getCurrentTheme() {
+    const access_token = await AsyncStorage.getItem('access_token');
+    const response = await fetch(domain + "userTheme", {
+        method: 'get',
+        headers: {
+            "Authorization": `Bearer ${access_token}`,
+            "Accept": "application/json",
+            "Content-Type": "application/json"
+        },
+        mode: 'cors'
+    });
+    const json = await response.json();
+    return json[0]['theme']
 }

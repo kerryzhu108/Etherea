@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getTasksForTheme, chooseTasks } from "../apis/tasks.js";
+import { getTasksForTheme, chooseTasks, getCurrentTheme } from "../apis/tasks.js";
 import Task from '../components/Task';
 import Popup from '../components/Popup';
 import { useFocusEffect } from '@react-navigation/native';
@@ -20,10 +20,12 @@ export default function SelectTasks({ navigation }) {
     // reloads tasks every time page loads
     useFocusEffect(
       React.useCallback(() => {
-        getTasksForTheme(1).then(response=>response.json()).then(tasks => {
-          setAllTasksToPickFrom(tasks)
-          setThemeColour(tasks[0]['colour'])
-          setThemeName(tasks[0]['theme'])
+        getCurrentTheme().then(themeid=>{
+          getTasksForTheme(themeid).then(response=>response.json()).then(tasks => {
+            setAllTasksToPickFrom(tasks)
+            setThemeColour(tasks[0]['colour'])
+            setThemeName(tasks[0]['theme'])
+          })
         })
       }, [])
     );
@@ -118,7 +120,6 @@ const styles = StyleSheet.create({
       borderRadius: 20,
       marginTop: 50,
       textAlign: 'center',
-      position: 'absolute'
     },
     habitText: {
       color: 'white',

@@ -16,19 +16,12 @@ const { height, width } = Dimensions.get('window');
 export default class Home extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-          changeTasks: false
-        }
     }
     render() {
-      const taskChanger = () => {
-        this.setState({changeTasks: !this.state.changeTasks})
-      }
         return (
           <MenuProvider style={{ flexDirection: "column"}}>
-            <SideMenu changeTask={taskChanger}/>
             <ScrollView style={styles.container} contentContainerStyle={styles.scrollViewContainer}>
-              <FetchTasks changeTask={this.state.changeTasks} navigation={this.props.navigation}/>
+              <FetchTasks navigation={this.props.navigation}/>
               <View style={styles.navigation}>
                 <NavigationPanel navigation={this.props.navigation}/>              
               </View>
@@ -39,7 +32,7 @@ export default class Home extends React.Component {
 
 }
 
-function SideMenu() {
+function SideMenu(props) {
 
   const [getUserName, setUserName] = React.useState('')
   const [getPoints, setPoints] = React.useState(-1)
@@ -91,7 +84,7 @@ function SideMenu() {
               getThemes.map((item, index)=>{
                 return (
                   <TouchableOpacity key={index} style={[styles.menuItem, {backgroundColor: item['colour']}]}
-                    onPress={async ()=>{await changeTheme(item['id']); this.props.changeTask()}}>
+                    onPress={async ()=>{await changeTheme(item['id']); props.updateTasks()}}>
                     <Text style={styles.menuContent}>{item['theme']}</Text>
                   </TouchableOpacity>
                 )
@@ -181,10 +174,11 @@ function FetchTasks( props ) {
 
   return (
     <View>
-      <Text style={styles.title}>Hello,</Text>
-      <Text style={styles.username}>{getUserName}</Text>
+      <SideMenu updateTasks={loadTasks}/>
+      <Text style={[styles.title, {color: getThemeColour}]}>Hello,</Text>
+      <Text style={[styles.username, {color: getThemeColour}]}>{getUserName}</Text>
       <Text style={styles.topic}>This month's topic: </Text>
-      <View style={styles.theme}>
+      <View style={[styles.theme, {backgroundColor: getThemeColour}]}>
         <Text style={styles.themeText}>{renderThemeName()}</Text>
       </View>
       <Text style={styles.todaysChallenge}>Today's challenges</Text>

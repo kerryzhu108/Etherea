@@ -327,7 +327,7 @@ router.post("/updateUserTheme", [authenticateToken, check("themeid").isInt()], a
 });
 
 // Get a user's task
-router.get("/userTheme", [authenticateToken, check("themeid").isInt()], async (req, res) => {
+router.get("/userTheme", [authenticateToken], async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ error: errors.array() });
