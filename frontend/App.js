@@ -27,16 +27,16 @@ class App extends Component {
   render() {
     return (
       <NavigationContainer theme={MyTheme}>
-        <Drawer.Navigator initialRouteName="Landing" screenOptions={{headerShown: false}} style={styles.container}
+        <Stack.Navigator initialRouteName="Landing" screenOptions={{headerShown: false}} style={styles.container}
         drawerContent={props => <DrawerContent { ...props} />}>
-          <Drawer.Screen name="Landing" component={Landing} options={ { gestureEnabled: false } }/>
-          <Drawer.Screen name="SignUp" component={SignUp} options={ { gestureEnabled: false } }/>
-          <Drawer.Screen name="Login" component={Login} options={ { gestureEnabled: false } }/>
-          <Drawer.Screen name="Home" component={Home} />
-          <Drawer.Screen name="SelectTasks" component={SelectTasks} />
-          <Drawer.Screen name="Leaderboard" component={Leaderboard} />
-          <Drawer.Screen name="Progress" component={Progress} />
-        </Drawer.Navigator>
+          <Stack.Screen name="Landing" component={Landing} options={ { gestureEnabled: false } }/>
+          <Stack.Screen name="SignUp" component={SignUp} options={ { gestureEnabled: false } }/>
+          <Stack.Screen name="Login" component={Login} options={ { gestureEnabled: false } }/>
+          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="SelectTasks" component={SelectTasks} />
+          <Stack.Screen name="Leaderboard" component={Leaderboard} />
+          <Stack.Screen name="Progress" component={Progress} />
+        </Stack.Navigator>
       </NavigationContainer>
     )
   }
