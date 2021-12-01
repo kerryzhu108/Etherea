@@ -14,6 +14,7 @@ const pool = new Pool({
     } : false
 });
 
+
 // const config = {
 //     db: {
 //         host: process.env.DB_HOST,
@@ -185,8 +186,8 @@ async function createTables() {
     await client.query(`CREATE TABLE IF NOT EXISTS taskList(
                 id BIGSERIAL PRIMARY KEY NOT NULL,
                 themeID int,
-                taskName varchar(400),
                 descript varchar(500),
+                taskName varchar(400),
                 points int,
                 CONSTRAINT fk_themes -- foreign key from themes
                     FOREIGN KEY (themeID)
