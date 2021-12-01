@@ -14,8 +14,8 @@ router.post('/register', [
     check("first_name").isString().isLength({ min: 1 }),
     check("last_name").isString().isLength({ min: 1 }),
     check("email").isEmail(),
-    check("password").isString().isLength({ min: 8 }),
-    check("confirmPassword").isString().isLength({ min: 8 })
+    check("password").isString().isLength({ min: 4 }),
+    check("confirmPassword").isString().isLength({ min: 4 })
 ], async (req, res) => {
     const errors = validationResult(req);
 

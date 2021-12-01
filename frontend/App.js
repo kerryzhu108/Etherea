@@ -12,6 +12,7 @@ import Home from './views/home.js'
 import Leaderboard from './views/leaderboard.js'
 import Progress from './views/Progress.js'
 import SelectTasks from './views/selectTasks.js'
+import adminPanel from './views/adminPanel.js'
 import { DrawerContent } from './components/drawerContent.js';
 
 const Drawer = createDrawerNavigator();
@@ -36,6 +37,7 @@ class App extends Component {
           <Stack.Screen name="SelectTasks" component={SelectTasks} />
           <Stack.Screen name="Leaderboard" component={Leaderboard} />
           <Stack.Screen name="Progress" component={Progress} />
+          <Stack.Screen name="Admin" component={adminPanel} />
         </Stack.Navigator>
       </NavigationContainer>
     )

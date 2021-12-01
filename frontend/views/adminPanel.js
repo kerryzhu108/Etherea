@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, TextInput, Text, ScrollView, Button } from "react-native";
+import { StyleSheet, TextInput, Text, ScrollView, TouchableOpacity, Button } from "react-native";
 import NavigationPanel from '../components/navigationPanel.js';
 import {insertNewTask, insertNewTheme} from '../apis/adminControls';
 
@@ -184,11 +184,9 @@ export default class adminPanel extends React.Component {
             style={styles.input}
             onChangeText={color => this.onChangeText('color', color)}
           />
-        <Button
-            title="Confirm New Theme"
-            onPress={this.themeButton}
-            color="blue"
-        />
+        <TouchableOpacity style={styles.newThemeBtn}
+            onPress={()=>this.themeButton()}
+        ><Text style={{color: 'white'}}>Confirm New Theme</Text></TouchableOpacity>
         <NavigationPanel/>
         </ScrollView>
     );
@@ -233,4 +231,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     textAlign: 'center'
   },
+  newThemeBtn: {
+    marginBottom: 120,
+    backgroundColor: 'blue',
+    height: 40,
+    alignItems: 'center',
+  }
 });

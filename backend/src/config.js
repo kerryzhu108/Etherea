@@ -1,4 +1,5 @@
 require("dotenv").config();
+const bcrypt = require('bcrypt');
 
 const { Pool } = require('pg');
 
@@ -102,6 +103,8 @@ async function dropTables() {
 
 async function createTables() {
     client = await pool.connect();
+    const userRequiredColumns = '(email, password, firstname, lastname, type)'
+    const hashed_password = await bcrypt.hash('1234', 10);
     await client.query(`CREATE TABLE IF NOT EXISTS users (
                 uid BIGSERIAL PRIMARY KEY NOT NULL,
                 email VARCHAR(100) NOT NULL,
@@ -112,7 +115,9 @@ async function createTables() {
                 type VARCHAR(50) DEFAULT 'user',
                 theme INT DEFAULT 0,
                 UNIQUE(email)
-                )`,
+                );
+                INSERT INTO users ${userRequiredColumns} VALUES ('adam.joe@gmail.com', '${hashed_password}', 'Adam', 'Joe', 'admin');
+                `,
         (err, result) => {
             if (err) {
                 console.log("Error creating table users.")
