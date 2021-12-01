@@ -29,9 +29,9 @@ class App extends Component {
       <NavigationContainer theme={MyTheme}>
         <Stack.Navigator initialRouteName="Landing" screenOptions={{headerShown: false}} style={styles.container}
         drawerContent={props => <DrawerContent { ...props} />}>
-          <Stack.Screen name="Landing" component={Landing} options={ { gestureEnabled: false } }/>
-          <Stack.Screen name="SignUp" component={SignUp} options={ { gestureEnabled: false } }/>
-          <Stack.Screen name="Login" component={Login} options={ { gestureEnabled: false } }/>
+          <Stack.Screen name="Landing" component={Landing} />
+          <Stack.Screen name="SignUp" component={SignUp} />
+          <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="SelectTasks" component={SelectTasks} />
           <Stack.Screen name="Leaderboard" component={Leaderboard} />

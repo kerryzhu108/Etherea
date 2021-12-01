@@ -10,6 +10,20 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default class Progress extends React.Component { 
   constructor(props) {
     super(props);
+    this.state = {
+        emissions_reduced: "N/A",
+        animals_saved: "N/A"
+    }
+  }
+
+  async componentDidMount() {
+      // Set user impact stats by changing the React state
+      const user_id = await AsyncStorage.getItem("userid");
+      const response = await getImpactStats(user_id);
+      this.setState({
+          emissions_reduced: response.emissions_reduced,
+          animals_saved: response.animals_saved
+      });
   }
 
   render() { 
@@ -25,11 +39,11 @@ export default class Progress extends React.Component {
         </Text>
         <View style={styles.circlesWrapper}>
           <View style={styles.circle1}>
-            <FetchImpact type='Animals'/>
+            <Text style={styles.textStyle}>{this.state.animals_saved}</Text>
             <Text style={styles.circleText}>Animals Saved</Text>
           </View>
           <View style={styles.circle2}>
-            <FetchImpact type='CO2'/>
+            <Text style={styles.textStyle}>{this.state.emissions_reduced}</Text>
             <Text style={styles.circleText}>CO2</Text>
           </View>
         </View>
@@ -120,35 +134,16 @@ function getLastDay(){
   return yearString
 }
 
-// Need this to use onload hook
-function FetchImpact(type) {
-  const [getImpact1, setImpact1] = React.useState('N/A');
-  const [getImpact2, setImpact2] = React.useState('N/A');
-
-  useFocusEffect(
-    React.useCallback(() => {
-      AsyncStorage.getItem('userid').then(id => {
-        getImpactStats(id).then(resp => resp.json()).then(stat => {
-          if (stat[0]) {
-            setImpact1(stat[0]['animalssaved'])
-            setImpact2(stat[0]['emissionsreduced'])
-            return
-          }
-          setImpact1('N/A')
-          setImpact2('N/A')
-        });
-      })
-    }, [])
-  );
-
-  const textStyle = {fontSize: 25, marginTop: 35, color: 'white', fontWeight: 'bold'}
-  return <Text style={textStyle}>{type['type']=="Animals" ? getImpact1 : getImpact2}</Text>
-}
-
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flex: 1
+  },
+  textStyle: {
+      fontSize: 25,
+      marginTop: 35,
+      color: "white",
+      fontWeight: "bold"
   },
   scrollView: {
     flex: 1
@@ -198,7 +193,7 @@ const styles = StyleSheet.create({
   flex: 1
 },
  circleText: {
-   marginTop: 80,
+   marginTop: 20,
    fontSize: 14,
    color: 'white',
    fontWeight: 'bold',

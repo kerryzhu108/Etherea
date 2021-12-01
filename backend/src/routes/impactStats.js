@@ -28,12 +28,12 @@ router.get("/impactStats/points/:userid", async (req, res) => {
         
         if (themeid != default_no_theme_id){//theme id was specified in parameter
             const result = await pool.query(
-                "SELECT sum(points)*$2 AS impact FROM TaskList l, TaskCompletion c WHERE c.userid = $1 AND c.taskid = l.id AND c.complete AND (c.datetodo >= '$3' AND c.datetodo <= '$4') AND l.themeid = $5 GROUP BY c.userid;"
+                "SELECT sum(points)*$2 AS impact FROM TaskList l, TaskCompletion c WHERE c.userid = $1 AND c.taskid = l.id AND c.complete AND (c.datetodo >= $3 AND c.datetodo <= $4) AND l.themeid = $5 GROUP BY c.userid;"
                 , [userid, impact_per_point, lower_date, upper_date, themeid]);
             res.json(result.rows);
         } else {
             const result = await pool.query(
-                "SELECT sum(points)*$2 AS impact FROM TaskList l, TaskCompletion c WHERE c.userid = $1 AND c.taskid = l.id AND c.complete AND (c.datetodo >= '$3' AND c.datetodo <= '$4') GROUP BY c.userid;"
+                "SELECT sum(points)*$2 AS impact FROM TaskList l, TaskCompletion c WHERE c.userid = $1 AND c.taskid = l.id AND c.complete AND (c.datetodo >= $3 AND c.datetodo <= $4) GROUP BY c.userid;"
                 , [userid, impact_per_point, lower_date, upper_date]);
             res.json(result.rows);
         }
@@ -46,6 +46,16 @@ router.get("/impactStats/points/:userid", async (req, res) => {
         res.end();
     }
 })
+
+router.get("/impactStats/calculator/:userid", async (req, res) => {
+    try {
+        const result = await pool.query("SELECT * FROM impactstats WHERE uid=$1", [req.params.userid]);
+        if (result.rows.length <= 0) return res.status(404).json({error: {message: "Unable to find specified user"}});
+        return res.json({animals_saved: result.rows[0].animalssaved, emissions_reduced: result.rows[0].emissionsreduced});
+    } catch (error) {
+        return res.status(500).json({error: {message: "Internal server error"}});
+    }
+});
 
 //get number of tasks completed, not complete yet, and total tasks for a user within a date range
 //task counts are grouped by datetodo (due date of task)

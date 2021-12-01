@@ -85,6 +85,8 @@ router.post('/login', [
     }
 });
 
+// Generate a new pair of access refresh tokens
+// should be used once access tokens have expired.
 router.post("/refresh", [
     check("refresh").isString()
 ], async (req, res) => {
