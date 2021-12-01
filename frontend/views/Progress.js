@@ -28,10 +28,6 @@ export default class Progress extends React.Component {
             <FetchImpact type='Animals'/>
             <Text style={styles.circleText}>Animals Saved</Text>
           </View>
-          <View style={styles.circle2}>
-            <FetchImpact type='CO2'/>
-            <Text style={styles.circleText}>CO2</Text>
-          </View>
         </View>
         <Text style={styles.subtitle}>Missions Completed</Text>
         <View style={styles.rectanglesWrapper}>
@@ -176,18 +172,7 @@ const styles = StyleSheet.create({
   circlesWrapper:{
     flexDirection:'row',
   },
-  circle1: {
-    width: 120,
-    height: 120,
-    margin: 10,
-    marginTop: -20,
-    borderRadius: 120/2,
-    alignItems: 'center',
-    backgroundColor: '#F296B8',
-    textAlign: 'center',
-    flex: 1
- },
- circle2: {
+ circle1: {
   width: 120,
   height: 120,
   margin: 10,
