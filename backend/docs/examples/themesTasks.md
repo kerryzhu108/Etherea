@@ -16,24 +16,24 @@ Gets all the tasks associated with a specific theme ID. Includes task ID, descri
 ```json
 [
     {
+        "id": 1,
         "themeid": 1,
-        "theme": "Climate Change",
-        "taskid": 1,
         "descript": "Eat vegetarian",
+        "taskName": "Vegetarian Challenge",
         "points": 10
     },
     {
+        "id": 2,
         "themeid": 1,
-        "theme": "Climate Change",
-        "taskid": 2,
         "descript": "Make your commute green",
+        "taskName": "A New Way to Travel",
         "points": 20
     },
     {
+        "id": 3
         "themeid": 1,
-        "theme": "Climate Change",
-        "taskid": 3,
         "descript": "Reduce use of plastic packaging",
+        "taskName": "Reduce, Reuse, Recycle",
         "points": 30
     }
 ]
