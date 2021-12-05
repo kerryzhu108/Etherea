@@ -6,12 +6,14 @@ import { getImpactStats } from "../apis/progress";
 import { Calendar } from 'react-native-calendars';
 import NavigationPanel from '../components/navigationPanel.js';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getCurrentTheme, getAllThemes } from "../api/tasks";
 
 export default class Progress extends React.Component { 
   constructor(props) {
     super(props);
     this.state = {
-        impact: "0"
+        impact: "0",
+        stat: ""
     }
   }
 
@@ -22,6 +24,20 @@ export default class Progress extends React.Component {
       this.setState({
           impact: impact
       });
+  }
+
+  async setStatName() {
+    // Set the user's currently chosen theme
+    const theme = await getCurrentTheme();
+    const allThemes = await getAllThemes();
+    for(const completeTheme in allThemes){
+      if(completeTheme["theme"] == theme){
+        this.setState({
+          stat: completeTheme["statname"]
+        })
+        return
+      }
+    }
   }
 
   render() { 
@@ -38,7 +54,7 @@ export default class Progress extends React.Component {
         <View style={styles.circlesWrapper}>
           <View style={styles.circle2}>
             <Text style={styles.textStyle}>{this.state.impact}</Text>
-            <Text style={styles.circleText}>Impact</Text>
+            <Text style={styles.circleText}>{this.state.stat}</Text>
           </View>
         </View>
         <Text style={styles.subtitle}>Missions Completed</Text>
