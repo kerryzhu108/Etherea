@@ -34,7 +34,7 @@ router.get("/progressInfo/:userid", async(req, res) =>{
                 SELECT COALESCE(MAX(datetodo), $4) FROM taskCompletion 
                     WHERE userID = $1 AND complete = $2 AND datetodo < $3)+1
                 AND $3) fromNo`
-            const daysFromNo= await client.query(daysFromNoQ, [userid, false, new Date(), new Date(2021, 01, 01)]);
+            const daysFromNo= await client.query(daysFromNoQ, [userid, false, new Date(), new Date(2021, 1, 1)]);
             streak = daysFromNo.rows[0].completeddays
             
             // Check if all tasks for today have been completed
