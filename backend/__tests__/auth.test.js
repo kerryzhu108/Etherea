@@ -13,6 +13,8 @@ describe('Post Endpoints', () => {
         password: "password",
         confirmPassword: "password"
       })
+    console.log(res.body)
     expect(res.statusCode).toEqual(200)
+    expect(res.body).toEqual({})
   })
 })
