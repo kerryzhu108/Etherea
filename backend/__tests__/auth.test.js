@@ -15,6 +15,5 @@ describe('Post Endpoints', () => {
       })
     console.log(res.body)
     expect(res.statusCode).toEqual(200)
-    expect(res.body).toEqual({})
   })
 })
