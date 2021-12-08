@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -39,19 +38,29 @@ jobs:
     - name: backend
       run: cd backend && npm install
         
-    - name: Setup database
-      env:
-        DB_HOST: localhost
-        DB_NAME: test
-        DB_USER: test
-        DB_PASS: test
-        DB_PORT: 5432
-        TOKEN_SECRET: secret
-        NODE_ENV: development
-        resetDB: true   
-      run: node backend/src/app.js
-      
-    - name: Run test
-      env:
-        resetDB: false
-      run: npm test
+#     - name: Setup database
+#       env:
+#         DB_HOST: localhost
+#         DB_NAME: test
+#         DB_USER: test
+#         DB_PASS: test
+#         DB_PORT: 5432
+#         TOKEN_SECRET: secret
+#         NODE_ENV: development
+#         resetDB: true   
+
+    - name: Create env file
+      run: |
+        cd backend
+        touch .env
+        echo DB_HOST=localhost >> .env
+        echo DB_NAME=test >> .env
+        echo DB_USER=test >> .env
+        echo DB_PASS=test >> .env
+        echo DB_PORT=5432 >> .env
+        echo TOKEN_SECRET=secret >> .env
+        echo NODE_ENV=development >> .env
+        echo resetDB=true >> .env
+        node src/app.js
+        echo resetDB=false >> .env
+        npm test
