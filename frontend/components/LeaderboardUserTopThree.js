@@ -20,10 +20,10 @@ export class LeaderboardUserTopThree extends React.Component{
 
           <View style={styles.textContainer}>
             <Text style={styles.itemTextName}>{name}</Text>
-          <View style={styles.pointsContainer}>
-            <Text style={styles.itemTextPoints}>{exp}</Text>
-            <Text style={styles.itemTextPointsLetter}>pts</Text>
-          </View>
+            <View style={styles.pointsContainer}>
+              <Text style={styles.itemTextPoints}>{exp}</Text>
+              <Text style={styles.itemTextPointsLetter}>pts</Text>
+            </View>
           </View>
         </View>
       )
@@ -33,7 +33,8 @@ export class LeaderboardUserTopThree extends React.Component{
 
 const styles = StyleSheet.create({
     item:{
-      alignItems: 'center'
+      margin: 20,
+      alignItems: 'center'  
     },
     textContainer:{
       flexDirection: 'column'
@@ -49,6 +50,7 @@ const styles = StyleSheet.create({
       marginTop: '-20%'
     },
     iconImages:{
+      marginTop: 15,
       position: 'absolute',
       top: '100%'
     },
@@ -57,6 +59,7 @@ const styles = StyleSheet.create({
       alignSelf: "center"
     },
     itemTextName:{
+      marginTop: 5,
       fontSize: 15,
       color: "#707070",
       alignSelf: "center"

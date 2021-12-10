@@ -7,14 +7,13 @@ var leaderboardRouter = require("./routes/leaderboard");
 var impactStatsRouter = require("./routes/impactStats");
 var profileRouter = require("./routes/profile");
 var authRouter = require("./routes/auth");
-var imageRouter = require("./routes/imageupload");
 var adminRouter = require("./routes/admincontrols");
 
 require("dotenv").config();
 const { createTables, dropTables } = require("./config.js");
 
 if (process.env.resetDB=='true') {
-  dropTables().then(() => createTables());
+  dropTables().then(() => createTables().then());
 }
 
 const app = express();
@@ -33,7 +32,6 @@ app.use("/", leaderboardRouter);
 app.use("/", impactStatsRouter);
 app.use("/auth/", authRouter);
 app.use("/profile/", profileRouter);
-app.use("/", imageRouter);
 app.use("/", adminRouter);
 
 module.exports = app;

@@ -6,10 +6,38 @@ import { getImpactStats } from "../apis/progress";
 import { Calendar } from 'react-native-calendars';
 import NavigationPanel from '../components/navigationPanel.js';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getCurrentTheme, getAllThemes } from "../api/tasks";
 
 export default class Progress extends React.Component { 
   constructor(props) {
     super(props);
+    this.state = {
+        impact: "0",
+        stat: ""
+    }
+  }
+
+  async componentDidMount() {
+      // Set user impact stats by changing the React state
+      const user_id = await AsyncStorage.getItem("userid");
+      const impact = await getImpactStats(user_id);
+      this.setState({
+          impact: impact
+      });
+  }
+
+  async setStatName() {
+    // Set the user's currently chosen theme
+    const theme = await getCurrentTheme();
+    const allThemes = await getAllThemes();
+    for(const completeTheme in allThemes){
+      if(completeTheme["theme"] == theme){
+        this.setState({
+          stat: completeTheme["statname"]
+        })
+        return
+      }
+    }
   }
 
   render() { 
@@ -24,13 +52,9 @@ export default class Progress extends React.Component {
           small action can add up to make a big difference!
         </Text>
         <View style={styles.circlesWrapper}>
-          <View style={styles.circle1}>
-            <FetchImpact type='Animals'/>
-            <Text style={styles.circleText}>Animals Saved</Text>
-          </View>
           <View style={styles.circle2}>
-            <FetchImpact type='CO2'/>
-            <Text style={styles.circleText}>CO2</Text>
+            <Text style={styles.textStyle}>{this.state.impact}</Text>
+            <Text style={styles.circleText}>{this.state.stat}</Text>
           </View>
         </View>
         <Text style={styles.subtitle}>Missions Completed</Text>
@@ -57,7 +81,7 @@ export default class Progress extends React.Component {
             <Text style={styles.rectanglesText}>ST</Text>
           </View>
         </View>
-          <View style={{ paddingTop: 10, flex: 1 }}>
+          <View style={{ paddingTop: 10, paddingBottom: 80, flex: 1 }}>
           <Calendar
             // Set minimum date to be first day of month
             minDate={getFirstDay()}
@@ -68,8 +92,8 @@ export default class Progress extends React.Component {
             firstDay={1}
           />
         </View>
-        </ScrollView>
         <NavigationPanel navigation={this.props.navigation}/>
+        </ScrollView>
       </View>
     );
   }
@@ -120,35 +144,16 @@ function getLastDay(){
   return yearString
 }
 
-// Need this to use onload hook
-function FetchImpact(type) {
-  const [getImpact1, setImpact1] = React.useState('N/A');
-  const [getImpact2, setImpact2] = React.useState('N/A');
-
-  useFocusEffect(
-    React.useCallback(() => {
-      AsyncStorage.getItem('userid').then(id => {
-        getImpactStats(id).then(resp => resp.json()).then(stat => {
-          if (stat[0]) {
-            setImpact1(stat[0]['animalssaved'])
-            setImpact2(stat[0]['emissionsreduced'])
-            return
-          }
-          setImpact1('N/A')
-          setImpact2('N/A')
-        });
-      })
-    }, [])
-  );
-
-  const textStyle = {fontSize: 25, marginTop: 35, color: 'white', fontWeight: 'bold'}
-  return <Text style={textStyle}>{type['type']=="Animals" ? getImpact1 : getImpact2}</Text>
-}
-
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flex: 1
+  },
+  textStyle: {
+      fontSize: 25,
+      marginTop: 35,
+      color: "white",
+      fontWeight: "bold"
   },
   scrollView: {
     flex: 1
@@ -198,7 +203,7 @@ const styles = StyleSheet.create({
   flex: 1
 },
  circleText: {
-   marginTop: 80,
+   marginTop: 20,
    fontSize: 14,
    color: 'white',
    fontWeight: 'bold',

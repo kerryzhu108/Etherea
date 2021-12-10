@@ -12,7 +12,7 @@ import Home from './views/home.js'
 import Leaderboard from './views/leaderboard.js'
 import Progress from './views/Progress.js'
 import SelectTasks from './views/selectTasks.js'
-import { DrawerContent } from './components/drawerContent.js';
+import adminPanel from './views/adminPanel.js'
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -29,13 +29,14 @@ class App extends Component {
       <NavigationContainer theme={MyTheme}>
         <Stack.Navigator initialRouteName="Landing" screenOptions={{headerShown: false}} style={styles.container}
         drawerContent={props => <DrawerContent { ...props} />}>
-          <Stack.Screen name="Landing" component={Landing} options={ { gestureEnabled: false } }/>
-          <Stack.Screen name="SignUp" component={SignUp} options={ { gestureEnabled: false } }/>
-          <Stack.Screen name="Login" component={Login} options={ { gestureEnabled: false } }/>
+          <Stack.Screen name="Landing" component={Landing} />
+          <Stack.Screen name="SignUp" component={SignUp} />
+          <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="SelectTasks" component={SelectTasks} />
           <Stack.Screen name="Leaderboard" component={Leaderboard} />
           <Stack.Screen name="Progress" component={Progress} />
+          <Stack.Screen name="Admin" component={adminPanel} />
         </Stack.Navigator>
       </NavigationContainer>
     )

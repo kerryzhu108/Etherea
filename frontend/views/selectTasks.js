@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, ScrollView, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getTasksForTheme, chooseTasks } from "../apis/tasks.js";
+import { getTasksForTheme, chooseTasks, getCurrentTheme } from "../apis/tasks.js";
 import Task from '../components/Task';
 import Popup from '../components/Popup';
 import { useFocusEffect } from '@react-navigation/native';
@@ -20,10 +20,12 @@ export default function SelectTasks({ navigation }) {
     // reloads tasks every time page loads
     useFocusEffect(
       React.useCallback(() => {
-        getTasksForTheme(1).then(response=>response.json()).then(tasks => {
-          setAllTasksToPickFrom(tasks)
-          setThemeColour(tasks[0]['colour'])
-          setThemeName(tasks[0]['theme'])
+        getCurrentTheme().then(themeid=>{
+          getTasksForTheme(themeid).then(response=>response.json()).then(tasks => {
+            setAllTasksToPickFrom(tasks)
+            setThemeColour(tasks[0]['colour'])
+            setThemeName(tasks[0]['theme'])
+          })
         })
       }, [])
     );
@@ -50,7 +52,7 @@ export default function SelectTasks({ navigation }) {
     }
  
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <View style={[styles.themeWrapper, {backgroundColor: getThemeColour}]}>
           <Text style={styles.sectionTitle}>Current Theme:</Text>
           <Text style={styles.sectionTitleTwo}>{getThemeName}</Text>
@@ -78,7 +80,7 @@ export default function SelectTasks({ navigation }) {
           <Text style={styles.habitText}>Choose Habits</Text>
         </TouchableOpacity>
         { !isHidden && <Popup themeColour={getThemeColour} closePopup={togglePopup} title={getPopupInfo[0]} desc={getPopupInfo[1]}/> }
-      </View>     
+      </ScrollView>     
     );
   }
  
@@ -86,6 +88,7 @@ const styles = StyleSheet.create({
     container: {
       paddingTop: 80,
       paddingHorizontal: 20,
+      paddingBottom: 80,
     },
     themeWrapper: {
       padding: 30,
@@ -123,7 +126,7 @@ const styles = StyleSheet.create({
       color: 'white',
       fontSize: 16,
       textAlign: 'center',
-      fontWeight: 'bold'
+      fontWeight: 'bold',
     },
   });
 

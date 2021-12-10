@@ -1,0 +1,68 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: test
+          POSTGRES_PORT: 5432
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - name: backend
+      run: cd backend && npm install
+        
+#     - name: Setup database
+#       env:
+#         DB_HOST: localhost
+#         DB_NAME: test
+#         DB_USER: test
+#         DB_PASS: test
+#         DB_PORT: 5432
+#         TOKEN_SECRET: secret
+#         NODE_ENV: development
+#         resetDB: true   
+
+    - name: Create env file and run test
+      run: |
+        cd backend
+        touch .env
+        echo DB_HOST=localhost >> .env
+        echo DB_NAME=test >> .env
+        echo DB_USER=test >> .env
+        echo DB_PASS=test >> .env
+        echo DB_PORT=5432 >> .env
+        echo TOKEN_SECRET=secret >> .env
+        echo NODE_ENV=development >> .env
+        echo resetDB=true >> .env
+        cat .env
+        node src/app.js
+        echo resetDB=false >> .env
+        cat .env
+        npm test

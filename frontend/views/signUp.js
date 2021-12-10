@@ -70,8 +70,8 @@ export default class SignUp extends React.Component {
               messageString += "The Confirm Password field is required. ";
             }
             if ( (error.param === "password" || error.param === "confirmPassword") && error.value !== "") {
-                if ( error.value.length < 8 ) {
-                  messageString += "Password must be a least 8 characters long. ";
+                if ( error.value.length < 4 ) {
+                  messageString += "Password must be a least 4 characters long. ";
                 } else {
                   messageString += "Password contains invalid characters. ";
                 }
@@ -111,6 +111,8 @@ export default class SignUp extends React.Component {
       }
       else {
         AsyncStorage.setItem('userid', responseData.userid)
+        AsyncStorage.setItem('access_token', responseData.tokens.access);
+        AsyncStorage.setItem('refresh_token', responseData.tokens.refresh);
         this.props.navigation.navigate('Home')
       }
     }
