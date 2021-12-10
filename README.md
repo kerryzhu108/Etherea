@@ -70,6 +70,8 @@ Since our tasks were distributed and understood early on, we ensured that code r
 
  ## Licenses 
 
- We will be using the GPLv3 license in our codebase. This allows the code to be modified and shared freely, but requires the source code to be disclosed.
+ **(Old, not in use anymore)** We will be using the GPLv3 license in our codebase. This allows the code to be modified and shared freely, but requires the source code to be disclosed.
+ 
+ Instead, we will be using the MIT license to ensure that our partner can distribute closed-sourced version of any extensions made to this code.
 
  Our partner has permitted the sharing of anything in our codebase that we have made on our own, but any additional changes made by the partner will be close-sourced and not available to the public.
