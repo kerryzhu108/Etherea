@@ -6,7 +6,7 @@ import { getImpactStats } from "../apis/progress";
 import { Calendar } from 'react-native-calendars';
 import NavigationPanel from '../components/navigationPanel.js';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getCurrentTheme, getAllThemes } from "../api/tasks";
+import { getCurrentTheme, getAllThemes } from "../apis/tasks";
 
 export default class Progress extends React.Component { 
   constructor(props) {
@@ -17,6 +17,22 @@ export default class Progress extends React.Component {
     }
   }
 
+  setStatName = async () => {
+    // Set the user's currently chosen theme
+    const theme = await getCurrentTheme();
+    let allThemes = await getAllThemes();
+    allThemes = await allThemes.json()
+    allThemes.map(themeDetails=>{
+      console.log(themeDetails)
+      if(themeDetails["id"] == theme){
+        this.setState({
+          stat: themeDetails["statname"]
+        })
+        return
+      }
+    })
+  }
+
   async componentDidMount() {
       // Set user impact stats by changing the React state
       const user_id = await AsyncStorage.getItem("userid");
@@ -24,20 +40,7 @@ export default class Progress extends React.Component {
       this.setState({
           impact: impact
       });
-  }
-
-  async setStatName() {
-    // Set the user's currently chosen theme
-    const theme = await getCurrentTheme();
-    const allThemes = await getAllThemes();
-    for(const completeTheme in allThemes){
-      if(completeTheme["theme"] == theme){
-        this.setState({
-          stat: completeTheme["statname"]
-        })
-        return
-      }
-    }
+      this.setStatName()
   }
 
   render() { 
