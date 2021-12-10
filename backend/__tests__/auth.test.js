@@ -2,8 +2,8 @@ const request = require('supertest')
 const app = require("../src/app");
 
 
-describe('Post Endpoints', () => {
-  it('should create a new post', async () => {
+describe('Post /auth/register', () => {
+  it('should successfully create an user', async () => {
     const res = await request(app)
       .post('/auth/register')
       .send({
@@ -13,7 +13,20 @@ describe('Post Endpoints', () => {
         password: "password",
         confirmPassword: "password"
       })
-    console.log(res.body)
     expect(res.statusCode).toEqual(200)
+  })
+})
+
+describe('Post /auth/login', () => {
+  it('should return with userid and tokens', async () => {
+    const res = await request(app)
+      .post('/auth/login')
+      .send({
+        email: "test@gmail.com",
+        password: "password",
+      })
+    expect(res.statusCode).toEqual(200)
+    expect(res.body).toHaveProperty('userid')
+    expect(res.body).toHaveProperty('tokens')
   })
 })
