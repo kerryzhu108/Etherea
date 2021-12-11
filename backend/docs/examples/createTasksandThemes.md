@@ -27,7 +27,7 @@ Allows an admin to add a theme, given a theme name, multiplier, statName, dateLa
 # Adds a task
 Allows an admin to add a task, given a task name, themeID, description, and points.
 
-**URL** : `/themesTasks/:themeID`
+**URL** : `/themesAll`
 
 **Method** : `POST`
 
