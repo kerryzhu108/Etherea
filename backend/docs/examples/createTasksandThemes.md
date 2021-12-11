@@ -43,7 +43,7 @@ Allows an admin to add a task, given a task name, themeID, description, and poin
   {
     "themeID": 1,
     "taskName": "Clean Up Oceans",
-    "descript": 2,
+    "descript": "Pick up 100 pieces of trash from the beaches.",
     "points": "30"
   }
 ]
