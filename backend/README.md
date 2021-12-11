@@ -4,17 +4,14 @@ REST API to be used as Etherea's backend.
 
 ## REST API Documentation
 
-### Endpoints
-
-- [Login](docs/examples/login.md)
-- [Register](docs/examples/register.md)
+Documentation for backend REST endpoints can be located in [docs/examples](docs/examples/).
 
 ## Running the backend
 
-The backend can be run using the following command:
+The backend can be setup and run using the following command:
 
 ```
-npm install && npm start
+cd backend && npm install && npm start
 ```
 
 To ensure proper configuration, ensure that your `.env` file, located in the backend directory root, contains the following information:
