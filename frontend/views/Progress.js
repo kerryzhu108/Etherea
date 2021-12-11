@@ -13,8 +13,59 @@ export default class Progress extends React.Component {
     super(props);
     this.state = {
         impact: "0",
-        stat: ""
+        stat: "",
+        firstday: "",
+        lastday: ""
     }
+  }
+
+  getFirstDay = async () => {
+    let date = new Date();
+    let month = date.getMonth();
+    let year = date.getFullYear();
+    
+    let numericalMonth = month + 1;
+  
+    let yearString = String(year);
+    let monthString = String(numericalMonth);
+    yearString = yearString.concat("-");
+    monthString = monthString.concat("-");
+    yearString = yearString.concat(monthString);
+    yearString = yearString.concat("1");
+    this.setState({
+      lastday: yearString
+    });
+  }
+  
+  getLastDay = async () => {
+    let date = new Date();
+    let month = date.getMonth();
+    let year = date.getFullYear();
+  
+    let numericalMonth = month + 1;
+  
+    let yearString = String(year);
+    let monthString = String(numericalMonth);
+    yearString = yearString.concat("-");
+    monthString = monthString.concat("-");
+    yearString = yearString.concat(monthString);
+  
+    let long_months = [1, 3, 5, 7, 8, 10, 12];
+    let short_months = [4, 6, 9, 11]
+    if(long_months.includes(numericalMonth)){
+      yearString = yearString.concat("31");
+    }else if(short_months.includes(numericalMonth)){
+      yearString = yearString.concat("30");
+    }else{
+      if((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)){
+        yearString = yearString.concat("29");
+      }else{
+        yearString = yearString.concat("28");
+      }
+    }
+    this.setState({
+      lastday: yearString
+    });
   }
 
   setStatName = async () => {
@@ -87,9 +138,9 @@ export default class Progress extends React.Component {
           <View style={{ paddingTop: 10, paddingBottom: 80, flex: 1 }}>
           <Calendar
             // Set minimum date to be first day of month
-            minDate={getFirstDay()}
+            minDate={this.firstday}
             // Set maximum date to be last day of month
-            maxDate={getLastDay()}
+            maxDate={this.lastday}
             hideArrows={true}
             disableMonthChange={true}
             firstDay={1}
@@ -100,51 +151,6 @@ export default class Progress extends React.Component {
       </View>
     );
   }
-}
-
-function getFirstDay(){
-  let date = new Date();
-  let month = date.getMonth();
-  let year = date.getFullYear();
-  
-  let numericalMonth = month + 1;
-
-  let yearString = String(year);
-  let monthString = String(numericalMonth);
-  yearString = yearString.concat("-");
-  monthString = monthString.concat("-");
-  yearString = yearString.concat(monthString);
-  yearString = yearString.concat("1");
-  return yearString;
-}
-
-function getLastDay(){
-  let date = new Date();
-  let month = date.getMonth();
-  let year = date.getFullYear();
-
-  let numericalMonth = month + 1;
-
-  let yearString = String(year);
-  let monthString = String(numericalMonth);
-  yearString = yearString.concat("-");
-  monthString = monthString.concat("-");
-  yearString = yearString.concat(monthString);
-
-  let long_months = [1, 3, 5, 7, 8, 10, 12];
-  let short_months = [4, 6, 9, 11]
-  if(long_months.includes(numericalMonth)){
-    yearString = yearString.concat("31");
-  }else if(short_months.includes(numericalMonth)){
-    yearString = yearString.concat("30");
-  }else{
-    if((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)){
-      yearString = yearString.concat("29");
-    }else{
-      yearString = yearString.concat("28");
-    }
-  }
-  return yearString
 }
 
 const styles = StyleSheet.create({
@@ -184,17 +190,6 @@ const styles = StyleSheet.create({
   circlesWrapper:{
     flexDirection:'row',
   },
-  circle1: {
-    width: 120,
-    height: 120,
-    margin: 10,
-    marginTop: -20,
-    borderRadius: 120/2,
-    alignItems: 'center',
-    backgroundColor: '#F296B8',
-    textAlign: 'center',
-    flex: 1
- },
  circle2: {
   width: 120,
   height: 120,
