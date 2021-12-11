@@ -84,18 +84,24 @@ router.post("/progressInfo", async(req, res) =>{
    }
 })
 
-/* Get all themes(id, name, date theme was launched)
+/* Get all themes(id, theme name, name of stat, multiplier, date theme was launched, and colour in frontend)
 Returns the follow json:
 [
     {
         "id": 1,
         "theme": "Climate Change",
-        "datelaunched": "2021-10-01T04:00:00.000Z"
+        "multiplier": 2,
+        "statname": "CO2",
+        "datelaunched": "2021-10-01T04:00:00.000Z",
+        "colour": "#A0E3B2"
     },
     {
         "id": 2,
         "theme": "Mental Health",
-        "datelaunched": "2021-11-01T04:00:00.000Z"
+        "multiplier": 5,
+        "statname": "Mental Health",
+        "datelaunched": "2021-11-01T04:00:00.000Z",
+        "colour": "#7AD7E0"
     }
 ]
 */
@@ -111,7 +117,7 @@ router.get("/themesAll", async(req, res) =>{
     }
 })
 
-/* Get all tasks for a particular theme(themeID, theme, taskID, task name/description, task points)
+/* Get all tasks for a particular theme(themeID, theme, taskID, task name/description, task points, and colour)
 Returns the following json:
 [
     {
@@ -119,21 +125,24 @@ Returns the following json:
         "theme": "Climate Change",
         "taskid": 1,
         "descript": "Eat vegetarian",
-        "points": 10
+        "points": 10,
+        "colour": "#A0E3B2"
     },
     {
         "themeid": 1,
         "theme": "Climate Change",
         "taskid": 2,
         "descript": "Make your commute green",
-        "points": 20
+        "points": 20,
+        "colour":"#A0E3B2"
     },
     {
         "themeid": 1,
         "theme": "Climate Change",
         "taskid": 3,
         "descript": "Reduce use of plastic packaging",
-        "points": 30
+        "points": 30,
+        "colour":"#A0E3B2"
     }
 ]
 */
